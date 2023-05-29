@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "669333318828",
+    "project_id": "care-for-each-chat",
+    "storage_bucket": "care-for-each-chat.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:669333318828:android:2a68eb4be76e0ab0f58309",
+        "android_client_info": {
+          "package_name": "com.example.care_for_each"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "669333318828-ppnjgqthbduivlqs0kv7cd9dcv4ejam8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCTj9t8-W9dTRZrPRdL5r7_f2mxiH8rrIE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "669333318828-ppnjgqthbduivlqs0kv7cd9dcv4ejam8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
