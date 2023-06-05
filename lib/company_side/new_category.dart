@@ -2,6 +2,7 @@ import 'package:care_for_each/company_side/category.dart';
 import 'package:care_for_each/widgets/round_button2.dart';
 import 'package:flutter/material.dart';
 
+import '../API/CategoryManageAPI.dart';
 import '../widgets/round_button.dart';
 import 'company_profile.dart';
 import 'package:sizer/sizer.dart';
@@ -9,11 +10,14 @@ import 'package:sizer/sizer.dart';
 class NewCategory extends StatefulWidget {
   const NewCategory({Key? key}) : super(key: key);
 
+
   @override
   State<NewCategory> createState() => _NewCategoryState();
 }
 
 class _NewCategoryState extends State<NewCategory> {
+  TextEditingController catname=TextEditingController();
+  TextEditingController gst=TextEditingController();
   final formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -69,6 +73,7 @@ class _NewCategoryState extends State<NewCategory> {
                     SizedBox(
                       height: 5.92.h,
                       child: TextFormField(
+                        controller: catname,
                         validator: (value){
                           if(value!.isEmpty){
                             return 'Please enter a category name';
@@ -91,6 +96,7 @@ class _NewCategoryState extends State<NewCategory> {
                     SizedBox(
                       height: 5.92.h,
                       child: TextFormField(
+                        controller: gst,
                         validator: (value){
                           if(value!.isEmpty){
                             return 'Please enter a GST';
@@ -107,6 +113,7 @@ class _NewCategoryState extends State<NewCategory> {
                             labelText: "Add GST % *",
                             labelStyle: TextStyle(
                                 color: Color.fromRGBO(12, 25, 71, 1))),
+
                       ),
                     ),
                   ],
@@ -114,8 +121,27 @@ class _NewCategoryState extends State<NewCategory> {
                 RoundButton(
                   title: "Save",
                   onTap: () {
+                    FutureBuilder(
+                      future: CategoryManageAPI().categoryManage("info@webearl.com",catname.text,gst.text,"insert",""),
+                      builder: (BuildContext context, snapshot) {
+                        if(snapshot.connectionState==ConnectionState.waiting){
+                          return Text("Loading");
+                        }
+                        else if(snapshot.hasData){
+                          return Column(
+                            children: [
+                              Text(snapshot.data!.server![0].result.toString())
+                            ],
+                          );
+                        }
+                        else{
+                          return Text("No data");
+                        }
+                      },
+
+                    );
                     if(formKey.currentState!.validate()){
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>Category()));
+                      //Navigator.push(context, MaterialPageRoute(builder: (context)=>Category()));
                     }
 
                   },

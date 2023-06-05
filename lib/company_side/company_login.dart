@@ -47,24 +47,38 @@ class _CompanyLoginState extends State<CompanyLogin> {
   //     print(response.body);
   //   }
   // }
-
-  Future<void> _login() async {
-    final url = 'http://www.careforeach.com/new/company/company_api_jay/webservices/company_login.php';
-    //final url='http://www.careforeach.com/new/company/company_api_jay/webservices/company_profile.php';
-    final data = {
-      'emailid': emailController.text,
-      'pword': passwordController.text,
-    };
-
-    final response = await http.post(Uri.parse(url), body: data);
-    final responseData = jsonDecode(response.body);
-
-    // Handle the response as per your requirements
-    if(response.statusCode==200){
-      print(responseData);
-    }
-
-  }
+  // class LoginApi{
+  // LoginApi();
+  // Future<LoginModel> loginList(phone) async{
+  // var url = LURL + "/api/user/login";
+  // http.Response response = await http.post(Uri.parse(url),
+  // headers: {"content-type": "application/json"},
+  // body: jsonEncode({
+  // "mobile": phone
+  //
+  // }));
+  // var data = jsonDecode(response.body);
+  // print("SignIn" + response.body);
+  // return LoginModel.fromJson(data);
+  // }
+  // }
+  // Future<void> _login() async {
+  //   final url = 'http://www.careforeach.com/new/company/company_api_jay/webservices/company_login.php';
+  //   //final url='http://www.careforeach.com/new/company/company_api_jay/webservices/company_profile.php';
+  //   final data = {
+  //     'emailid': emailController.text,
+  //     'pword': passwordController.text,
+  //   };
+  //
+  //   final response = await http.post(Uri.parse(url), body: data);
+  //   final responseData = jsonDecode(response.body);
+  //
+  //   // Handle the response as per your requirements
+  //   if(response.statusCode==200){
+  //     print(responseData);
+  //   }
+  //
+  // }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -178,15 +192,9 @@ class _CompanyLoginState extends State<CompanyLogin> {
                     title: "Log In",
                     onTap: () {
                       if(formKey.currentState!.validate()){
-                        _login();
+                        //_login();
 
                          //signIn(emailController.text,passwordController.text);
-
-                        const snackBar = SnackBar(
-                          content: Text('Submitting Form'),
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
                         Navigator.push(context, MaterialPageRoute(builder: (context)=>CompanyDashboard()));
                       }
                       

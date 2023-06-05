@@ -1,13 +1,15 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:care_for_each/Models/Profile/CompanyProfileModel.dart';
+import 'package:care_for_each/Models/CompanyProfileModel.dart';
 
 import '../API/CompanyProfileAPI.dart';
 
 class CompanyProfile extends StatefulWidget {
   const CompanyProfile({Key? key}) : super(key: key);
-
+ // const CompanyProfile({super.key,required this.emailid});
+  //  const OTP({super.key, required this.phone});
+  // final String emailid;
   @override
   State<CompanyProfile> createState() => _CompanyProfileState();
 }
@@ -62,7 +64,7 @@ class _CompanyProfileState extends State<CompanyProfile> {
                         image: AssetImage("assets/Ellipse 5 (2).png")),
                   ),
                   child: FutureBuilder<CompanyProfileModel>(
-                    future: CompanyProfileApi().profileList("info@webearl.com"),
+                    future: CompanyProfileApi().profileList("info@webearl.com"),//aya login kru to email login kari eno levo che
                     builder: (BuildContext context, snapshot){
                       if(snapshot.connectionState==ConnectionState.waiting){
                         return Text("Loading");
@@ -72,16 +74,18 @@ class _CompanyProfileState extends State<CompanyProfile> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Container(
-                                  height: height * 0.10,
-                                  child: Center(
-                                    child: Text("we",style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.white,
-                                  ),
+                                Center(
+                                  child: Container(
+                                      height: 120,width: 120,
+                                      child: CircleAvatar(
+                                        child:  Image.network(
+                                          snapshot.data!.server![0].cPhoto.toString(),
+                                        ),
+                                        backgroundColor: Colors.white,
+                                      )
+                                  )
+                                  // child: Text( snapshot.data!.server![0].cPhoto.toString(),style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+                                  // ),
                                 ),
                                 SizedBox(
                                   height: 10,
@@ -98,12 +102,6 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                       fontWeight: FontWeight.bold,
                                       color: Color.fromRGBO(13, 46, 85, 1)),
                                 ),
-                                Text(
-                                  snapshot.data!.server![0].designation.toString(),
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Color.fromRGBO(13, 46, 85, 1)),
-                                )
                               ],
                             ),
                           );

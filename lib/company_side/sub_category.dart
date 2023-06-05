@@ -3,6 +3,7 @@ import 'package:care_for_each/company_side/new_category.dart';
 import 'package:care_for_each/company_side/new_sub_category.dart';
 import 'package:flutter/material.dart';
 
+import '../API/SubCategoryDisplayAPI.dart';
 import '../widgets/round_button2.dart';
 import 'company_dashboard.dart';
 import 'company_profile.dart';
@@ -44,7 +45,7 @@ class _SubCategoryState extends State<SubCategory> {
           },
         ),
         title: Text(
-          "New Sub Category",
+          "Sub Category",
           style: TextStyle(color: Color.fromRGBO(9, 31, 87, 1)),
         ),
         actions: [
@@ -60,221 +61,63 @@ class _SubCategoryState extends State<SubCategory> {
         backgroundColor: Colors.white,
         shadowColor: Colors.transparent,
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(left: 43.0,right: 43),
-        child: Column(
-          children: [
-            RoundButton2(title: 'Sub Category          Category' ,onTap: (){}),
-            SizedBox(height: 2.13.h,),
-            Container(
-              width: 79.74.w,
-              height: 5.92.h,
-              child: ElevatedButton(
-                  onPressed: () {
-                    showAlertDialog(context);
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("Android App", style: TextStyle(color: Colors.teal,fontSize: 11.37.sp),),
-                      Text("Mob Application", style: TextStyle(color: Colors.teal,fontSize: 11.37.sp),),
-                    ],
+      body: FutureBuilder(
+        future: SubCategoryDisplayAPI().subcategoryList("info@webearl.com"),
+        builder: (BuildContext context, snapshot) {
+          if(snapshot.connectionState==ConnectionState.waiting){
+            return Text("Loading");
+          }
+          else if(snapshot.hasData){
+            return Column(
+              children: [
+                RoundButton2(title: 'SubCategory   Category' ,onTap: (){}),
+                SizedBox(height: 3.79.h,),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: snapshot.data!.server!.length,
+                    itemBuilder: (context, index) {
+                      return  Column(
+                        children: [
+                          Container(
+                            width: 85.w,
+                            height: 5.92.h,
+                            child: ElevatedButton(
+                                onPressed: () {
+                                  showAlertDialog(context);
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    //   Text("Select Category", style: TextStyle(color: Colors.teal,fontSize: 15.16.sp),),
+                                    Text(snapshot.data!.server![index].subcatname.toString(), style: TextStyle(color: Colors.teal,),),
+                                    Text(snapshot.data!.server![index].catname.toString(), style: TextStyle(color: Colors.teal,overflow: TextOverflow.ellipsis,),maxLines: 2,),
+                                  ],
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(1.36.h)),
+                                    elevation: 0,
+                                    backgroundColor: Colors.white,
+                                    side: const BorderSide(
+                                      width: 1.0,
+                                      color: Colors.teal,
+                                    )
+                                )
+                            ),
+                          ),
+                          SizedBox(height: 2.13.h,),
+                        ],
+                      );
+                    },
                   ),
-                  style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                      elevation: 0,
-                      backgroundColor: Colors.white,
-                      side: const BorderSide(
-                        width: 1.0,
-                        color: Colors.teal,
-                      )
-                  )
-              ),
-            ),
-            SizedBox(height: 2.13.h,),
-            Container(
-              width: 79.74.w,
-              height: 5.92.h,
-              child: ElevatedButton(
-                  onPressed: () {
-                    showAlertDialog(context);
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("Social Media", style: TextStyle(color: Colors.teal,fontSize: 11.37.sp),),
-                      Text("Digital Marketing", style: TextStyle(color: Colors.teal,fontSize: 11.37.sp),),
-                    ],
-                  ),
-                  style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                      elevation: 0,
-                      backgroundColor: Colors.white,
-                      side: const BorderSide(
-                        width: 1.0,
-                        color: Colors.teal,
-                      )
-                  )
-              ),
-            ),
-            SizedBox(height: 2.13.h,),
-            Container(
-              width: 79.74.w,
-              height: 5.92.h,
-              child: ElevatedButton(
-                  onPressed: () {
-                    // Navigator.push(context, MaterialPageRoute(builder: (context)=>));
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("IOS", style: TextStyle(color: Colors.teal,fontSize: 11.37.sp),),
-                      Text("Mobile Application", style: TextStyle(color: Colors.teal,fontSize: 11.37.sp),),
-                    ],
-                  ),
-                  style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                      elevation: 0,
-                      backgroundColor: Colors.white,
-                      side: const BorderSide(
-                        width: 1.0,
-                        color: Colors.teal,
-                      )
-                  )
-              ),
-            ),
-            SizedBox(height: 2.13.h,),
-            Container(
-              width: 79.74.w,
-              height: 5.92.h,
-              child: ElevatedButton(
-                  onPressed: () {
-                    // Navigator.push(context, MaterialPageRoute(builder: (context)=>));
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("Windows", style: TextStyle(color: Colors.teal,fontSize: 11.37.sp),),
-                      Text("Mob Application", style: TextStyle(color: Colors.teal,fontSize: 11.37.sp),),
-                    ],
-                  ),
-                  style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                      elevation: 0,
-                      backgroundColor: Colors.white,
-                      side: const BorderSide(
-                        width: 1.0,
-                        color: Colors.teal,
-                      )
-                  )
-              ),
-            ),
-            SizedBox(height: 2.13.h,),
-            Container(
-              width: 79.74.w,
-              height: 5.92.h,
-              child: ElevatedButton(
-                  onPressed: () {
-                    // Navigator.push(context, MaterialPageRoute(builder: (context)=>));
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("Operators", style: TextStyle(color: Colors.teal,fontSize: 11.37.sp),),
-                      Text("Customized Software", style: TextStyle(color: Colors.teal,fontSize: 11.37.sp),),
-                    ],
-                  ),
-                  style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                      elevation: 0,
-                      backgroundColor: Colors.white,
-                      side: const BorderSide(
-                        width: 1.0,
-                        color: Colors.teal,
-                      )
-                  )
-              ),
-            ),
-            SizedBox(height: 2.13.h,),
-            Container(
-              width: 79.74.w,
-              height: 5.92.h,
-              child: ElevatedButton(
-                  onPressed: () {
-                    // Navigator.push(context, MaterialPageRoute(builder: (context)=>));
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("fdksuh", style: TextStyle(color: Colors.teal,fontSize: 11.37.sp),),
-                      Text("Man Power", style: TextStyle(color: Colors.teal,fontSize: 11.37.sp),),
-                    ],
-                  ),
-                  style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                      elevation: 0,
-                      backgroundColor: Colors.white,
-                      side: const BorderSide(
-                        width: 1.0,
-                        color: Colors.teal,
-                      )
-                  )
-              ),
-            ),
-            SizedBox(height: 2.13.h,),
-            Container(
-              width: 79.74.w,
-              height: 5.92.h,
-              child: ElevatedButton(
-                  onPressed: () {
-                    // Navigator.push(context, MaterialPageRoute(builder: (context)=>));
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("eryguh", style: TextStyle(color: Colors.teal,fontSize: 11.37.sp),),
-                      Text("Digital Marketing", style: TextStyle(color: Colors.teal,fontSize: 11.37.sp),),
-                    ],
-                  ),
-                  style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                      elevation: 0,
-                      backgroundColor: Colors.white,
-                      side: const BorderSide(
-                        width: 1.0,
-                        color: Colors.teal,
-                      )
-                  )
-              ),
-            ),
-            SizedBox(height: 2.13.h,),
-            Container(
-              width: 79.74.w,
-              height: 5.92.h,
-              child: ElevatedButton(
-                  onPressed: () {
-                    // Navigator.push(context, MaterialPageRoute(builder: (context)=>));
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("Hello 2", style: TextStyle(color: Colors.teal,fontSize: 11.37.sp),),
-                      Text("Mobile Application", style: TextStyle(color: Colors.teal,fontSize: 11.37.sp),),
-                    ],
-                  ),
-                  style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                      elevation: 0,
-                      backgroundColor: Colors.white,
-                      side: const BorderSide(
-                        width: 1.0,
-                        color: Colors.teal,
-                      )
-                  )
-              ),
-            ),
-          ],
-        ),
+                ),
+              ],
+            );
+          }
+          else{
+            return Text("No data");
+          }
+        },
+
       ),
     );
   }
