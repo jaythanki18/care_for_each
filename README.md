@@ -1,16 +1,40 @@
 # care_for_each
 
-A new Flutter project.
+This is the project during an internship at Webearl Technology by applying Flutter,NodeJs,Firebase,REST APIs.
+The application makes ease interaction between the Employees and Company.
 
-## Getting Started
+## Modules
+Employee Side
+Company Side
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Features
+### Employee Side
+  - Employee Login
+  - Dashboard
+  - Employee Profile
+  - Attendance
+  - Product
+  - Cart
+  - Ginnie Box
+  - Visitors
+  - Customer
+  - Sales
+  - Messages
+  - Leave Request
+  - Complaint
+### Company Side
+  - Company Login
+  - Dashboard
+  - Company Profile
+  - Orders
+  - Attendance
+  - Employees
+  - Visitors
+  - Ginnie box
+  - Products
+  - Leave requests
+  - Category
+  - Sub category
+  - Messages
+  - Compaint
+  - Report
