@@ -4,8 +4,8 @@ This is the project during an internship at Webearl Technology by applying Flutt
 The application makes ease interaction between the Employees and Company.
 
 ## Modules
-Employee Side
-Company Side
+- Employee Side
+-  Company Side
 
 ## Features
 ### Employee Side
