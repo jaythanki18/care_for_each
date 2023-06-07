@@ -1,7 +1,7 @@
 # care_for_each
 
--This is the project during an internship at Webearl Technology by applying Flutter,NodeJs,Firebase,REST APIs.
--The application makes ease interaction between the Employees and Company.
+- This is the project during an internship at Webearl Technology by applying Flutter,NodeJs,Firebase,REST APIs.
+- The application makes ease interaction between the Employees and Company.
 
 ## Modules
 - Employee Side
