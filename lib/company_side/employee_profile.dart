@@ -1,16 +1,22 @@
+import 'package:care_for_each/API/employee_data_API.dart';
+import 'package:care_for_each/Models/EmployeeDataModel.dart';
+import 'package:care_for_each/company_side/employee.dart';
 import 'package:flutter/material.dart';
-
+import '../API/employee_delete_API.dart';
 import '../widgets/round_button.dart';
 import 'package:sizer/sizer.dart';
 
+
 class EmployeeProfile extends StatefulWidget {
-  const EmployeeProfile({Key? key}) : super(key: key);
+  const EmployeeProfile({Key? key, required this.ename, required this.emailid, required this.designation, required this.joiningdate, required this.dob, required this.mobilenum, required this.address, required this.edu, required this.photo, }) : super(key: key);
+  final String ename,emailid,designation,joiningdate,dob,mobilenum,address,edu,photo;
 
   @override
   State<EmployeeProfile> createState() => _EmployeeProfileState();
 }
 
 class _EmployeeProfileState extends State<EmployeeProfile> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,107 +54,129 @@ class _EmployeeProfileState extends State<EmployeeProfile> {
         backgroundColor: Colors.white,
         shadowColor: Colors.white,
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Card(
-            margin: EdgeInsets.only(left: 40,right: 40),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            child: Container(
-              height: 47.51.h,
-              width: 79.74.w,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(2.36.h),
-                  gradient: LinearGradient(colors: [
-                    Color.fromRGBO(62, 86, 115, 0.2),
-                    Color.fromRGBO(184, 184, 184, 0.1)
-                  ])
-              ),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 40,right: 40,bottom: 17,top: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Center(child: Container(child: Image.asset("assets/img_5.png",width: 20.51.w,height: 11.25.h,))),
-                    SizedBox(height: 0.59.h,),
-                    //Image.asset("calender.png",width: 0.01*w),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            FutureBuilder(
+            future: EmployeeDataAPI().employeeList("info@webearl.com"),
+                builder: (BuildContext context, snapshot) {
+                  if(snapshot.connectionState==ConnectionState.waiting){
+                    return Text("Loading");
+                  }
+                  else if(snapshot.hasData){
+                    return Column(
                       children: [
-                        Text('Name : Ashok Sindhav',style: TextStyle(fontSize: 11.37.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1),
-                        Icon(Icons.edit,color: Colors.teal,)
+                        Card(
+                          margin: EdgeInsets.only(left: 40,right: 40),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                          child: Container(
+                            height: 47.51.h,
+                            width: 79.74.w,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(2.36.h),
+                                gradient: LinearGradient(colors: [
+                                  Color.fromRGBO(62, 86, 115, 0.2),
+                                  Color.fromRGBO(184, 184, 184, 0.1)
+                                ])
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 40,right: 40,bottom: 17,top: 16),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Center(child: Container(child: Image.network(widget.photo.toString(),width: 20.51.w,height: 11.25.h,errorBuilder: (context, error, stackTrace) => SizedBox(child: Container(color: Colors.grey,),width: 20.51.w,height: 11.25.h,)))),
+                                  SizedBox(height: 0.59.h,),
+                                  //Image.asset("calender.png",width: 0.01*w),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+
+                                      SizedBox(width: 180,child: Text('Name : '+widget.ename,style: TextStyle(fontSize: 11.37.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1)),
+                                      Icon(Icons.edit,color: Colors.teal,)
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      SizedBox(width: 200,child: Text('Email : '+widget.emailid,style: TextStyle(fontSize: 9.09.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1)),
+                                      Icon(Icons.edit,color: Colors.teal,)
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      SizedBox(width: 200,child: Text('Designation : '+widget.designation,style: TextStyle(fontSize: 11.37.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1)),
+                                      Icon(Icons.edit,color: Colors.teal,)
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      SizedBox(width: 200,child: Text('Joining Date : '+widget.joiningdate,style: TextStyle(fontSize: 11.37.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1)),
+                                      Icon(Icons.edit,color: Colors.teal,)
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      SizedBox(width: 200,child: Text('Date of Birth : '+widget.dob,style: TextStyle(fontSize: 11.37.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1)),
+                                      Icon(Icons.edit,color: Colors.teal,)
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      SizedBox(width: 200,child: Text('Mob. No. : '+widget.mobilenum,style: TextStyle(fontSize: 11.37.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1)),
+                                      Icon(Icons.edit,color: Colors.teal,)
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      SizedBox(width: 200,child: Text('Address : '+widget.address,style: TextStyle(fontSize: 11.37.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 2)),
+                                      Icon(Icons.edit,color: Colors.teal,)
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      SizedBox(width: 200,child: Text('Education : '+widget.edu,style: TextStyle(fontSize: 11.37.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1)),
+                                      Icon(Icons.edit,color: Colors.teal,)
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
                       ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Email : sindhav88@gmail.com ',style: TextStyle(fontSize: 9.09.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1),
-                        Icon(Icons.edit,color: Colors.teal,)
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Designation : python dev',style: TextStyle(fontSize: 11.37.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1),
-                        Icon(Icons.edit,color: Colors.teal,)
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Joining Date : 01-01-2020',style: TextStyle(fontSize: 11.37.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1),
-                        Icon(Icons.edit,color: Colors.teal,)
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Date of Birth : 09-07-1988',style: TextStyle(fontSize: 11.37.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1),
-                        Icon(Icons.edit,color: Colors.teal,)
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Mob. No. : +91 9033251903',style: TextStyle(fontSize: 11.37.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1),
-                        Icon(Icons.edit,color: Colors.teal,)
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Address : kjsgddslkjlldsck',style: TextStyle(fontSize: 11.37.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1),
-                        Icon(Icons.edit,color: Colors.teal,)
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(' Education : BE Computer',style: TextStyle(fontSize: 11.37.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1),
-                        Icon(Icons.edit,color: Colors.teal,)
-                      ],
-                    ),
-                  ],
-                ),
+                    );
+                  }
+                  else{
+                    return Text("No data");
+                  }
+                },
+
+            ),
+
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 11.02.w,vertical: 3.w),
+              child: RoundButton(
+                title: "Delete Employee",
+                onTap: () {
+                  showAlertDialog(context,"info@webearl.com",widget.emailid);
+                },
               ),
             ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 11.02.w,vertical: 3.w),
-            child: RoundButton(
-              title: "Delete Employee",
-              onTap: () {
-                showAlertDialog(context);
-              },
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 }
 
-showAlertDialog(BuildContext context) {
+showAlertDialog(BuildContext context,emailid,e_emailid) {
 
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
@@ -172,7 +200,28 @@ showAlertDialog(BuildContext context) {
           Padding(
             padding: const EdgeInsets.only(right: 50),
             child: ElevatedButton(
-                onPressed: (){},
+                onPressed: (){
+                  FutureBuilder(
+                    future: EmployeeDeleteAPI().employee("info@webearl.com",e_emailid),
+                    builder: (BuildContext context, snapshot) {
+                      if(snapshot.connectionState==ConnectionState.waiting){
+                        return Text("Loading");
+                      }
+                      else if(snapshot.hasData){
+                        return Column(
+                          children: [
+                            Text(snapshot.data!.server![0].result.toString())
+                          ],
+                        );
+                      }
+                      else{
+                        return Text("No data");
+                      }
+                    },
+
+                  );
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>Employee()));
+                },
                 style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.teal)),
                 child: Text("Yes",style: TextStyle(color: Colors.white))),
           ),

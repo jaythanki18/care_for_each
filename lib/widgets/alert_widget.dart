@@ -1,14 +1,19 @@
+import 'package:care_for_each/API/employee_leave_status_change_API.dart';
+import 'package:care_for_each/company_side/leave_detail3.dart';
 import 'package:flutter/material.dart';
+import '../company_side/leave_detail4.dart';
 
 class AlertWidget extends StatefulWidget {
-  const AlertWidget({Key? key}) : super(key: key);
+  const AlertWidget({Key? key, required this.lrid}) : super(key: key);
 
+  final String lrid;
   @override
   State<AlertWidget> createState() => _AlertWidgetState();
 }
 
 class _AlertWidgetState extends State<AlertWidget> {
 
+  late String status;
   // Group Value for Radio Button.
   int id = 1;
   @override
@@ -28,6 +33,8 @@ class _AlertWidgetState extends State<AlertWidget> {
                 setState(() {
                   // radioButtonItem = 'ONE';
                   id = 1;
+                  status="Approved";
+                  print(status);
                 });
               },
             ),
@@ -44,6 +51,8 @@ class _AlertWidgetState extends State<AlertWidget> {
                 setState(() {
                   // radioButtonItem = 'TWO';
                   id = 2;
+                  status="Rejected";
+                  print(status);
                 });
               },
             ),
@@ -55,6 +64,49 @@ class _AlertWidgetState extends State<AlertWidget> {
               ),
             ),
 
+          ],
+        ),
+        Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 50,),
+              child: ElevatedButton(
+                  onPressed: (){
+                    Navigator.pop(context);
+                  },
+                  style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.teal)),
+                  child: Text("No",style: TextStyle(color: Colors.white))
+              ),
+            ),
+            SizedBox(width: 20,),
+            Padding(
+              padding: const EdgeInsets.only(right: 50),
+              child: ElevatedButton(
+                  onPressed: (){
+                    FutureBuilder(
+                      future: EmployeeLeaveStatusChangeAPI().status("info@webearl.com",widget.lrid),
+                      builder: (BuildContext context, snapshot) {
+                        if(snapshot.connectionState==ConnectionState.waiting){
+                          return Text("Loading");
+                        }
+                        else if(snapshot.hasData){
+                          return Column(
+                            children: [
+                              Text(snapshot.data!.server![0].status.toString())
+                            ],
+                          );
+                        }
+                        else{
+                          return Text("No data");
+                        }
+                      },
+
+                    );
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>LeaveDetail4()));
+                  },
+                  style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.teal)),
+                  child: Text("Yes",style: TextStyle(color: Colors.white))),
+            ),
           ],
         ),
       ],

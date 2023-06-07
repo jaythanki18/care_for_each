@@ -126,6 +126,7 @@ class _ProductsState extends State<Products> {
                          InkWell(
                            onTap: (){
                              Navigator.push(context, MaterialPageRoute(builder: (context)=>ProductDetail(pid:snapshot.data!.server![index].pid.toString())));
+                             print("pid :- "+snapshot.data!.server![index].pid.toString());
                            },
                            child: Card(
                             // margin: EdgeInsets.symmetric(horizontal: 10.25.w),
