@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../API/SubCategoryManageAPI.dart';
 import '../widgets/round_button.dart';
 import '../widgets/round_button2.dart';
 import 'company_profile.dart';
@@ -14,9 +15,10 @@ class NewSubCategory extends StatefulWidget {
 
 class _NewSubCategoryState extends State<NewSubCategory> {
   final formKey = GlobalKey<FormState>();
-
+  TextEditingController subcatname=TextEditingController();
   final items=['Select Category','Mobile Application','Digital Marketing','Web Application','Graphics Designing ','Customized Software','Man Power','Hello 2'];
   String? selectedItem='Select Category';
+  late final int catid;
 
   @override
   Widget build(BuildContext context) {
@@ -82,6 +84,16 @@ class _NewSubCategoryState extends State<NewSubCategory> {
                       )
                       ).toList(),
                       onChanged: (item)=>setState(()=>selectedItem=item),
+                        onTap: (){
+                          if(selectedItem=="Mobile Application"){ catid=112;}
+                          else if(selectedItem=="Digital Marketing"){ catid=113;}
+                          else if(selectedItem=="customized Software"){ catid=137;}
+                          else if(selectedItem=="man power"){ catid=138;}
+                          else if(selectedItem=="Web Application"){ catid=135;}
+                          else if(selectedItem=="Graphics Designing"){ catid=136;}
+                          print(selectedItem);
+                          print(catid);
+                        },
                     ),
                   ),
                   SizedBox(height: 1.36.h,),
@@ -90,7 +102,7 @@ class _NewSubCategoryState extends State<NewSubCategory> {
                     child: TextFormField(
                       validator: (value){
                         if(value!.isEmpty){
-                          return 'Please enter category name';
+                          return 'Please enter sub category name';
                         }
                         else{
                           return null;
@@ -111,6 +123,24 @@ class _NewSubCategoryState extends State<NewSubCategory> {
               RoundButton(
                 title: "Save",
                 onTap: () {
+                  FutureBuilder(
+                      future: SubCategoryManageAPI().subcategoryManage("info@webearl.com",subcatname.text,"insert",catid,""),
+                      builder: (BuildContext context, snapshot) {
+                        if(snapshot.connectionState==ConnectionState.waiting){
+                          return Center(child: CircularProgressIndicator());
+                        }
+                        else if(snapshot.hasData){
+                          return Column(
+                            children: [
+                              Text(snapshot.data!.server![0].result.toString())
+                            ],
+                          );
+                        }
+                        else{
+                          return Text("No data");
+                        }
+                      }
+                  );
                   if(formKey.currentState!.validate()){
 
                   }

@@ -6,8 +6,9 @@ import 'company_profile.dart';
 import 'package:sizer/sizer.dart';
 
 class ProductDetail extends StatefulWidget {
-  const ProductDetail({Key? key}) : super(key: key);
+  const ProductDetail({Key? key,required this.pid}) : super(key: key);
 
+   final pid;
   @override
   State<ProductDetail> createState() => _ProductDetailState();
 }

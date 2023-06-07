@@ -115,7 +115,7 @@ class _ProductsState extends State<Products> {
               future: ProductDisplayAPI().productList("info@webearl.com"),
               builder: (BuildContext context, snapshot) {
                 if(snapshot.connectionState==ConnectionState.waiting){
-                  return Text("Loading");
+                  return Center(child: CircularProgressIndicator(),);
                 }
                 else if(snapshot.hasData){
                   return ListView.builder(
@@ -125,7 +125,7 @@ class _ProductsState extends State<Products> {
                        children: [
                          InkWell(
                            onTap: (){
-                             Navigator.push(context, MaterialPageRoute(builder: (context)=>ProductDetail()));
+                             Navigator.push(context, MaterialPageRoute(builder: (context)=>ProductDetail(pid:snapshot.data!.server![index].pid.toString())));
                            },
                            child: Card(
                             // margin: EdgeInsets.symmetric(horizontal: 10.25.w),

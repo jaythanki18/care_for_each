@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:care_for_each/API/ProductInsertAPI.dart';
 import 'package:care_for_each/company_side/product_detail.dart';
+import 'package:care_for_each/company_side/products.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import '../ui/add_visitor.dart';
@@ -20,6 +22,15 @@ class _NewProductState extends State<NewProduct> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   TextEditingController _userimage=TextEditingController();
+  TextEditingController pname=TextEditingController();
+  TextEditingController pcode=TextEditingController();
+  TextEditingController price=TextEditingController();
+  TextEditingController min_sell_price=TextEditingController();
+  TextEditingController stock=TextEditingController();
+  TextEditingController minimum_stock=TextEditingController();
+  TextEditingController pdesc=TextEditingController();
+
+
   var _image;
   var imagePicker;
   var type;
@@ -39,6 +50,7 @@ class _NewProductState extends State<NewProduct> {
     List<String> list2=['Select Subcategory'];
     String? list2item='Select Subcategory';
 
+    var photo;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -138,7 +150,10 @@ class _NewProductState extends State<NewProduct> {
                           preferredCameraDevice: CameraDevice.front);
                       setState(() {
                         _image = File(image.path);
+                        photo=File(image.path);
+                       // _userimage=_image;
                       });
+                      //print(_userimage.text);
                     },
                     child: Padding(
                       padding:  EdgeInsets.symmetric(horizontal: 5.12.w),
@@ -162,8 +177,9 @@ class _NewProductState extends State<NewProduct> {
                           SizedBox(
                             height: 5.92.h,
                             child: TextFormField(
+                              controller: pname,
                               validator: (value){
-                                if(value!.isEmpty || !RegExp(r"^\s*([A-Za-z]{1,}([\.,] |[-']| ))+[A-Za-z]+\.?\s*$").hasMatch(value!)){
+                                if(value!.isEmpty ){
                                   return 'Enter correct name';
                                 }
                                 else{
@@ -184,6 +200,7 @@ class _NewProductState extends State<NewProduct> {
                           SizedBox(
                             height: 5.92.h,
                             child: TextFormField(
+                              controller: pcode,
                               validator: (value){
                                 if(value!.isEmpty){
                                   return 'Please enter product code';
@@ -206,6 +223,7 @@ class _NewProductState extends State<NewProduct> {
                           SizedBox(
                             height: 5.92.h,
                             child: TextFormField(
+                              controller: price,
                               validator: (value){
                                 if(value!.isEmpty){
                                   return 'Please enter a valid product price';
@@ -228,6 +246,7 @@ class _NewProductState extends State<NewProduct> {
                           SizedBox(
                             height: 5.92.h,
                             child: TextFormField(
+                              controller: min_sell_price,
                               validator: (value){
                                 if(value!.isEmpty){
                                   return 'Please enter a valid selling price';
@@ -250,6 +269,7 @@ class _NewProductState extends State<NewProduct> {
                           SizedBox(
                             height: 5.92.h,
                             child: TextFormField(
+                              controller: stock,
                               validator: (value){
                                 if(value!.isEmpty){
                                   return 'Please enter a valid product stock';
@@ -272,6 +292,7 @@ class _NewProductState extends State<NewProduct> {
                           SizedBox(
                             height: 5.92.h,
                             child: TextFormField(
+                              controller: minimum_stock,
                               validator: (value){
                                 if(value!.isEmpty){
                                   return 'Please enter a valid product stock';
@@ -294,6 +315,7 @@ class _NewProductState extends State<NewProduct> {
                           SizedBox(
                             height: 5.92.h,
                             child: TextFormField(
+                              controller: pdesc,
                               validator: (value){
                                 if(value!.isEmpty){
                                   return 'Please enter a description';
@@ -317,10 +339,29 @@ class _NewProductState extends State<NewProduct> {
                             child: RoundButton(
                               title: "Add Product",
                               onTap: () {
-                                if(formKey.currentState!.validate()){
+                                FutureBuilder(
+                                  future: ProductInsertAPI().productList(pname.text,pcode.text,pdesc.text,price.text,stock.text,minimum_stock.text,"","info@webearl.com","",""),
+                                  builder: (BuildContext context, snapshot) {
+                                    if(snapshot.connectionState==ConnectionState.waiting){
+                                      return Center(child: CircularProgressIndicator(),);
+                                    }
+                                    else if(snapshot.hasData){
+                                      return Column(
+                                        children: [
+                                          Text(snapshot.data!.server![0].status.toString())
+                                        ],
+                                      );
+                                    }
+                                    else{
+                                      return Text("No data");
+                                    }
+                                  },
 
+                                );
+                                if(formKey.currentState!.validate()){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>Products()));
                                 }
-                                //Navigator.push(context, MaterialPageRoute(builder: (context)=>ProductDetail()));
+
                               },
                             ),
                           ),

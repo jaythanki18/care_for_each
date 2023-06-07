@@ -63,7 +63,7 @@ class _CompanyVisitorDetailState extends State<CompanyVisitorDetail> {
             margin: EdgeInsets.only(left: 40,right: 40),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
             child: Container(
-              height: 34.36.h,
+             // height: 34.36.h,
               width: 79.74.h,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(2.36.h),
