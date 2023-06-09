@@ -5,8 +5,9 @@ import '../widgets/round_button.dart';
 import 'company_profile.dart';
 import 'package:sizer/sizer.dart';
 class CompanyVisitorDetail extends StatefulWidget {
-  const CompanyVisitorDetail({Key? key}) : super(key: key);
+  const CompanyVisitorDetail({Key? key, required this.visitorname, required this.company, required this.email, required this.contact, required this.date, required this.time, required this.discussion, required this.address, required this.photo}) : super(key: key);
 
+  final String visitorname,company,email,contact,date,time,discussion,address,photo;
   @override
   State<CompanyVisitorDetail> createState() => _CompanyVisitorDetailState();
 }
@@ -54,7 +55,7 @@ class _CompanyVisitorDetailState extends State<CompanyVisitorDetail> {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 11.02.w),
             child: RoundButton2(
-              title: "Company Name",
+              title: widget.company,
               onTap: () {},
             ),
           ),
@@ -78,16 +79,16 @@ class _CompanyVisitorDetailState extends State<CompanyVisitorDetail> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
 
-                    Center(child: Container(child: Image.asset("assets/img_4.png",width: 20.51.w,height: 11.25.h,))),
+                    Center(child: Container(child: Image.network(widget.photo,errorBuilder: (context, error, stackTrace) => SizedBox(width: 25.64.w,height: 100,)),height: 95,width: 80,)),
                     SizedBox(height: 11.37.sp,),
                     //Image.asset("calender.png",width: 0.01*w),
-                    Text('Person Name : kagku',style: TextStyle(fontSize: 10.61.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1),
-                    Text('Company Address : mygve',style: TextStyle(fontSize: 10.61.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1,),
-                    Text('Email : mjrhg@gmail.com',style: TextStyle(fontSize: 10.61.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1),
-                    Text('Contact No : 9898989898',style: TextStyle(fontSize: 10.61.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1),
-                    Text('Date : 09-08-2020',style: TextStyle(fontSize: 10.61.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1),
-                    Text('Time : 01:30 PM',style: TextStyle(fontSize: 10.61.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 2),
-                    Text('Discussion : asdfghjkl',style: TextStyle(fontSize: 10.61.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 2),
+                    Text('Person Name : '+widget.visitorname,style: TextStyle(fontSize: 10.61.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1),
+                    Text('Company Address : '+widget.address,style: TextStyle(fontSize: 10.61.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1,),
+                    Text('Email : '+widget.email,style: TextStyle(fontSize: 10.61.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1),
+                    Text('Contact No : '+widget.contact,style: TextStyle(fontSize: 10.61.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1),
+                    Text('Date : '+widget.date,style: TextStyle(fontSize: 10.61.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1),
+                    Text('Time : '+widget.time,style: TextStyle(fontSize: 10.61.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 2),
+                    Text('Discussion : '+widget.discussion,style: TextStyle(fontSize: 10.61.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 2),
                     //Text('Expected Date :${message}'),
                   ],
                 ),

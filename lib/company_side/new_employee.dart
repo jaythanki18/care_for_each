@@ -1,10 +1,8 @@
 import 'dart:io';
 import 'package:care_for_each/company_side/employee.dart';
 import 'package:intl/intl.dart';
-import 'package:care_for_each/company_side/employee_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-
 import '../API/employee_add_API.dart';
 import '../ui/add_visitor.dart';
 import 'package:sizer/sizer.dart';

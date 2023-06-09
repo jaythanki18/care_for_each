@@ -6,19 +6,19 @@ import '../Models/SingleProductDisplayModel.dart';
 class ProductValueEditAPI {
   // SingleProductDisplayAPI();
 
-  Future<ProductValueEditModel> productList(c_email,fname,value) async {
+  Future<ProductValueEditModel> productEditList(pid,fname,value) async {
     // final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
     // final SharedPreferences prefs = await _prefs;
     // var token = prefs.getString("userToken");
 
-    var url =  "http://www.careforeach.com/new/company/company_api_jay/webservices/single_product_display.php";
+    var url =  "http://www.careforeach.com/new/company/company_api_jay/webservices/product_value_edit.php";
     http.Response response = await http.post(
         Uri.parse(url),
         // headers: {
         //   // "Authorization": token,
         // },
         body:{
-          'c_emailid': c_email,
+          'pid': pid,
           'fname':fname,
           'value':value
         }
