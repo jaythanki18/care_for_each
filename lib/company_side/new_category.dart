@@ -8,9 +8,8 @@ import 'company_profile.dart';
 import 'package:sizer/sizer.dart';
 
 class NewCategory extends StatefulWidget {
-  const NewCategory({Key? key}) : super(key: key);
-
-
+  const NewCategory({Key? key, required this.c_emailid}) : super(key: key);
+  final String c_emailid;
   @override
   State<NewCategory> createState() => _NewCategoryState();
 }
@@ -122,7 +121,7 @@ class _NewCategoryState extends State<NewCategory> {
                   title: "Save",
                   onTap: () {
                     FutureBuilder(
-                      future: CategoryManageAPI().categoryManage("info@webearl.com",catname.text,gst.text,"insert",""),
+                      future: CategoryManageAPI().categoryManage(widget.c_emailid,catname.text,gst.text,"insert",""),
                       builder: (BuildContext context, snapshot) {
                         if(snapshot.connectionState==ConnectionState.waiting){
                           return Text("Loading");
@@ -141,7 +140,7 @@ class _NewCategoryState extends State<NewCategory> {
 
                     );
                     if(formKey.currentState!.validate()){
-                      //Navigator.push(context, MaterialPageRoute(builder: (context)=>Category()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>Category(c_emailid: widget.c_emailid,)));
                     }
 
                   },

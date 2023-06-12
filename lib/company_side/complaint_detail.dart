@@ -5,9 +5,9 @@ import '../API/employee_complain_API.dart';
 
 
 class ComplaintDetail extends StatefulWidget {
-  const ComplaintDetail({Key? key, required this.name,}) : super(key: key);
+  const ComplaintDetail({Key? key, required this.name, required this.c_emailid,}) : super(key: key);
 
-  final String name;
+  final String name,c_emailid;
  // final String photo,name,designation,date,detail;
   @override
   State<ComplaintDetail> createState() => _ComplaintDetailState();

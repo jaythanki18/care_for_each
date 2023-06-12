@@ -6,8 +6,9 @@ import 'package:sizer/sizer.dart';
 import '../API/employee_complain_API.dart';
 
 class Complaint extends StatefulWidget {
-  const Complaint({Key? key}) : super(key: key);
+  const Complaint({Key? key, required this.c_emailid}) : super(key: key);
 
+  final String c_emailid;
   @override
   State<Complaint> createState() => _ComplaintState();
 }
@@ -60,7 +61,7 @@ class _ComplaintState extends State<Complaint> {
       body: Column(
         children: [
           FutureBuilder(
-              future: EmployeeComplainAPI().complainList("info@webearl.com"),
+              future: EmployeeComplainAPI().complainList(widget.c_emailid),
               builder: (BuildContext context, snapshot){
                 if(snapshot.connectionState==ConnectionState.waiting){
                   return Center(child: CircularProgressIndicator(),);
@@ -87,7 +88,7 @@ class _ComplaintState extends State<Complaint> {
                                   width: 80.74.w,
                                   child: InkWell(
                                     onTap: (){
-                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>ComplaintDetail(name: snapshot.data!.server![index].ename.toString(),)));
+                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>ComplaintDetail(name: snapshot.data!.server![index].ename.toString(),c_emailid: widget.c_emailid,)));
                                     },
                                     child: Row(
                                       children: [

@@ -7,8 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
 class Employee extends StatelessWidget {
-  const Employee({Key? key}) : super(key: key);
+  const Employee({Key? key, required this.c_emailid}) : super(key: key);
 
+  final String c_emailid;
   @override
   Widget build(BuildContext context) {
     //double w=MediaQuery.of(context).size.width;
@@ -51,7 +52,7 @@ class Employee extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Color.fromRGBO(12,25,71,1),
         onPressed: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>NewEmployee()));
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>NewEmployee(c_emailid: c_emailid,)));
         },
         child: Icon(Icons.add),
       ),
@@ -61,7 +62,7 @@ class Employee extends StatelessWidget {
           child: Column(
             children: [
               FutureBuilder(
-                future: EmployeeDataAPI().employeeList("info@webearl.com"),
+                future: EmployeeDataAPI().employeeList(c_emailid),
                 builder: (BuildContext context, snapshot) {
                   if(snapshot.connectionState==ConnectionState.waiting){
                     return Center(child: CircularProgressIndicator(),);
@@ -78,6 +79,7 @@ class Employee extends StatelessWidget {
                                 onTap: (){
                                   int i=index;
                                     Navigator.push(context, MaterialPageRoute(builder: (context)=>EmployeeProfile(
+                                      c_emailid: c_emailid,
                                       photo: snapshot.data!.server![index].photo.toString(),
                                       ename: snapshot.data!.server![index].ename.toString(),
                                       emailid: snapshot.data!.server![index].emailid.toString(),

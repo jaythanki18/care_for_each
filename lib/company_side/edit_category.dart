@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 
 import '../API/CategoryManageAPI.dart';
 import '../widgets/round_button.dart';
+import 'category.dart';
 import 'company_profile.dart';
 import 'package:sizer/sizer.dart';
 
 class EditCategory extends StatefulWidget {
-  const EditCategory({Key? key, required this.catid}) : super(key: key);
-  final String catid;
+  const EditCategory({Key? key, required this.catid, required this.c_emailid}) : super(key: key);
+  final String catid,c_emailid;
   @override
   State<EditCategory> createState() => _EditCategoryState();
 }
@@ -120,7 +121,7 @@ class _EditCategoryState extends State<EditCategory> {
                   title: "Save",
                   onTap: () {
                     FutureBuilder(
-                      future: CategoryManageAPI().categoryManage("info@webearl.com",catname.text,gst.text,"update",widget.catid),
+                      future: CategoryManageAPI().categoryManage(widget.c_emailid,catname.text,gst.text,"update",widget.catid),
                       builder: (BuildContext context, snapshot) {
                         if(snapshot.connectionState==ConnectionState.waiting){
                           return Text("Loading");
@@ -139,7 +140,7 @@ class _EditCategoryState extends State<EditCategory> {
 
                     );
                     if(formKey.currentState!.validate()){
-                      //Navigator.push(context, MaterialPageRoute(builder: (context)=>Category()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>Category(c_emailid: widget.c_emailid,)));
                     }
                   },
                 ),

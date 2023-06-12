@@ -11,8 +11,9 @@ import 'company_profile.dart';
 import 'package:sizer/sizer.dart';
 
 class NewProduct extends StatefulWidget {
-  const NewProduct({Key? key}) : super(key: key);
+  const NewProduct({Key? key, required this.c_emailid}) : super(key: key);
 
+  final String c_emailid;
   @override
   State<NewProduct> createState() => _NewProductState();
 }
@@ -30,6 +31,13 @@ class _NewProductState extends State<NewProduct> {
   TextEditingController minimum_stock=TextEditingController();
   TextEditingController pdesc=TextEditingController();
 
+  String proName="";
+  String proCode="";
+  String proPrice="";
+  String minimum_sell="";
+  String proStock="";
+  String min_stock="";
+  String proDesc="";
 
   var _image;
   var imagePicker;
@@ -151,9 +159,9 @@ class _NewProductState extends State<NewProduct> {
                       setState(() {
                         _image = File(image.path);
                         photo=File(image.path);
-                       // _userimage=_image;
+                        _userimage=_image;
                       });
-                      //print(_userimage.text);
+                      print(_userimage.text);
                     },
                     child: Padding(
                       padding:  EdgeInsets.symmetric(horizontal: 5.12.w),
@@ -177,6 +185,12 @@ class _NewProductState extends State<NewProduct> {
                           SizedBox(
                             height: 5.92.h,
                             child: TextFormField(
+                              onChanged: (value){
+                                proName=value;
+                                setState(() {
+
+                                });
+                              },
                               controller: pname,
                               validator: (value){
                                 if(value!.isEmpty ){
@@ -200,6 +214,12 @@ class _NewProductState extends State<NewProduct> {
                           SizedBox(
                             height: 5.92.h,
                             child: TextFormField(
+                              onChanged: (value){
+                                proCode=value;
+                                setState(() {
+
+                                });
+                              },
                               controller: pcode,
                               validator: (value){
                                 if(value!.isEmpty){
@@ -223,6 +243,12 @@ class _NewProductState extends State<NewProduct> {
                           SizedBox(
                             height: 5.92.h,
                             child: TextFormField(
+                              onChanged: (value){
+                                proPrice=value;
+                                setState(() {
+
+                                });
+                              },
                               controller: price,
                               validator: (value){
                                 if(value!.isEmpty){
@@ -246,6 +272,12 @@ class _NewProductState extends State<NewProduct> {
                           SizedBox(
                             height: 5.92.h,
                             child: TextFormField(
+                              onChanged: (value){
+                                minimum_sell=value;
+                                setState(() {
+
+                                });
+                              },
                               controller: min_sell_price,
                               validator: (value){
                                 if(value!.isEmpty){
@@ -269,6 +301,12 @@ class _NewProductState extends State<NewProduct> {
                           SizedBox(
                             height: 5.92.h,
                             child: TextFormField(
+                              onChanged: (value){
+                                proStock=value;
+                                setState(() {
+
+                                });
+                              },
                               controller: stock,
                               validator: (value){
                                 if(value!.isEmpty){
@@ -292,6 +330,12 @@ class _NewProductState extends State<NewProduct> {
                           SizedBox(
                             height: 5.92.h,
                             child: TextFormField(
+                              onChanged: (value){
+                                min_stock=value;
+                                setState(() {
+
+                                });
+                              },
                               controller: minimum_stock,
                               validator: (value){
                                 if(value!.isEmpty){
@@ -315,6 +359,12 @@ class _NewProductState extends State<NewProduct> {
                           SizedBox(
                             height: 5.92.h,
                             child: TextFormField(
+                              onChanged: (value){
+                                proDesc=value;
+                                setState(() {
+
+                                });
+                              },
                               controller: pdesc,
                               validator: (value){
                                 if(value!.isEmpty){
@@ -340,7 +390,7 @@ class _NewProductState extends State<NewProduct> {
                               title: "Add Product",
                               onTap: () {
                                 FutureBuilder(
-                                  future: ProductInsertAPI().productList(pname.text,pcode.text,pdesc.text,price.text,stock.text,minimum_stock.text,"","info@webearl.com","",""),
+                                  future: ProductInsertAPI().productList(proName,proCode,proDesc,proPrice,proStock,min_stock,"",widget.c_emailid,"",""),
                                   builder: (BuildContext context, snapshot) {
                                     if(snapshot.connectionState==ConnectionState.waiting){
                                       return Center(child: CircularProgressIndicator(),);
@@ -359,7 +409,7 @@ class _NewProductState extends State<NewProduct> {
 
                                 );
                                 if(formKey.currentState!.validate()){
-                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>Products()));
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>Products(c_emailid: widget.c_emailid,)));
                                 }
 
                               },

@@ -4,9 +4,12 @@ import 'package:table_calendar/table_calendar.dart';
 import '../ui/profile.dart';
 import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
-class Attendance extends StatefulWidget {
-  const Attendance({Key? key}) : super(key: key);
+import 'company_dashboard.dart';
 
+class Attendance extends StatefulWidget {
+  const Attendance({Key? key, required this.c_emailid}) : super(key: key);
+
+  final String c_emailid;
   @override
   State<Attendance> createState() => _AttendanceState();
 
@@ -123,7 +126,7 @@ class _AttendanceState extends State<Attendance> {
           SizedBox(height: 1.10.h,),
 
           FutureBuilder(
-              future: EmployeeTodayAttendanceAPI().employee("info@webearl.com",formattedDate2),
+              future: EmployeeTodayAttendanceAPI().employee(widget.c_emailid,formattedDate2),
               builder: (BuildContext context, snapshot){
                 if(snapshot.connectionState==ConnectionState.waiting){
                   return Center(child: CircularProgressIndicator(),);

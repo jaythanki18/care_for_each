@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:care_for_each/API/CompanyLoginAPI.dart';
 import 'package:care_for_each/company_side/company_dashboard.dart';
 import 'package:care_for_each/company_side/company_profile.dart';
 import 'package:flutter/material.dart';
@@ -19,8 +20,18 @@ class _CompanyLoginState extends State<CompanyLogin> {
   final formKey=GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey=GlobalKey<ScaffoldState>();
 
+
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+   String email="";
+   String password="";
+
+   @override
+  void initState() {
+    // TODO: implement initState
+
+    super.initState();
+  }
 
   //  signIn(String email,String password) async{
   //   Map server={
@@ -81,16 +92,18 @@ class _CompanyLoginState extends State<CompanyLogin> {
   // }
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
-        body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20),
-          child: SingleChildScrollView(
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
             child: Form(
               key: formKey,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+
                   SizedBox(height: 15.h,),
                   Container(
                     height: 19.19.h,
@@ -116,6 +129,12 @@ class _CompanyLoginState extends State<CompanyLogin> {
                      //width: 77.94.w,
                     // height: 5.92.h,
                     child: TextFormField(
+                      onChanged: (value){
+                        email=value;
+                        setState(() {
+
+                        });
+                      },
                       controller: emailController,
                       keyboardType: TextInputType.emailAddress,
                       validator: (value){
@@ -150,6 +169,12 @@ class _CompanyLoginState extends State<CompanyLogin> {
                     // width: 77.94.w,
                     // height: 5.92.h,
                     child: TextFormField(
+                      onChanged: (value){
+                        password=value;
+                        setState(() {
+
+                        });
+                      },
                       controller: passwordController,
                       obscureText: true,
                       keyboardType: TextInputType.text,
@@ -188,45 +213,104 @@ class _CompanyLoginState extends State<CompanyLogin> {
                   SizedBox(
                     height: 2.37.h,
                   ),
-                  RoundButton(
-                    title: "Log In",
-                    onTap: () {
-                      if(formKey.currentState!.validate()){
-                        //_login();
+                  SizedBox(
+                    height: 25.83.h,
+                    child:  Column(
+                      children: [
+                        FutureBuilder(
+                            future: CompanyLoginAPI().login(emailController.text,passwordController.text),
+                            builder: (BuildContext context, snapshot){
+                              if(snapshot.connectionState==ConnectionState.waiting){
+                                return  RoundButton(
+                                  title: "Log In", onTap: () {  },
 
-                         //signIn(emailController.text,passwordController.text);
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>CompanyDashboard()));
-                      }
-                      
-
-                    },
-                  ),
-                  Container(
-                      alignment: Alignment.centerRight,
-                      child: TextButton(
-                          onPressed: () {},
-                          child: Text(
-                            "Forgot password?",
-                            style: TextStyle(color: Colors.grey[400],fontSize: 11.37.sp),
-                          ))),
-                  Container(
-                    width: 77.94.w,
-                    height: 5.92.h,
-                    child: ElevatedButton(
-                        onPressed: () {
-                        //  Navigator.push(context, MaterialPageRoute(builder: (context)=>CompanyLogin()));
-                        },
-                        child: Text(
-                          "Don't have an Account? Sign Up",
-                          style: TextStyle(color: Colors.teal),
+                                  // onTap: () async{
+                                  //   // final SharedPreferences sharedPreferences=await SharedPreferences.getInstance();
+                                  //   // sharedPreferences.setString('c_email', emailController.text);
+                                  //   email=emailController.text;
+                                  //   print(""+snapshot.data!.server![index].success.toString());
+                                  //   // var snackBar = SnackBar(
+                                  //   //   content: Text("success : "+snapshot.data!.server![index].success.toString()),
+                                  //   // );
+                                  //   // ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                  //   if(formKey.currentState!.validate() && snapshot.data!.server![index].success.toString()==emailController.text.toString()){
+                                  //     Navigator.push(context, MaterialPageRoute(builder: (context)=>CompanyDashboard(c_email: emailController.text,)));
+                                  //     print(emailController.text);
+                                  //   }
+                                  //   else if(snapshot.data!.server![index].success.toString()!=emailController.text.toString()){
+                                  //     var snackBar = SnackBar(
+                                  //       content: Text("success : "+snapshot.data!.server![index].success.toString()),
+                                  //     );
+                                  //     ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                  //   }
+                                  // },
+                                );
+                              }
+                              else if(snapshot.hasData){
+                                return Expanded(
+                                    child: ListView.builder(
+                                        itemCount: snapshot.data!.server!.length,
+                                        itemBuilder: (context,index){
+                                          return  RoundButton(
+                                            title: "Log In",
+                                            onTap: () async{
+                                              // final SharedPreferences sharedPreferences=await SharedPreferences.getInstance();
+                                              // sharedPreferences.setString('c_email', emailController.text);
+                                              email=emailController.text;
+                                              print("success"+snapshot.data!.server![index].success.toString());
+                                              // var snackBar = SnackBar(
+                                              //   content: Text("success : "+snapshot.data!.server![index].success.toString()),
+                                              // );
+                                              // ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                              if(formKey.currentState!.validate() && snapshot.data!.server![index].success.toString()==emailController.text.toString()){
+                                                Navigator.push(context, MaterialPageRoute(builder: (context)=>CompanyDashboard(c_email: emailController.text,)));
+                                                print(emailController.text);
+                                              }
+                                              else if(snapshot.data!.server![index].success.toString()!=emailController.text.toString()){
+                                                var snackBar = SnackBar(
+                                                  content: Text(snapshot.data!.server![index].success.toString()),
+                                                );
+                                                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                              }
+                                            },
+                                          );
+                                        })
+                                );
+                              }
+                              else{
+                                return Text("No data");
+                              }
+                            }
                         ),
-                        style: ElevatedButton.styleFrom(
-                            elevation: 0,
-                            backgroundColor: Colors.white,
-                            side: const BorderSide(
-                              width: 1.0,
-                              color: Colors.teal,
-                            ))),
+                        Container(
+                            alignment: Alignment.centerRight,
+                            child: TextButton(
+                                onPressed: () {},
+                                child: Text(
+                                  "Forgot password?",
+                                  style: TextStyle(color: Colors.grey[400],fontSize: 11.37.sp),
+                                ))),
+                        Container(
+                          width: 77.94.w,
+                          height: 5.92.h,
+                          child: ElevatedButton(
+                              onPressed: () {
+                                //  Navigator.push(context, MaterialPageRoute(builder: (context)=>CompanyLogin()));
+                              },
+                              child: Text(
+                                "Don't have an Account? Sign Up",
+                                style: TextStyle(color: Colors.teal),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                  elevation: 0,
+                                  backgroundColor: Colors.white,
+                                  side: const BorderSide(
+                                    width: 1.0,
+                                    color: Colors.teal,
+                                  ))),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -235,3 +319,4 @@ class _CompanyLoginState extends State<CompanyLogin> {
         ));
   }
 }
+

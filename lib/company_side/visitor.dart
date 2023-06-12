@@ -6,8 +6,9 @@ import 'package:sizer/sizer.dart';
 import 'company_profile.dart';
 
 class CompanyVisitor extends StatefulWidget {
-  const CompanyVisitor({Key? key}) : super(key: key);
+  const CompanyVisitor({Key? key, required this.c_emailid}) : super(key: key);
 
+  final String c_emailid;
   @override
   State<CompanyVisitor> createState() => _CompanyVisitorState();
 }
@@ -106,7 +107,7 @@ class _CompanyVisitorState extends State<CompanyVisitor> {
 
 
           FutureBuilder(
-              future: VisitorDisplayAPI().visitor("info@webearl.com",dur,e_emailid),
+              future: VisitorDisplayAPI().visitor(widget.c_emailid,dur,e_emailid),
               builder: (BuildContext context, snapshot){
                 if(snapshot.connectionState==ConnectionState.waiting){
                   return Center(child: CircularProgressIndicator(),);
@@ -122,6 +123,7 @@ class _CompanyVisitorState extends State<CompanyVisitor> {
                                 InkWell(
                                   onTap: (){
                                     Navigator.push(context, MaterialPageRoute(builder: (context)=>CompanyVisitorDetail(
+                                      c_emailid: widget.c_emailid,
                                       visitorname: snapshot.data!.server![index].visitername.toString(),
                                       company: snapshot.data!.server![index].companyname.toString(),
                                       address: snapshot.data!.server![index].address.toString(),

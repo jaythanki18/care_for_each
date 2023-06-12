@@ -1,5 +1,4 @@
-import 'package:care_for_each/company_side/edit_category.dart';
-import 'package:care_for_each/company_side/new_category.dart';
+
 import 'package:care_for_each/company_side/new_sub_category.dart';
 import 'package:flutter/material.dart';
 import '../API/SubCategoryDisplayAPI.dart';
@@ -9,8 +8,9 @@ import 'company_profile.dart';
 import 'package:sizer/sizer.dart';
 
 class SubCategory extends StatefulWidget {
-  const SubCategory({Key? key}) : super(key: key);
+  const SubCategory({Key? key, required this.c_emailid}) : super(key: key);
 
+  final String c_emailid;
 
   @override
   State<SubCategory> createState() => _SubCategoryState();
@@ -25,7 +25,7 @@ class _SubCategoryState extends State<SubCategory> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>NewSubCategory()));
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>NewSubCategory(c_emailid: widget.c_emailid,)));
         },
         backgroundColor: Color.fromRGBO(12,25,71,1),
         child: Icon(Icons.add),
@@ -65,10 +65,10 @@ class _SubCategoryState extends State<SubCategory> {
         shadowColor: Colors.transparent,
       ),
       body: FutureBuilder(
-        future: SubCategoryDisplayAPI().subcategoryList("info@webearl.com"),
+        future: SubCategoryDisplayAPI().subcategoryList(widget.c_emailid),
         builder: (BuildContext context, snapshot) {
           if(snapshot.connectionState==ConnectionState.waiting){
-            return Text("Loading");
+            return Center(child: CircularProgressIndicator(),);
           }
           else if(snapshot.hasData){
             return Column(
@@ -125,101 +125,102 @@ class _SubCategoryState extends State<SubCategory> {
       ),
     );
   }
-}
+  showAlertDialog(BuildContext context,catname,subcatname,catid,subcat_id) {
 
-showAlertDialog(BuildContext context,catname,subcatname,catid,subcat_id) {
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      backgroundColor: Color.fromRGBO(2, 25, 71, 1),
+      title: FutureBuilder(
+        future: SubCategoryManageAPI().subcategoryManage(widget.c_emailid, subcatname, "delete",catid,subcat_id),
+        builder: (context,snapshot){
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("Edit Sub-Category : ",style: TextStyle(color: Colors.white,decoration: TextDecoration.underline),),
+              SizedBox(height: 10,),
+              Container(
+                width: 64.10.w,
+                height: 5.33.h,
+                child: ElevatedButton(
+                    onPressed: () {
+                      // Navigator.push(context, MaterialPageRoute(builder: (context)=>));
+                    },
+                    child: Text(catname, style: TextStyle(color: Colors.teal,fontSize: 11.37.sp),),
+                    style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                        elevation: 0,
+                        backgroundColor: Colors.transparent,
+                        side: const BorderSide(
+                          width: 1.0,
+                          color: Colors.teal,
+                        )
+                    )
+                ),
+              ),
+              SizedBox(height: 0.59.h,),
+              Container(
+                width: 64.10.w,
+                height: 5.33.h,
+                child: ElevatedButton(
+                    onPressed: () {
+                      // Navigator.push(context, MaterialPageRoute(builder: (context)=>));
+                    },
+                    child: Text(subcatname, style: TextStyle(color: Colors.teal,fontSize: 11.37.sp),),
+                    style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                        elevation: 0,
+                        backgroundColor: Colors.transparent,
+                        side: const BorderSide(
+                          width: 1.0,
+                          color: Colors.teal,
+                        )
+                    )
+                ),
+              ),
+            ],
+          );
+        },
 
-  // set up the AlertDialog
-  AlertDialog alert = AlertDialog(
-    backgroundColor: Color.fromRGBO(2, 25, 71, 1),
-    title: FutureBuilder(
-      future: SubCategoryManageAPI().subcategoryManage("info@webearl.com", subcatname, "delete",catid,subcat_id),
-      builder: (context,snapshot){
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+      ),
+      // content: Text("Would you like to continue learning how to use Flutter alerts?"),
+      actions: [
+        Row(
           children: [
-            Text("Edit Sub-Category : ",style: TextStyle(color: Colors.white,decoration: TextDecoration.underline),),
-            SizedBox(height: 10,),
-            Container(
-              width: 64.10.w,
-              height: 5.33.h,
+            Padding(
+              padding: const EdgeInsets.only(left: 50,),
               child: ElevatedButton(
-                  onPressed: () {
-                    // Navigator.push(context, MaterialPageRoute(builder: (context)=>));
+                  onPressed: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>SubCategory(c_emailid: widget.c_emailid,)));
                   },
-                  child: Text(catname, style: TextStyle(color: Colors.teal,fontSize: 11.37.sp),),
-                  style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                      elevation: 0,
-                      backgroundColor: Colors.transparent,
-                      side: const BorderSide(
-                        width: 1.0,
-                        color: Colors.teal,
-                      )
-                  )
+                  style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.teal)),
+                  child: Text("Delete",style: TextStyle(color: Colors.white))
               ),
             ),
-            SizedBox(height: 0.59.h,),
-            Container(
-              width: 64.10.w,
-              height: 5.33.h,
+            SizedBox(width: 5.92.w,),
+            Padding(
+              padding: const EdgeInsets.only(right: 50),
               child: ElevatedButton(
-                  onPressed: () {
-                    // Navigator.push(context, MaterialPageRoute(builder: (context)=>));
+                  onPressed: (){
+                    //Navigator.push(context, MaterialPageRoute(builder: (context)=>EditCategory(catid: catid,)));
                   },
-                  child: Text(subcatname, style: TextStyle(color: Colors.teal,fontSize: 11.37.sp),),
-                  style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                      elevation: 0,
-                      backgroundColor: Colors.transparent,
-                      side: const BorderSide(
-                        width: 1.0,
-                        color: Colors.teal,
-                      )
-                  )
-              ),
+                  style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.teal)),
+                  child: Text("Edit",style: TextStyle(color: Colors.white))),
             ),
           ],
-        );
+        ),
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
       },
-
-    ),
-    // content: Text("Would you like to continue learning how to use Flutter alerts?"),
-    actions: [
-      Row(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 50,),
-            child: ElevatedButton(
-                onPressed: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>SubCategory()));
-                },
-                style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.teal)),
-                child: Text("Delete",style: TextStyle(color: Colors.white))
-            ),
-          ),
-          SizedBox(width: 5.92.w,),
-          Padding(
-            padding: const EdgeInsets.only(right: 50),
-            child: ElevatedButton(
-                onPressed: (){
-                  //Navigator.push(context, MaterialPageRoute(builder: (context)=>EditCategory(catid: catid,)));
-                },
-                style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.teal)),
-                child: Text("Edit",style: TextStyle(color: Colors.white))),
-          ),
-        ],
-      ),
-    ],
-  );
-
-  // show the dialog
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
-  );
+    );
+  }
 }
+
+
 
 

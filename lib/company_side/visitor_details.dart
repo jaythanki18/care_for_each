@@ -5,9 +5,9 @@ import '../widgets/round_button.dart';
 import 'company_profile.dart';
 import 'package:sizer/sizer.dart';
 class CompanyVisitorDetail extends StatefulWidget {
-  const CompanyVisitorDetail({Key? key, required this.visitorname, required this.company, required this.email, required this.contact, required this.date, required this.time, required this.discussion, required this.address, required this.photo}) : super(key: key);
+  const CompanyVisitorDetail({Key? key, required this.visitorname, required this.company, required this.email, required this.contact, required this.date, required this.time, required this.discussion, required this.address, required this.photo, required this.c_emailid}) : super(key: key);
 
-  final String visitorname,company,email,contact,date,time,discussion,address,photo;
+  final String visitorname,company,email,contact,date,time,discussion,address,photo,c_emailid;
   @override
   State<CompanyVisitorDetail> createState() => _CompanyVisitorDetailState();
 }

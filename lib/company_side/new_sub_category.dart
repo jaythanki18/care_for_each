@@ -7,8 +7,9 @@ import 'company_profile.dart';
 import 'package:sizer/sizer.dart';
 
 class NewSubCategory extends StatefulWidget {
-  const NewSubCategory({Key? key}) : super(key: key);
+  const NewSubCategory({Key? key, required this.c_emailid}) : super(key: key);
 
+  final String c_emailid;
   @override
   State<NewSubCategory> createState() => _NewSubCategoryState();
 }
@@ -124,7 +125,7 @@ class _NewSubCategoryState extends State<NewSubCategory> {
                 title: "Save",
                 onTap: () {
                   FutureBuilder(
-                      future: SubCategoryManageAPI().subcategoryManage("info@webearl.com",subcatname.text,"insert",catid,""),
+                      future: SubCategoryManageAPI().subcategoryManage(widget.c_emailid,subcatname.text,"insert",catid,""),
                       builder: (BuildContext context, snapshot) {
                         if(snapshot.connectionState==ConnectionState.waiting){
                           return Center(child: CircularProgressIndicator());

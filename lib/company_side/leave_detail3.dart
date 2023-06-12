@@ -9,8 +9,9 @@ import 'leave_detail.dart';
 import 'package:sizer/sizer.dart';
 
 class LeaveDetail3 extends StatefulWidget {
-  const LeaveDetail3({Key? key}) : super(key: key);
+  const LeaveDetail3({Key? key, required this.c_emailid}) : super(key: key);
 
+  final String c_emailid;
   @override
   State<LeaveDetail3> createState() => _LeaveDetail3State();
 }
@@ -30,7 +31,7 @@ class _LeaveDetail3State extends State<LeaveDetail3> {
                 size: 30, // Changing Drawer Icon Size
               ),
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>CompanyDashboard()));
+               // Navigator.push(context, MaterialPageRoute(builder: (context)=>CompanyDashboard()));
               },
               tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
             );
@@ -60,7 +61,7 @@ class _LeaveDetail3State extends State<LeaveDetail3> {
             children: [
               InkWell(
                 onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>LeaveDetail1()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>LeaveDetail1(c_emailid: widget.c_emailid,)));
                 },
                 child: Container(
                   height: 4.26.h,
@@ -74,7 +75,7 @@ class _LeaveDetail3State extends State<LeaveDetail3> {
               ),
               InkWell(
                 onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>LeaveDetail2()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>LeaveDetail2(c_emailid: widget.c_emailid,)));
                 },
                 child: Container(
                   height: 4.26.h,
@@ -102,7 +103,7 @@ class _LeaveDetail3State extends State<LeaveDetail3> {
               ),
               InkWell(
                 onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>LeaveDetail4()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>LeaveDetail4(c_emailid: widget.c_emailid,)));
                 },
                 child: Container(
                   height: 4.26.h,
@@ -118,7 +119,7 @@ class _LeaveDetail3State extends State<LeaveDetail3> {
           ),
           SizedBox(height: 1.36.h,),
           FutureBuilder(
-              future: EmployeeLeaveAPI().leave("info@webearl.com", "Approved"),
+              future: EmployeeLeaveAPI().leave(widget.c_emailid, "Approved"),
               builder: (BuildContext context, snapshot){
                 if(snapshot.connectionState==ConnectionState.waiting){
                   return Center(child: CircularProgressIndicator(),);

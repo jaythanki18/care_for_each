@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'package:care_for_each/company_side/company_dashboard.dart';
+import 'package:care_for_each/company_side/profile_detail.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:care_for_each/Models/CompanyProfileModel.dart';
-
+import 'company_login.dart';
 import '../API/CompanyProfileAPI.dart';
 
 class CompanyProfile extends StatefulWidget {
@@ -14,7 +16,7 @@ class CompanyProfile extends StatefulWidget {
   State<CompanyProfile> createState() => _CompanyProfileState();
 }
 
-
+String email=email;
 class _CompanyProfileState extends State<CompanyProfile> {
 
   @override
@@ -24,8 +26,37 @@ class _CompanyProfileState extends State<CompanyProfile> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        elevation: 0,
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: const Icon(
+                Icons.arrow_back,
+                color: Color.fromRGBO(9, 31, 87, 1),
+                size: 30, // Changing Drawer Icon Size
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+            );
+          },
+        ),
+        title: Text(
+          "Profile",
+          style: TextStyle(color: Color.fromRGBO(9, 31, 87, 1)),
+        ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => CompanyLogin()));
+              },
+              icon: Icon(Icons.logout),
+              color: Color.fromRGBO(9, 31, 87, 1))
+        ],
         backgroundColor: Colors.teal,
-        title: Text("Profile"),),
+        shadowColor: Colors.teal,
+      ),
         // automaticallyImplyLeading: false,
         // shadowColor: Colors.teal,
         // toolbarHeight: 250,
@@ -52,69 +83,79 @@ class _CompanyProfileState extends State<CompanyProfile> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Stack(
-              children: [
-                SizedBox(height: 20,),
-                Container(
-                  width: double.infinity,
-                  height: 230,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: AssetImage("assets/Ellipse 5 (2).png")),
-                  ),
-                  child: FutureBuilder<CompanyProfileModel>(
-                    future: CompanyProfileApi().profileList("info@webearl.com"),//aya login kru to email login kari eno levo che
-                    builder: (BuildContext context, snapshot){
-                      if(snapshot.connectionState==ConnectionState.waiting){
-                        return Text("Loading");
-                      }
-                      else if (snapshot.hasData){
-                          return Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Center(
-                                  child: Container(
-                                      height: 120,width: 120,
-                                      child: CircleAvatar(
-                                        child:  Image.network(
-                                          snapshot.data!.server![0].cPhoto.toString(),
-                                        ),
-                                        backgroundColor: Colors.white,
-                                      )
-                                  )
-                                  // child: Text( snapshot.data!.server![0].cPhoto.toString(),style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
-                                  // ),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Text(
-                                  snapshot.data!.server![0].cname.toString(),
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Color.fromRGBO(13, 46, 85, 1)),
-                                ),
-                                Text(
-                                  snapshot.data!.server![0].emailid.toString(),
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Color.fromRGBO(13, 46, 85, 1)),
-                                ),
-                              ],
-                            ),
-                          );
+            InkWell(
+              onTap: (){
 
-                      }
-                      else{
-                        return Text("No data");
-                      }
-                    },
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfileDetail()));
+              },
+              child: Column(
+                children: [
+                  Stack(
+                    children: [
+                      SizedBox(height: 20,),
+                      Container(
+                        width: double.infinity,
+                        height: 230,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: AssetImage("assets/Ellipse 5 (2).png")),
+                        ),
+                        child: FutureBuilder<CompanyProfileModel>(
+                          future: CompanyProfileApi().profileList("info@webearl.com"),//aya login kru to email login kari eno levo che
+                          builder: (BuildContext context, snapshot){
+                            if(snapshot.connectionState==ConnectionState.waiting){
+                              return Center(child: CircularProgressIndicator());
+                            }
+                            else if (snapshot.hasData){
+                                return Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Center(
+                                        child: Container(
+                                            height: 120,width: 120,
+                                            child: CircleAvatar(
+                                              child:  Image.network(
+                                                snapshot.data!.server![0].cPhoto.toString(),
+                                              ),
+                                              backgroundColor: Colors.white,
+                                            )
+                                        )
+                                        // child: Text( snapshot.data!.server![0].cPhoto.toString(),style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+                                        // ),
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Text(
+                                        snapshot.data!.server![0].cname.toString(),
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Color.fromRGBO(13, 46, 85, 1)),
+                                      ),
+                                      Text(
+                                        snapshot.data!.server![0].emailid.toString(),
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Color.fromRGBO(13, 46, 85, 1)),
+                                      ),
+                                    ],
+                                  ),
+                                );
 
+                            }
+                            else{
+                              return Text("No data");
+                            }
+                          },
+
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             SizedBox(
               height: 5,

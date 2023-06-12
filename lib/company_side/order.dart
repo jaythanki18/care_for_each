@@ -1,13 +1,14 @@
 import 'package:care_for_each/API/order_master_display_API.dart';
 import 'package:care_for_each/company_side/order_details.dart';
 import 'package:flutter/material.dart';
-
+import 'company_dashboard.dart';
 import 'company_profile.dart';
 import 'package:sizer/sizer.dart';
 
 class Order extends StatefulWidget {
-  const Order({Key? key}) : super(key: key);
+  const Order({Key? key, required this.c_emailid}) : super(key: key);
 
+  final String c_emailid;
   @override
   State<Order> createState() => _OrderState();
 }
@@ -106,7 +107,7 @@ class _OrderState extends State<Order> {
           ),
           SizedBox(height: 1.10.h,),
           FutureBuilder(
-              future: OrderMasterDisplayAPI().orderList("info@webearl.com",dur,emp_emailid),
+              future: OrderMasterDisplayAPI().orderList(widget.c_emailid,dur,emp_emailid),
               builder: (BuildContext context, snapshot){
                 if(snapshot.connectionState==ConnectionState.waiting){
                   return Center(child: CircularProgressIndicator(),);
@@ -121,7 +122,7 @@ class _OrderState extends State<Order> {
                                 SizedBox(height: 1.18.h,),
                                 InkWell(
                                   onTap: (){
-                                    Navigator.push(context, MaterialPageRoute(builder: (context)=>OrderDetails(oid: snapshot.data!.server![index].oid.toString(),eid: eid)));
+                                    Navigator.push(context, MaterialPageRoute(builder: (context)=>OrderDetails(oid: snapshot.data!.server![index].oid.toString(),eid: eid,c_emailid: widget.c_emailid,)));
                                   },
                                   child: Card(
                                     margin: EdgeInsets.symmetric(horizontal: 10.2.w),

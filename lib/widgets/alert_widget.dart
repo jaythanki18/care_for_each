@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import '../company_side/leave_detail4.dart';
 
 class AlertWidget extends StatefulWidget {
-  const AlertWidget({Key? key, required this.lrid}) : super(key: key);
+  const AlertWidget({Key? key, required this.lrid, required this.c_emailid}) : super(key: key);
 
+  final String c_emailid;
   final String lrid;
   @override
   State<AlertWidget> createState() => _AlertWidgetState();
@@ -102,7 +103,7 @@ class _AlertWidgetState extends State<AlertWidget> {
                       },
 
                     );
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>LeaveDetail4()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>LeaveDetail4(c_emailid: widget.c_emailid,)));
                   },
                   style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.teal)),
                   child: Text("Yes",style: TextStyle(color: Colors.white))),

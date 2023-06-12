@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'cart.dart';
 import 'package:sizer/sizer.dart';
 
-class GinnieBox extends StatelessWidget {
+class GinnieBox extends StatefulWidget {
  // String name, email, phone, date, message;
 
   GinnieBox({
@@ -17,6 +17,11 @@ class GinnieBox extends StatelessWidget {
     // required this.message,
   }) : super(key: key);
 
+  @override
+  State<GinnieBox> createState() => _GinnieBoxState();
+}
+
+class _GinnieBoxState extends State<GinnieBox> {
   @override
   Widget build(BuildContext context) {
     double w=MediaQuery.of(context).size.width;
@@ -68,7 +73,7 @@ class GinnieBox extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(15.0),
         child: Container(
-          height: 21.09.h,
+          height: 30.09.h,
           width: 83.07.w,
           child: Card(
             //color: Colors.blue,
@@ -78,6 +83,7 @@ class GinnieBox extends StatelessWidget {
                 Navigator.push(context, MaterialPageRoute(builder: (context)=>GinnieBoxDetail()));
               },
               child: Container(
+
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
                     gradient: LinearGradient(colors: [
@@ -113,7 +119,7 @@ class GinnieBox extends StatelessWidget {
                         Center(
                           child: Container(
                             width: 28.71.w,
-                            height: 4.14.h,
+                            height: 3.14.h,
                             child: ElevatedButton(
                                 onPressed: () {
                                   //Navigator.push(context, MaterialPageRoute(builder: (context)=>GinnieBox(name: _name.text, email: _email.text, phone: _contact.text, date: dateInput.text, message: _message.text)));
@@ -144,7 +150,7 @@ class GinnieBox extends StatelessWidget {
                           child: Center(
                             child: Container(
                               width: 34.61.w,
-                              height: 4.14.h,
+                              height: 3.14.h,
                               child: ElevatedButton(
                                   onPressed: () {
                                     //Navigator.push(context, MaterialPageRoute(builder: (context)=>GinnieBox(name: _name.text, email: _email.text, phone: _contact.text, date: dateInput.text, message: _message.text)));

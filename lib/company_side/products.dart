@@ -6,8 +6,9 @@ import 'company_profile.dart';
 import 'package:sizer/sizer.dart';
 
 class Products extends StatefulWidget {
-  const Products({Key? key}) : super(key: key);
+  const Products({Key? key, required this.c_emailid}) : super(key: key);
 
+  final String c_emailid;
   @override
   State<Products> createState() => _ProductsState();
 }
@@ -58,7 +59,7 @@ class _ProductsState extends State<Products> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>NewProduct()));
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>NewProduct(c_emailid: widget.c_emailid,)));
         },
         backgroundColor: Color.fromRGBO(12,25,71,1),
         child: Icon(Icons.add),
@@ -112,7 +113,7 @@ class _ProductsState extends State<Products> {
         //  SizedBox(height: 2.01.h,),
           Expanded(
             child: FutureBuilder(
-              future: ProductDisplayAPI().productList("info@webearl.com"),
+              future: ProductDisplayAPI().productList(widget.c_emailid),
               builder: (BuildContext context, snapshot) {
                 if(snapshot.connectionState==ConnectionState.waiting){
                   return Center(child: CircularProgressIndicator(),);
@@ -125,7 +126,7 @@ class _ProductsState extends State<Products> {
                        children: [
                          InkWell(
                            onTap: (){
-                             Navigator.push(context, MaterialPageRoute(builder: (context)=>ProductDetail(pid:snapshot.data!.server![index].pid.toString())));
+                             Navigator.push(context, MaterialPageRoute(builder: (context)=>ProductDetail(pid:snapshot.data!.server![index].pid.toString(),c_emailid: widget.c_emailid,)));
                              print("pid :- "+snapshot.data!.server![index].pid.toString());
                            },
                            child: Card(

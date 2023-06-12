@@ -6,9 +6,9 @@ import 'company_profile.dart';
 import 'package:sizer/sizer.dart';
 
 class OrderDetails extends StatefulWidget {
-  const OrderDetails({Key? key, required this.oid, required this.eid}) : super(key: key);
+  const OrderDetails({Key? key, required this.oid, required this.eid, required this.c_emailid}) : super(key: key);
 
-  final String oid,eid;
+  final String oid,eid,c_emailid;
   @override
   State<OrderDetails> createState() => _OrderDetailsState();
 }
@@ -55,7 +55,7 @@ class _OrderDetailsState extends State<OrderDetails> {
         child: Column(
           children: [
             FutureBuilder(
-                future: OrderDetailDisplayAPI().orderDetailList("info@webearl.com", widget.oid, widget.eid),
+                future: OrderDetailDisplayAPI().orderDetailList(widget.c_emailid, widget.oid, widget.eid),
                 builder: (BuildContext context, snapshot){
                   if(snapshot.connectionState==ConnectionState.waiting){
                     return Center(child: CircularProgressIndicator(),);

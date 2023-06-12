@@ -10,8 +10,8 @@ import 'package:sizer/sizer.dart';
 
 class ProductDetail extends StatefulWidget {
   final String pid;
-
-  const ProductDetail({Key? key,required this.pid}) : super(key: key);
+  final String c_emailid;
+  const ProductDetail({Key? key,required this.pid, required this.c_emailid}) : super(key: key);
 
 
 
@@ -20,6 +20,7 @@ class ProductDetail extends StatefulWidget {
 }
 
 class _ProductDetailState extends State<ProductDetail> {
+  String edit="";
   showAlertEditDialog(BuildContext context,name,pid,fname) {
     TextEditingController value=TextEditingController();
     late String val;
@@ -34,6 +35,12 @@ class _ProductDetailState extends State<ProductDetail> {
             SizedBox(
               height: 5.92.h,
               child: TextFormField(
+                onChanged: (val){
+                  edit=val;
+                  setState(() {
+
+                  });
+                },
                 controller: value,
                 style: TextStyle(color: Colors.white),
                 validator: (value){
@@ -79,16 +86,15 @@ class _ProductDetailState extends State<ProductDetail> {
                       padding: const EdgeInsets.only(right: 50),
                       child: InkWell(
                         onTap: (){
-                           val=value.text;
+                           //val=value.text;
                         },
                         child: FutureBuilder(
-                          future: ProductValueEditAPI().productEditList(widget.pid,fname,val=value.text),
+                          future: ProductValueEditAPI().productEditList(widget.pid,fname,edit),
                              builder: (context,snapshot){
                               return ElevatedButton(
                                 onPressed: (){
-
                                   print(snapshot.data!.server![0].result.toString());
-                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>ProductDetail(pid: widget.pid)));
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>ProductDetail(pid: widget.pid,c_emailid: widget.c_emailid,)));
                                 },
                                 style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.teal)),
                                 child: Text("Edit",style: TextStyle(color: Colors.white)));
@@ -172,7 +178,7 @@ class _ProductDetailState extends State<ProductDetail> {
                   RoundButton2(title: 'Product Detail', onTap: (){}),
                   SizedBox(height: 2.01.h,),
                   FutureBuilder(
-                      future: SingleProductDisplayAPI().productList("info@webearl.com", widget.pid),
+                      future: SingleProductDisplayAPI().productList(widget.c_emailid, widget.pid),
                       builder: (BuildContext context, snapshot){
                         if(snapshot.connectionState==ConnectionState.waiting){
                           return Center(child: CircularProgressIndicator(),);
@@ -286,7 +292,7 @@ class _ProductDetailState extends State<ProductDetail> {
               RoundButton(
                 title: "Delete",
                 onTap: () {
-                  showAlertDialog(context,pid,"delete","");
+                  showAlertDialog(context,pid,"delete","",widget.c_emailid);
                 },
               ),
             ],
@@ -298,7 +304,8 @@ class _ProductDetailState extends State<ProductDetail> {
 }
 
 
-showAlertDialog(BuildContext context,pid,fname,value) {
+showAlertDialog(BuildContext context,pid,fname,value,c_emailid) {
+
 
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
@@ -330,7 +337,7 @@ showAlertDialog(BuildContext context,pid,fname,value) {
                     child: ElevatedButton(
                         onPressed: (){
                           print(snapshot.data!.server![0].result.toString());
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>Products()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>Products(c_emailid: c_emailid,)));
                         },
                         style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.teal)),
                         child: Text("Yes",style: TextStyle(color: Colors.white))),

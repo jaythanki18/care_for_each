@@ -9,8 +9,8 @@ import 'package:sizer/sizer.dart';
 
 
 class EmployeeProfile extends StatefulWidget {
-  const EmployeeProfile({Key? key, required this.ename, required this.emailid, required this.designation, required this.joiningdate, required this.dob, required this.mobilenum, required this.address, required this.edu, required this.photo, }) : super(key: key);
-  final String ename,emailid,designation,joiningdate,dob,mobilenum,address,edu,photo;
+  const EmployeeProfile({Key? key, required this.ename, required this.emailid, required this.designation, required this.joiningdate, required this.dob, required this.mobilenum, required this.address, required this.edu, required this.photo, required this.c_emailid, }) : super(key: key);
+  final String ename,emailid,designation,joiningdate,dob,mobilenum,address,edu,photo,c_emailid;
 
   @override
   State<EmployeeProfile> createState() => _EmployeeProfileState();
@@ -41,7 +41,7 @@ class _EmployeeProfileState extends State<EmployeeProfile> {
                     return null;
                   }
                 },
-                keyboardType: TextInputType.name,
+                keyboardType: TextInputType.text,
                 decoration: InputDecoration(
                     focusColor: Colors.white,
                     enabledBorder: OutlineInputBorder(
@@ -152,8 +152,17 @@ class _EmployeeProfileState extends State<EmployeeProfile> {
             FutureBuilder(
             future: EmployeeDataAPI().employeeList("info@webearl.com"),
                 builder: (BuildContext context, snapshot) {
+              TextEditingController ename=TextEditingController(text: widget.ename);
+              TextEditingController emailid=TextEditingController(text: widget.emailid);
+              TextEditingController designation=TextEditingController(text: widget.designation);
+              TextEditingController dob=TextEditingController(text: widget.dob);
+              TextEditingController joiningdate=TextEditingController(text: widget.joiningdate);
+              TextEditingController mobilenum=TextEditingController(text: widget.mobilenum);
+              TextEditingController address=TextEditingController(text: widget.address);
+              TextEditingController edu=TextEditingController(text: widget.edu);
+
                   if(snapshot.connectionState==ConnectionState.waiting){
-                    return Text("Loading");
+                    return Center(child: CircularProgressIndicator(),);
                   }
                   else if(snapshot.hasData){
                     return Column(
@@ -182,87 +191,150 @@ class _EmployeeProfileState extends State<EmployeeProfile> {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      SizedBox(width: 180,child: Text('Name : '+widget.ename,style: TextStyle(fontSize: 11.37.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1)),
+                                     SizedBox(
+                                       width:150,
+                                       child: TextFormField(
+                                         controller:ename,
+                                         decoration: InputDecoration(
+                                           border: InputBorder.none,
+                                           labelText: "Name"
+                                         ),
+                                       ),
+                                     ),
                                       IconButton(onPressed: (){
-                                        showAlertEditDialog(context, "Name", "ename");
+                                        editEmployeeProfile(widget.c_emailid, "ename", ename.text);
                                       },icon: Icon(Icons.edit,color: Colors.teal,))
                                     ],
                                   ),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      SizedBox(width: 180,child: Text('Email : '+widget.emailid,style: TextStyle(fontSize: 11.37.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1)),
+                                      SizedBox(
+                                        width:150,
+                                        child: TextFormField(
+                                          controller:emailid,
+                                          decoration: InputDecoration(
+                                              border: InputBorder.none,
+                                              labelText: "Email id"
+                                          ),
+                                        ),
+                                      ),
                                       IconButton(onPressed: (){
-                                        showAlertEditDialog(context, "Email id", "emailid");
+                                       // editEmployeeProfile("info@webearl.com", "emailid", emailid.text);
                                       },icon: Icon(Icons.edit,color: Colors.teal,))
                                     ],
                                   ),
 
+
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      SizedBox(width: 180,child: Text('Designation: '+widget.designation,style: TextStyle(fontSize: 11.37.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1)),
+                                      SizedBox(
+                                        width:150,
+                                        child: TextFormField(
+                                          controller:designation,
+                                          decoration: InputDecoration(
+                                              border: InputBorder.none,
+                                              labelText: "Designation"
+                                          ),
+                                        ),
+                                      ),
                                       IconButton(onPressed: (){
-                                        showAlertEditDialog(context, "Designation", "designation");
+                                        editEmployeeProfile(widget.c_emailid, "designation", designation.text);
                                       },icon: Icon(Icons.edit,color: Colors.teal,))
                                     ],
                                   ),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      SizedBox(width: 180,child: Text('Date of Birth: '+widget.dob,style: TextStyle(fontSize: 11.37.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1)),
+                                      SizedBox(
+                                        width:150,
+                                        child: TextFormField(
+                                          controller:dob,
+                                          decoration: InputDecoration(
+                                              border: InputBorder.none,
+                                              labelText: "Date of Birth"
+                                          ),
+                                        ),
+                                      ),
                                       IconButton(onPressed: (){
-                                        showAlertEditDialog(context, "DOB", "dob");
+                                        editEmployeeProfile(widget.c_emailid, "dob", dob.text);
                                       },icon: Icon(Icons.edit,color: Colors.teal,))
                                     ],
                                   ),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      SizedBox(width: 180,child: Text('Joining Date : '+widget.joiningdate,style: TextStyle(fontSize: 11.37.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1)),
+                                      SizedBox(
+                                        width:150,
+                                        child: TextFormField(
+                                          controller:joiningdate,
+                                          decoration: InputDecoration(
+                                              border: InputBorder.none,
+                                              labelText: "Joining Date"
+                                          ),
+                                        ),
+                                      ),
                                       IconButton(onPressed: (){
-                                        showAlertEditDialog(context, "Joining date", "joiningdate");
+                                        editEmployeeProfile(widget.c_emailid, "joiningdate", joiningdate.text);
                                       },icon: Icon(Icons.edit,color: Colors.teal,))
                                     ],
                                   ),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      SizedBox(width: 180,child: Text('Date of Birth : '+widget.dob,style: TextStyle(fontSize: 11.37.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1)),
+                                      SizedBox(
+                                        width:150,
+                                        child: TextFormField(
+                                          controller:mobilenum,
+                                          decoration: InputDecoration(
+                                              border: InputBorder.none,
+                                              labelText: "Mobile No."
+                                          ),
+                                        ),
+                                      ),
                                       IconButton(onPressed: (){
-                                        showAlertEditDialog(context, "Date Of Birth", "dob");
+                                        editEmployeeProfile(widget.c_emailid, "mobilenum", mobilenum.text);
                                       },icon: Icon(Icons.edit,color: Colors.teal,))
                                     ],
                                   ),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      SizedBox(width: 180,child: Text('Mob. No. : '+widget.mobilenum,style: TextStyle(fontSize: 11.37.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1)),
+                                      SizedBox(
+                                        width:150,
+                                        child: TextFormField(
+                                          controller:address,
+                                          decoration: InputDecoration(
+                                              border: InputBorder.none,
+                                              labelText: "Address"
+                                          ),
+                                        ),
+                                      ),
                                       IconButton(onPressed: (){
-                                        showAlertEditDialog(context, "Contact", "mobilenum");
+                                        editEmployeeProfile(widget.c_emailid, "address", address.text);
                                       },icon: Icon(Icons.edit,color: Colors.teal,))
                                     ],
                                   ),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      SizedBox(width: 180,child: Text('Address : '+widget.address,style: TextStyle(fontSize: 11.37.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 2)),
+                                      SizedBox(
+                                        width:150,
+                                        child: TextFormField(
+                                          controller:edu,
+                                          decoration: InputDecoration(
+                                              border: InputBorder.none,
+                                              labelText: "Education"
+                                          ),
+                                        ),
+                                      ),
                                       IconButton(onPressed: (){
-                                        showAlertEditDialog(context, "Address", "address");
+                                        editEmployeeProfile(widget.c_emailid, "edu", edu.text);
                                       },icon: Icon(Icons.edit,color: Colors.teal,))
                                     ],
                                   ),
-                                  SizedBox(
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        SizedBox(width: 180,child: Text('Education : '+widget.edu,style: TextStyle(fontSize: 11.37.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1)),
-                                        IconButton(onPressed: (){
-                                          showAlertEditDialog(context, "Education", "edu");
-                                        },icon: Icon(Icons.edit,color: Colors.teal,))
-                                      ],
-                                    ),
-                                  ),
+
                                 ],
                               ),
                             ),
@@ -285,7 +357,7 @@ class _EmployeeProfileState extends State<EmployeeProfile> {
                   RoundButton(
                     title: "Delete Employee",
                     onTap: () {
-                      showAlertDialog(context,"info@webearl.com",widget.emailid);
+                      showAlertDialog(context,widget.c_emailid,widget.emailid);
                     },
                   ),
                 ],
@@ -342,7 +414,7 @@ showAlertDialog(BuildContext context,emailid,e_emailid) {
                     },
 
                   );
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>Employee()));
+                //  Navigator.push(context, MaterialPageRoute(builder: (context)=>Employee(c_emailid:c_emailid ,)));
                 },
                 style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.teal)),
                 child: Text("Yes",style: TextStyle(color: Colors.white))),
@@ -358,5 +430,23 @@ showAlertDialog(BuildContext context,emailid,e_emailid) {
     builder: (BuildContext context) {
       return alert;
     },
+  );
+}
+
+editEmployeeProfile(c_emailid,fname,value){
+  print("c_emailid : "+c_emailid);
+  print("fname : "+fname);
+  print("value : "+value);
+  FutureBuilder(
+    future: EmployeeEditConfirmAPI().employee(c_emailid, fname, value, ""),
+    builder: (context,snapshot){
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+
+        ],
+      );
+    },
+
   );
 }

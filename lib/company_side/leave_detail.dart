@@ -9,8 +9,9 @@ import 'company_profile.dart';
 import 'package:sizer/sizer.dart';
 
 class LeaveDetail1 extends StatefulWidget {
-  const LeaveDetail1({Key? key}) : super(key: key);
+  const LeaveDetail1({Key? key, required this.c_emailid}) : super(key: key);
 
+  final String c_emailid;
   @override
   State<LeaveDetail1> createState() => _LeaveDetail1State();
 }
@@ -75,7 +76,7 @@ class _LeaveDetail1State extends State<LeaveDetail1> {
               ),
               InkWell(
                 onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>LeaveDetail2()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>LeaveDetail2(c_emailid: widget.c_emailid,)));
                 },
                 child: Container(
                   height: 4.26.h,
@@ -89,7 +90,7 @@ class _LeaveDetail1State extends State<LeaveDetail1> {
               ),
               InkWell(
                 onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>LeaveDetail3()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>LeaveDetail3(c_emailid: widget.c_emailid,)));
                 },
                 child: Container(
                   height: 4.26.h,
@@ -103,7 +104,7 @@ class _LeaveDetail1State extends State<LeaveDetail1> {
               ),
               InkWell(
                 onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>LeaveDetail4()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>LeaveDetail4(c_emailid: widget.c_emailid,)));
                 },
                 child: Container(
                   height: 4.26.h,
@@ -119,7 +120,7 @@ class _LeaveDetail1State extends State<LeaveDetail1> {
           ),
           SizedBox(height: 1.36.h,),
           FutureBuilder(
-            future: EmployeeLeaveAPI().leave("info@webearl.com", "All"),
+            future: EmployeeLeaveAPI().leave(widget.c_emailid, "All"),
               builder: (BuildContext context, snapshot){
                 if(snapshot.connectionState==ConnectionState.waiting){
                   return Center(child: CircularProgressIndicator(),);

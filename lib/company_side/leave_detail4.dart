@@ -9,13 +9,38 @@ import 'leave_detail.dart';
 import 'package:sizer/sizer.dart';
 
 class LeaveDetail4 extends StatefulWidget {
-  const LeaveDetail4({Key? key}) : super(key: key);
+  const LeaveDetail4({Key? key, required this.c_emailid}) : super(key: key);
 
+  final String c_emailid;
   @override
   State<LeaveDetail4> createState() => _LeaveDetail4State();
 }
 
 class _LeaveDetail4State extends State<LeaveDetail4> {
+  showAlertDialog(BuildContext context,lrid) {
+
+    String radioButtonItem = 'ONE';
+
+    // Group Value for Radio Button.
+    int id = 1;
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      backgroundColor: Color.fromRGBO(2, 25, 71, 1),
+      title: AlertWidget(lrid: lrid,c_emailid: widget.c_emailid,),
+      // content: Text("Would you like to continue learning how to use Flutter alerts?"),
+      actions: [
+
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +55,7 @@ class _LeaveDetail4State extends State<LeaveDetail4> {
                 size: 30, // Changing Drawer Icon Size
               ),
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>CompanyDashboard()));
+               // Navigator.push(context, MaterialPageRoute(builder: (context)=>CompanyDashboard()));
               },
               tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
             );
@@ -60,7 +85,7 @@ class _LeaveDetail4State extends State<LeaveDetail4> {
             children: [
               InkWell(
                 onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>LeaveDetail1()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>LeaveDetail1(c_emailid: widget.c_emailid,)));
                 },
                 child: Container(
                   height: 4.26.h,
@@ -74,7 +99,7 @@ class _LeaveDetail4State extends State<LeaveDetail4> {
               ),
               InkWell(
                 onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>LeaveDetail2()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>LeaveDetail2(c_emailid: widget.c_emailid,)));
                 },
                 child: Container(
                   height: 4.26.h,
@@ -88,7 +113,7 @@ class _LeaveDetail4State extends State<LeaveDetail4> {
               ),
               InkWell(
                 onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>LeaveDetail3()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>LeaveDetail3(c_emailid: widget.c_emailid,)));
                 },
                 child: Container(
                   height: 4.26.h,
@@ -118,7 +143,7 @@ class _LeaveDetail4State extends State<LeaveDetail4> {
           ),
           SizedBox(height: 1.36.h,),
           FutureBuilder(
-              future: EmployeeLeaveAPI().leave("info@webearl.com", "Pending"),
+              future: EmployeeLeaveAPI().leave(widget.c_emailid, "Pending"),
               builder: (BuildContext context, snapshot){
                 if(snapshot.connectionState==ConnectionState.waiting){
                   return Center(child: CircularProgressIndicator(),);
@@ -196,27 +221,4 @@ class _LeaveDetail4State extends State<LeaveDetail4> {
 }
 
 
-showAlertDialog(BuildContext context,lrid) {
 
-  String radioButtonItem = 'ONE';
-
-  // Group Value for Radio Button.
-  int id = 1;
-  // set up the AlertDialog
-  AlertDialog alert = AlertDialog(
-    backgroundColor: Color.fromRGBO(2, 25, 71, 1),
-    title: AlertWidget(lrid: lrid,),
-    // content: Text("Would you like to continue learning how to use Flutter alerts?"),
-    actions: [
-
-    ],
-  );
-
-  // show the dialog
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
-  );
-}

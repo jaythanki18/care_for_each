@@ -16,14 +16,17 @@ import 'leave_detail.dart';
 import 'package:sizer/sizer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class CompanyDashboard extends StatefulWidget {
-  const CompanyDashboard({Key? key}) : super(key: key);
 
+class CompanyDashboard extends StatefulWidget {
+  const CompanyDashboard({Key? key,required this.c_email }) : super(key: key);
+
+  final String c_email;
   @override
   State<CompanyDashboard> createState() => _CompanyDashboardState();
 }
-
+String email=email;
 class _CompanyDashboardState extends State<CompanyDashboard> {
+
   late SharedPreferences sharedPreferences;
   @override
   void initState() {
@@ -37,6 +40,7 @@ class _CompanyDashboardState extends State<CompanyDashboard> {
     //   Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>CompanyLogin()), (route) => false);
     // }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -112,15 +116,21 @@ class _CompanyDashboardState extends State<CompanyDashboard> {
                       child: Image.asset('assets/order.png',height: 14.87.h,width: 14.87.w,),
                     ),
                     Center(
-                      child: TextButton(
-                        onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>Order()));
+                      child: GestureDetector(
+                        onTap: (){
+                          print("email");
                         },
-                        child: Padding(
-                          padding:  EdgeInsets.symmetric(horizontal: 2.56.w),
-                          child: Text("Order",
-                            style: TextStyle(color: Color.fromRGBO(9, 31, 87, 1),
-                                fontWeight: FontWeight.bold),
+                        child: TextButton(
+                          onPressed: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>Order(c_emailid: widget.c_email,)));
+
+                          },
+                          child: Padding(
+                            padding:  EdgeInsets.symmetric(horizontal: 2.56.w),
+                            child: Text("Order",
+                              style: TextStyle(color: Color.fromRGBO(9, 31, 87, 1),
+                                  fontWeight: FontWeight.bold),
+                            ),
                           ),
                         ),
                       ),
@@ -157,7 +167,7 @@ class _CompanyDashboardState extends State<CompanyDashboard> {
                     Center(
                       child: TextButton(
                         onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>Attendance()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>Attendance(c_emailid: widget.c_email,)));
                         },
                         child: Padding(
                           padding:  EdgeInsets.symmetric(horizontal: 2.56.w),
@@ -200,7 +210,7 @@ class _CompanyDashboardState extends State<CompanyDashboard> {
                     Center(
                       child: TextButton(
                         onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>Employee()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>Employee(c_emailid: widget.c_email,)));
                         },
                         child: Padding(
                           padding:  EdgeInsets.symmetric(horizontal: 2.56.w),
@@ -243,7 +253,7 @@ class _CompanyDashboardState extends State<CompanyDashboard> {
                     Center(
                       child: TextButton(
                         onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>CompanyVisitor()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>CompanyVisitor(c_emailid: widget.c_email,)));
                         },
                         child: Padding(
                           padding:  EdgeInsets.symmetric(horizontal: 2.56.w),
@@ -286,7 +296,7 @@ class _CompanyDashboardState extends State<CompanyDashboard> {
                     Center(
                       child: TextButton(
                         onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>CompanyGinnieBox()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>CompanyGinnieBox(c_emailid: widget.c_email,)));
                         },
                         child: Padding(
                           padding:  EdgeInsets.symmetric(horizontal: 2.56.w),
@@ -329,7 +339,7 @@ class _CompanyDashboardState extends State<CompanyDashboard> {
                     Center(
                       child: TextButton(
                         onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>Products()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>Products(c_emailid: widget.c_email,)));
                         },
                         child: Padding(
                           padding:  EdgeInsets.symmetric(horizontal: 2.56.w),
@@ -372,7 +382,7 @@ class _CompanyDashboardState extends State<CompanyDashboard> {
                     Center(
                       child: TextButton(
                         onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>LeaveDetail1()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>LeaveDetail1(c_emailid: widget.c_email,)));
                         },
                         child: Padding(
                           padding:  EdgeInsets.symmetric(horizontal: 2.56.w),
@@ -415,7 +425,7 @@ class _CompanyDashboardState extends State<CompanyDashboard> {
                     Center(
                       child: TextButton(
                         onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>Category()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>Category(c_emailid: widget.c_email,)));
                         },
                         child: Padding(
                           padding:  EdgeInsets.symmetric(horizontal: 2.56.w),
@@ -458,7 +468,7 @@ class _CompanyDashboardState extends State<CompanyDashboard> {
                     Center(
                       child: TextButton(
                         onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>SubCategory()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>SubCategory(c_emailid: widget.c_email,)));
                         },
                         child: Padding(
                           padding:  EdgeInsets.symmetric(horizontal: 2.56.w),
@@ -544,7 +554,7 @@ class _CompanyDashboardState extends State<CompanyDashboard> {
                     Center(
                       child: TextButton(
                         onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>Complaint()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>Complaint(c_emailid: widget.c_email,)));
                         },
                         child: Padding(
                           padding:  EdgeInsets.symmetric(horizontal: 2.56.w),

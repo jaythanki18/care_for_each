@@ -8,8 +8,9 @@ import '../ui/add_visitor.dart';
 import 'package:sizer/sizer.dart';
 
 class NewEmployee extends StatefulWidget {
-  const NewEmployee({Key? key}) : super(key: key);
+  const NewEmployee({Key? key, required this.c_emailid}) : super(key: key);
 
+  final String c_emailid;
   @override
   State<NewEmployee> createState() => _NewEmployeeState();
 }
@@ -34,6 +35,15 @@ class _NewEmployeeState extends State<NewEmployee> {
   var type;
   late String formattedDate1;
   late String formattedDate2;
+  String personname="";
+  String des="";
+  String dob="";
+  String join="";
+  String addr="";
+  String em_email="";
+  String cont="";
+  String educ="";
+  String pword="";
 
   @override
   void initState() {
@@ -146,6 +156,12 @@ class _NewEmployeeState extends State<NewEmployee> {
                           SizedBox(
                             height: 50,
                             child: TextFormField(
+                              onChanged: (value){
+                                personname=value;
+                                setState(() {
+                                  print("personname : "+personname);
+                                });
+                              },
                               controller: ename,
                               validator: (value){
                                 if(value!.isEmpty || !RegExp(r"^\s*([A-Za-z]{1,}([\.,] |[-']| ))+[A-Za-z]+\.?\s*$").hasMatch(value!)){
@@ -164,6 +180,12 @@ class _NewEmployeeState extends State<NewEmployee> {
                           SizedBox(
                             height: 5.92.h,
                             child: TextFormField(
+                              onChanged: (value){
+                                des=value;
+                                setState(() {
+
+                                });
+                              },
                               controller: designation,
                               keyboardType: TextInputType.text,
                               validator: (value){
@@ -265,7 +287,7 @@ class _NewEmployeeState extends State<NewEmployee> {
                                       MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          "Select Date of Birth",
+                                          "Select Joining Date",
                                           style: TextStyle(
                                               color: Colors.teal, fontSize: 7.583.sp),
                                         ),
@@ -290,6 +312,12 @@ class _NewEmployeeState extends State<NewEmployee> {
                           SizedBox(
                             height: 5.92.h,
                             child: TextFormField(
+                              onChanged: (value){
+                                addr=value;
+                                setState(() {
+
+                                });
+                              },
                               controller: address,
                               keyboardType: TextInputType.streetAddress,
                               validator: (value){
@@ -309,6 +337,12 @@ class _NewEmployeeState extends State<NewEmployee> {
                           SizedBox(
                             height: 5.92.h,
                             child: TextFormField(
+                              onChanged: (value){
+                                em_email=value;
+                                setState(() {
+
+                                });
+                              },
                               controller: e_email,
                               keyboardType: TextInputType.emailAddress,
                               validator: (value){
@@ -328,6 +362,12 @@ class _NewEmployeeState extends State<NewEmployee> {
                           SizedBox(
                             height: 5.9.h,
                             child: TextFormField(
+                              onChanged: (value){
+                                cont=value;
+                                setState(() {
+
+                                });
+                              },
                               controller: mobilenum,
                               keyboardType: TextInputType.phone,
                               validator: (value) {
@@ -347,6 +387,12 @@ class _NewEmployeeState extends State<NewEmployee> {
                           SizedBox(
                             height: 5.9.h,
                             child: TextFormField(
+                              onChanged: (value){
+                                educ=value;
+                                setState(() {
+
+                                });
+                              },
                               controller: edu,
                               keyboardType: TextInputType.text,
                               validator: (value){
@@ -368,6 +414,12 @@ class _NewEmployeeState extends State<NewEmployee> {
                             // width: 79.74.w,
                             // height: 5.92.h,
                             child: TextFormField(
+                              onChanged: (value){
+                                pword=value;
+                                setState(() {
+
+                                });
+                              },
                               controller: password,
                               obscureText: true,
                               keyboardType: TextInputType.text,
@@ -459,7 +511,7 @@ class _NewEmployeeState extends State<NewEmployee> {
                     child: ElevatedButton(
                         onPressed: () {
                           FutureBuilder(
-                            future: EmployeeAddAPI().employeeAdd("info@webearl.com",e_email.text,ename.text,dateInput1.text,dateInput2.text,designation.text,edu.text,mobilenum.text,address.text,password.text,_image.toString()),
+                            future: EmployeeAddAPI().employeeAdd(widget.c_emailid,em_email,personname,dateInput1.text,dateInput2.text,des,educ,cont,addr,pword,_image.toString()),
                             builder: (BuildContext context, snapshot) {
                               if(snapshot.connectionState==ConnectionState.waiting){
                                 return Center(child: CircularProgressIndicator(),);
@@ -482,7 +534,7 @@ class _NewEmployeeState extends State<NewEmployee> {
                               content: Text('Employee added successfully!'),
                             );
                             ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>Employee()));
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>Employee(c_emailid: widget.c_emailid,)));
                           }
                           // Navigator.push(context, MaterialPageRoute(builder: (context)=>Visitor(name: _name.text, company: _visitors_company.text, phone: _contact.text, email: _email.text, address: _address.text, discussion: _discussion.text)));
 
