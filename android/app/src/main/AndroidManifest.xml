@@ -1,5 +1,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.care_for_each">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.care_for_each"
+    tools:ignore="ExtraText">
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="tel" />
+        </intent>
+    </queries>
    <application
         android:label="care_for_each"
         android:name="${applicationName}"
@@ -31,4 +43,5 @@
             android:name="flutterEmbedding"
             android:value="2" />
     </application>
+
 </manifest>

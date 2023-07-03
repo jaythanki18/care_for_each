@@ -85,7 +85,7 @@ class _NewProductState extends State<NewProduct> {
           IconButton(
               onPressed: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => CompanyProfile()));
+                    MaterialPageRoute(builder: (context) => CompanyProfile(c_emailid: widget.c_emailid,)));
               },
               icon: Icon(Icons.account_circle_sharp),
               color: Color.fromRGBO(9, 31, 87, 1)
@@ -188,7 +188,7 @@ class _NewProductState extends State<NewProduct> {
                               onChanged: (value){
                                 proName=value;
                                 setState(() {
-
+                                  print(proName);
                                 });
                               },
                               controller: pname,
@@ -217,7 +217,7 @@ class _NewProductState extends State<NewProduct> {
                               onChanged: (value){
                                 proCode=value;
                                 setState(() {
-
+                                  print(proCode);
                                 });
                               },
                               controller: pcode,
@@ -246,7 +246,7 @@ class _NewProductState extends State<NewProduct> {
                               onChanged: (value){
                                 proPrice=value;
                                 setState(() {
-
+                                  print(proPrice);
                                 });
                               },
                               controller: price,
@@ -275,7 +275,7 @@ class _NewProductState extends State<NewProduct> {
                               onChanged: (value){
                                 minimum_sell=value;
                                 setState(() {
-
+                                  print(minimum_sell);
                                 });
                               },
                               controller: min_sell_price,
@@ -304,7 +304,7 @@ class _NewProductState extends State<NewProduct> {
                               onChanged: (value){
                                 proStock=value;
                                 setState(() {
-
+                                  print(proStock);
                                 });
                               },
                               controller: stock,
@@ -333,7 +333,7 @@ class _NewProductState extends State<NewProduct> {
                               onChanged: (value){
                                 min_stock=value;
                                 setState(() {
-
+                                  print(min_stock);
                                 });
                               },
                               controller: minimum_stock,
@@ -362,7 +362,7 @@ class _NewProductState extends State<NewProduct> {
                               onChanged: (value){
                                 proDesc=value;
                                 setState(() {
-
+                                  print(proDesc);
                                 });
                               },
                               controller: pdesc,

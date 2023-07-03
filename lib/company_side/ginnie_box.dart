@@ -1,7 +1,10 @@
 import 'package:care_for_each/API/wishlist_display_company_API.dart';
 import 'package:care_for_each/company_side/ginnie_box_detail.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import '../API/employee_data_API.dart';
+import '../Models/EmployeeDataModel.dart';
 import 'company_profile.dart';
 import 'package:sizer/sizer.dart';
 
@@ -14,11 +17,31 @@ class CompanyGinnieBox extends StatefulWidget {
 }
 
 class _CompanyGinnieBoxState extends State<CompanyGinnieBox> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    callDisplayAPI();
+  }
   final items=['All','This Year','This Month','Today'];
-  String? selectedItem='All';
+  String? dur='All';
 
   List<String> list2=['Employee','sindhav88@gmail.com',];
   String? list2item='sindhav88@gmail.com';
+
+  List<String>? CategoryList=[];
+  var displayInitial;
+  void callDisplayAPI() async{
+    EmployeeDataModel data= await EmployeeDataAPI().employeeList(widget.c_emailid);
+    setState(() {
+      CategoryList = data.server?.map((e) => e.emailid.toString()).toList() ;
+      displayInitial=data.server![0].emailid.toString();
+    });
+    for(int i=0;i<CategoryList!.length;i++){
+      print(data.server![i].emailid.toString());
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +70,7 @@ class _CompanyGinnieBoxState extends State<CompanyGinnieBox> {
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => CompanyProfile()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => CompanyProfile(c_emailid: widget.c_emailid,)));
               },
               icon: Icon(Icons.account_circle_sharp),
               color: Color.fromRGBO(9, 31, 87, 1)
@@ -58,54 +81,85 @@ class _CompanyGinnieBoxState extends State<CompanyGinnieBox> {
       ),
       body: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Container(
-                height: 5.92.h,
-                width: 37.92.w,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                      color: Colors.teal,width: 2),
+          SizedBox(
+            width: 100.w,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Flexible(
+                  child: SizedBox(
+                    width: 30.w,
+                    child: Container(
+                      //  height: 5.92.h,
+                      width: 30.w,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                            color: Colors.teal,width: 2),
+                      ),
+                      child: DropdownButtonFormField<String>(
+                        value: dur,
+                        items: items.map((item) => DropdownMenuItem(
+                          value: item,
+                          child: SizedBox(child: Text(item,style: TextStyle(color: Colors.black,overflow: TextOverflow.ellipsis),maxLines: 1,)),
+                        )
+                        ).toList(),
+                        onChanged: (item)=>setState((){
+                          dur=item;
+                          print(dur);
+                        }),
+                      ),
+                    ),
+                  ),
                 ),
-                child: DropdownButtonFormField<String>(
-                  value: selectedItem,
-                  items: items.map((item) => DropdownMenuItem(
-                    value: item,
-                    child: Text(item,style: TextStyle(color: Colors.black),),
-                  )
-                  ).toList(),
-                  onChanged: (item)=>setState((){
-                    selectedItem=item;
-                    print(selectedItem);
-                  }),
-                ),
-              ),
+                // Container(
+                //   height: 5.92.h,
+                //   width: 60.92.w,
+                //   decoration: BoxDecoration(
+                //     border: Border.all(
+                //         color: Colors.teal,width: 2),
+                //   ),
+                //   child: DropdownButtonFormField<String>(
+                //     value: displayInitial,
+                //     items: CategoryList!.map((item) => DropdownMenuItem(
+                //       value: item,
+                //       child: Text(item,style: TextStyle(color: Colors.black),),
+                //     )
+                //     ).toList(),
+                //     onChanged: (item)=>setState((){
+                //       displayInitial=item;
+                //       print(displayInitial);
+                //     }),
+                //   ),
+                // ),
 
-              Container(
-                width: 55.92.w,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                      color: Colors.teal,width: 2),
-                ),
-                child: DropdownButtonFormField<String>(
-                  value: list2item,
-                  items: list2.map((item) => DropdownMenuItem(
-                    value: item,
-                    child: Text(item,style: TextStyle(color: Colors.black,),),
-                  )
-                  ).toList(),
-                  onChanged: (item)=>setState((){
-                    list2item=item;
-                    print(list2item);
-                  }),
-                ),
-              ),
-            ],
+               Flexible(child:  SizedBox(
+                 width: 65.w,
+                 child: Container(
+                   width: 65.w,
+                   decoration: BoxDecoration(
+                     border: Border.all(
+                         color: Colors.teal,width: 2),
+                   ),
+                   child: DropdownButtonFormField<String>(
+                     value: displayInitial,
+                     items: CategoryList!.map((item) => DropdownMenuItem(
+                       value: item,
+                       child: SizedBox(width: 40.w,child: Text(item,style: TextStyle(color: Colors.black,overflow: TextOverflow.ellipsis),maxLines: 1,)),
+                     )
+                     ).toList(),
+                     onChanged: (item)=>setState((){
+                       displayInitial=item;
+                       print(displayInitial);
+                     }),
+                   ),
+                 ),
+               ),)
+              ],
+            ),
           ),
           SizedBox(height: 1.36.h,),
           FutureBuilder(
-              future: WishlistDisplayCompanyAPI().wishlist(widget.c_emailid, selectedItem, list2item),
+              future: WishlistDisplayCompanyAPI().wishlist(widget.c_emailid, dur, displayInitial),
               builder: (BuildContext context, snapshot){
                 if(snapshot.connectionState==ConnectionState.waiting){
                   return Center(child: CircularProgressIndicator(),);
@@ -120,10 +174,10 @@ class _CompanyGinnieBoxState extends State<CompanyGinnieBox> {
                                 SizedBox(height: 1.18.h,),
                                 InkWell(
                                   onTap: (){
-                                    Navigator.push(context, MaterialPageRoute(builder: (context)=>GinnieBoxDetail(wcid: snapshot.data!.server![index].wcid.toString())));
+                                    Navigator.push(context, MaterialPageRoute(builder: (context)=>GinnieBoxDetail(wcid: snapshot.data!.server![index].wcid.toString(),c_emailid: widget.c_emailid,)));
                                   },
                                   child: Card(
-                                    margin: EdgeInsets.only(left: 33,right: 33),
+                                    margin: EdgeInsets.symmetric(horizontal: 8.46.w),
                                     elevation: 4,
                                     shadowColor: Colors.grey,
                                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.36.h)),
@@ -155,15 +209,23 @@ class _CompanyGinnieBoxState extends State<CompanyGinnieBox> {
                                             //Text('Expected Date :${message}'),
                                             //SizedBox(height: 1.36.h,),
                                             Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                               children: [
                                                 Container(
                                                   child: Center(
                                                     child: Container(
-                                                      width: 28.71.w,
+                                                     // width: 28.71.w,
                                                       height: 4.14.h,
                                                       child: ElevatedButton(
-                                                          onPressed: () {
+                                                          onPressed: () async{
+                                                            String phoneNumber = '+91${snapshot.data!.server![index].custmobile.toString()}';
+                                                            String url = 'tel:$phoneNumber';
+
+                                                            if (await canLaunchUrl(Uri.parse(url))) {
+                                                              await launchUrl(Uri.parse(url));
+                                                            } else {
+                                                              throw 'Could not launch $url';
+                                                            }
                                                             //Navigator.push(context, MaterialPageRoute(builder: (context)=>GinnieBox(name: _name.text, email: _email.text, phone: _contact.text, date: dateInput.text, message: _message.text)));
                                                           },
                                                           child: Row(
@@ -191,7 +253,7 @@ class _CompanyGinnieBoxState extends State<CompanyGinnieBox> {
                                                 Container(
                                                   child: Center(
                                                     child: Container(
-                                                      height: 35,
+                                                      height: 4.14.h,
                                                       child: ElevatedButton(
                                                           onPressed: () {
                                                             //Navigator.push(context, MaterialPageRoute(builder: (context)=>GinnieBox(name: _name.text, email: _email.text, phone: _contact.text, date: dateInput.text, message: _message.text)));

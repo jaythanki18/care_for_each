@@ -1,8 +1,12 @@
+import 'package:care_for_each/API/employee_data_API.dart';
 import 'package:care_for_each/API/visitor_display_API.dart';
+import 'package:care_for_each/Models/EmployeeDataModel.dart';
 import 'package:care_for_each/company_side/order_details.dart';
 import 'package:care_for_each/company_side/visitor_details.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
+import '../API/CategoryDisplayAPI.dart';
+import '../Models/CategoryDisplayModel.dart';
 import 'company_profile.dart';
 
 class CompanyVisitor extends StatefulWidget {
@@ -14,11 +18,31 @@ class CompanyVisitor extends StatefulWidget {
 }
 
 class _CompanyVisitorState extends State<CompanyVisitor> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    callDisplayAPI();
+  }
   final items=['All','This Year','This Month','Today'];
   String? dur='All';
 
   List<String> list2=['Employee','sindhav88@gmail.com'];
   String? e_emailid='sindhav88@gmail.com';
+
+  List<String>? CategoryList=[];
+  var displayInitial;
+  void callDisplayAPI() async{
+    EmployeeDataModel data= await EmployeeDataAPI().employeeList(widget.c_emailid);
+    setState(() {
+      CategoryList = data.server?.map((e) => e.emailid.toString()).toList() ;
+      displayInitial=data.server![0].emailid.toString();
+    });
+    for(int i=0;i<CategoryList!.length;i++){
+      print(data.server![i].emailid.toString());
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +72,7 @@ class _CompanyVisitorState extends State<CompanyVisitor> {
           IconButton(
               onPressed: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => CompanyProfile()));
+                    MaterialPageRoute(builder: (context) => CompanyProfile(c_emailid: widget.c_emailid,)));
               },
               icon: Icon(Icons.account_circle_sharp),
               color: Color.fromRGBO(9, 31, 87, 1)
@@ -59,55 +83,89 @@ class _CompanyVisitorState extends State<CompanyVisitor> {
       ),
       body: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Container(
-                height: 5.92.h,
-                width: 37.92.w,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                      color: Colors.teal,width: 2),
+          SizedBox(
+            width: 100.w,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Flexible(
+                    child: SizedBox(
+                      width: 30.w,
+                      child: Container(
+                        //  height: 5.92.h,
+                        width: 30.w,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                              color: Colors.teal,width: 2),
+                        ),
+                        child: DropdownButtonFormField<String>(
+                          value: dur,
+                          items: items.map((item) => DropdownMenuItem(
+                            value: item,
+                            child: SizedBox(child: Text(item,style: TextStyle(color: Colors.black,overflow: TextOverflow.ellipsis),maxLines: 1,)),
+                          )
+                          ).toList(),
+                          onChanged: (item)=>setState((){
+                            dur=item;
+                            print(dur);
+                          }),
+                        ),
+                      ),
+                    ),
                 ),
-                child: DropdownButtonFormField<String>(
-                  value: dur,
-                  items: items.map((item) => DropdownMenuItem(
-                    value: item,
-                    child: Text(item,style: TextStyle(color: Colors.black),),
-                  )
-                  ).toList(),
-                  onChanged: (item)=>setState((){
-                    dur=item;
-                    print(dur);
-                  }),
-                ),
-              ),
 
-              Container(
-                width: 55.92.w,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                      color: Colors.teal,width: 2),
+                // Container(
+                //   height: 5.92.h,
+                //   width: 60.92.w,
+                //   decoration: BoxDecoration(
+                //     border: Border.all(
+                //         color: Colors.teal,width: 2),
+                //   ),
+                //   child: DropdownButtonFormField<String>(
+                //     value: displayInitial,
+                //     items: CategoryList!.map((item) => DropdownMenuItem(
+                //       value: item,
+                //       child: Text(item,style: TextStyle(color: Colors.black),),
+                //     )
+                //     ).toList(),
+                //     onChanged: (item)=>setState((){
+                //       displayInitial=item;
+                //       print(displayInitial);
+                //     }),
+                //   ),
+                // ),
+
+                Flexible(
+                  child: SizedBox(
+                    width: 65.w,
+                    child: Container(
+                      width: 65.w,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                            color: Colors.teal,width: 2),
+                      ),
+                      child: DropdownButtonFormField<String>(
+                        value: displayInitial,
+                        items: CategoryList!.map((item) => DropdownMenuItem(
+                          value: item,
+                          child: SizedBox(width: 40.w,child: Text(item,style: TextStyle(color: Colors.black,overflow: TextOverflow.ellipsis),maxLines: 1,)),
+                        )
+                        ).toList(),
+                        onChanged: (item)=>setState((){
+                          displayInitial=item;
+                          print(displayInitial);
+                        }),
+                      ),
+                    ),
+                  ),
                 ),
-                child: DropdownButtonFormField<String>(
-                  value: e_emailid,
-                  items: list2.map((item) => DropdownMenuItem(
-                    value: item,
-                    child: Text(item,style: TextStyle(color: Colors.black,),),
-                  )
-                  ).toList(),
-                  onChanged: (item)=>setState((){
-                    e_emailid=item;
-                    print(e_emailid);
-                  }),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
 
 
           FutureBuilder(
-              future: VisitorDisplayAPI().visitor(widget.c_emailid,dur,e_emailid),
+              future: VisitorDisplayAPI().visitor(widget.c_emailid,dur,displayInitial),
               builder: (BuildContext context, snapshot){
                 if(snapshot.connectionState==ConnectionState.waiting){
                   return Center(child: CircularProgressIndicator(),);
@@ -119,7 +177,7 @@ class _CompanyVisitorState extends State<CompanyVisitor> {
                           itemBuilder: (context,index){
                             return  Column(
                               children: [
-                                SizedBox(height: 10,),
+                                SizedBox(height: 1.h,),
                                 InkWell(
                                   onTap: (){
                                     Navigator.push(context, MaterialPageRoute(builder: (context)=>CompanyVisitorDetail(
@@ -135,35 +193,37 @@ class _CompanyVisitorState extends State<CompanyVisitor> {
                                       photo: snapshot.data!.server![index].photo.toString(),
                                     )));
                                   },
-                                  child: Card(
-                                    margin: EdgeInsets.only(left: 40,right: 40),
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                                    child: Container(
-                                      height: 290,
-                                      width: 311,
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(20),
-                                          gradient: LinearGradient(colors: [
-                                            Color.fromRGBO(62, 86, 115, 0.2),
-                                            Color.fromRGBO(184, 184, 184, 0.1)
-                                          ])
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(left: 40,right: 40,bottom: 17,top: 16),
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Center(child: Container(child: Image.network(snapshot.data!.server![index].photo.toString(),width: 80,height: 95,errorBuilder: (context, error, stackTrace) => SizedBox(width: 25.64.w,height: 100,)))),
-                                            SizedBox(height: 15,),
-                                            //Image.asset("calender.png",width: 0.01*w),
-                                            Text('Person Name : '+snapshot.data!.server![index].visitername.toString(),style: TextStyle(fontSize: 13,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1),
-                                            Text('Company Name : '+snapshot.data!.server![index].companyname.toString(),style: TextStyle(fontSize: 13,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1,),
-                                            Text('Date : '+snapshot.data!.server![index].date.toString(),style: TextStyle(fontSize: 13,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1),
-                                            Text(' Time : '+snapshot.data!.server![index].time.toString(),style: TextStyle(fontSize: 13,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1),
-                                            Text('Mail Id : '+snapshot.data!.server![index].visiterEmailid.toString(),style: TextStyle(fontSize: 13,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1),
-                                            //Text('Grand Total : ₹ 9874',style: TextStyle(fontSize: 13,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 2),
-                                            //Text('Expected Date :${message}'),
-                                          ],
+                                  child: Center(
+                                    child: Card(
+                                     // margin: EdgeInsets.symmetric(horizontal: 10.25.w),
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                                      child: Container(
+                                      //  height: 30.21.h,
+                                        width: 80.w,
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(20),
+                                            gradient: LinearGradient(colors: [
+                                              Color.fromRGBO(62, 86, 115, 0.2),
+                                              Color.fromRGBO(184, 184, 184, 0.1)
+                                            ])
+                                        ),
+                                        child: Padding(
+                                          padding:  EdgeInsets.symmetric(horizontal: 10.25.w,vertical: 1.h),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Center(child: Container(child: Image.network(snapshot.data!.server![index].photo.toString(),width: 25.64.w,height: 10.41.h,errorBuilder: (context, error, stackTrace) => Container(color:Colors.black54,child: SizedBox(width: 25.64.w,height: 10.41.h,))))),
+                                              SizedBox(height: 1.5.h,),
+                                              //Image.asset("calender.png",width: 0.01*w),
+                                              SizedBox(width: 75.w,child: Text('Person Name : '+snapshot.data!.server![index].visitername.toString(),style: TextStyle(fontSize: 13,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1)),
+                                              SizedBox(width: 75.w,child: Text('Company Name : '+snapshot.data!.server![index].companyname.toString(),style: TextStyle(fontSize: 13,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1,)),
+                                              SizedBox(width: 75.w,child: Text('Date : '+snapshot.data!.server![index].date.toString(),style: TextStyle(fontSize: 13,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1)),
+                                              SizedBox(width: 75.w,child: Text('Time : '+snapshot.data!.server![index].time.toString(),style: TextStyle(fontSize: 13,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1)),
+                                              SizedBox(width: 75.w,child: Text('Mail Id : '+snapshot.data!.server![index].visiterEmailid.toString(),style: TextStyle(fontSize: 13,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1)),
+                                              //Text('Grand Total : ₹ 9874',style: TextStyle(fontSize: 13,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 2),
+                                              //Text('Expected Date :${message}'),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),

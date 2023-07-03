@@ -21,7 +21,6 @@ class ProductDisplayAPI {
         // },
         body:{
           'c_emailid': c_email,
-
         }
     );
     Map<String,dynamic> data = jsonDecode(response.body);

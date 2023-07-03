@@ -3,8 +3,9 @@ import 'package:intl/intl.dart';
 import 'company_profile.dart';
 import 'package:sizer/sizer.dart';
 class GinnieBoxReport extends StatefulWidget {
-  const GinnieBoxReport({Key? key}) : super(key: key);
+  const GinnieBoxReport({Key? key, required this.c_email}) : super(key: key);
 
+  final String c_email;
   @override
   State<GinnieBoxReport> createState() => _GinnieBoxReportState();
 }
@@ -55,7 +56,7 @@ class _GinnieBoxReportState extends State<GinnieBoxReport> {
           IconButton(
               onPressed: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => CompanyProfile()));
+                    MaterialPageRoute(builder: (context) => CompanyProfile(c_emailid: widget.c_email,)));
               },
               icon: Icon(Icons.account_circle_sharp),
               color: Color.fromRGBO(9, 31, 87, 1))

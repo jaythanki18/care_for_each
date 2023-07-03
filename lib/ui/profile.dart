@@ -1,5 +1,18 @@
+import 'package:care_for_each/API/EmployeeSide/employee_profile_API.dart';
+import 'package:care_for_each/ui/complaint.dart';
+import 'package:care_for_each/ui/customer.dart';
+import 'package:care_for_each/ui/ginnie_box.dart';
+import 'package:care_for_each/ui/leave_request.dart';
+import 'package:care_for_each/ui/product.dart';
+import 'package:care_for_each/ui/sales.dart';
+import 'package:care_for_each/ui/visitor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sizer/sizer.dart';
+
+import '../chat/chat_login.dart';
+import 'auth/login_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -9,6 +22,24 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getData();
+  }
+
+  String? getEName;
+  String? getCName;
+  void getData() async{
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    setState(() {
+      getEName=sharedPreferences.getString("email")!;
+      getCName=sharedPreferences.getString('c_email');
+    });
+    debugPrint(getEName);
+  }
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -48,58 +79,70 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: [
                   Container(
                     width: double.infinity,
-                    height: 230,
+                    height: 26.h,
                     decoration: BoxDecoration(
                       image: DecorationImage(
                           fit: BoxFit.cover,
                           image: AssetImage("assets/Ellipse 5 (2).png")),
                     ),
                     child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            height: height * 0.10,
-                            child: Center(
-                              child: Text(
-                                "AS",
-                                style: TextStyle(
-                                    fontSize: 40, fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            "Ashok Sindhav",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Color.fromRGBO(13, 46, 85, 1)),
-                          ),
-                          Text(
-                            "Sindhav88@gmail.com",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Color.fromRGBO(13, 46, 85, 1)),
-                          ),
-                          Text(
-                            "Python Dev",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Color.fromRGBO(13, 46, 85, 1)),
-                          )
-                        ],
-                      ),
+                      child :  FutureBuilder(
+                            future: EmployeeProfileAPI().profile(getEName),
+                            builder: (BuildContext context, snapshot){
+                              if(snapshot.connectionState==ConnectionState.waiting){
+                                return Center(child: CircularProgressIndicator(),);
+                              }
+                              else if(snapshot.hasData){
+                                return Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Center(
+                                      child: Container(
+                                        height: 12.h,
+                                        width: 30.77.w,
+                                        child: CircleAvatar(
+                                          child:  Image.network(
+                                                snapshot.data!.server![0].photo.toString(),
+                                              ),
+                                        ),
+                                      ),
+                                      //child: Image.network(snapshot.data!.server![0].photo.toString(),width: 20.51.w,height: 11.25.h,errorBuilder: (context, error, stackTrace) => SizedBox(width: 20.51.w,height: 11.25.h,))
+                                    ),
+                                    SizedBox(
+                                      height: 1.h,
+                                    ),
+                                    Text(
+                                      snapshot.data!.server![0].ename.toString(),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Color.fromRGBO(13, 46, 85, 1)),
+                                    ),
+                                    Text(
+                                      snapshot.data!.server![0].emailid.toString(),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Color.fromRGBO(13, 46, 85, 1)),
+                                    ),
+                                    Text(
+                                      snapshot.data!.server![0].designation.toString(),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Color.fromRGBO(13, 46, 85, 1)),
+                                    )
+                                  ],
+                                );
+                              }
+                              else{
+                                return Text("No data");
+                              }
+                            }
+                        ),
+
                     ),
                   ),
                 ],
               ),
-              SizedBox(height: 10,),
+              SizedBox(height: 1.h,),
               Container(
                 child: Center(
                 child: Column(
@@ -155,7 +198,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                     SizedBox(
-                      height: 10,
+                      height: 1.h,
                     ),
                     Container(
                       decoration: BoxDecoration(
@@ -191,7 +234,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                           Center(
                             child: TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=>ProductScreen(e_emailid: getEName!)));
+                              },
                               child: Text(
                                 "Products",
                                 style: TextStyle(
@@ -204,7 +249,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                     SizedBox(
-                      height: 10,
+                      height: 1.h,
                     ),
                     Container(
                       decoration: BoxDecoration(
@@ -240,7 +285,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                           Center(
                               child: TextButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>Visitor()));
+                                },
                                 child: Text(
                                   "Visitor",
                                   style: TextStyle(
@@ -252,7 +299,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                     SizedBox(
-                      height: 10,
+                      height: 1.h,
                     ),
                     Container(
                       decoration: BoxDecoration(
@@ -288,7 +335,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                           Center(
                               child: TextButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>Customer()));
+                                },
                                 child: Text(
                                   "Customer",
                                   style: TextStyle(
@@ -300,7 +349,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                     SizedBox(
-                      height: 10,
+                      height: 1.h,
                     ),
                     Container(
                       decoration: BoxDecoration(
@@ -336,7 +385,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                           Center(
                               child: TextButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>Sales()));
+                                },
                                 child: Text(
                                   "Sales",
                                   style: TextStyle(
@@ -348,7 +399,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                     SizedBox(
-                      height: 10,
+                      height: 1.h,
                     ),
                     Container(
                       decoration: BoxDecoration(
@@ -384,7 +435,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                           Center(
                               child: TextButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>GinnieBox()));
+                                },
                                 child: Text(
                                   "Ginnie Box",
                                   style: TextStyle(
@@ -396,7 +449,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                     SizedBox(
-                      height: 10,
+                      height: 1.h,
                     ),
                     Container(
                       decoration: BoxDecoration(
@@ -432,7 +485,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                           Center(
                               child: TextButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>Home()));
+                                },
                                 child: Text(
                                   "Messages",
                                   style: TextStyle(
@@ -444,7 +499,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                     SizedBox(
-                      height: 10,
+                      height: 1.h,
                     ),
                     Container(
                       decoration: BoxDecoration(
@@ -480,7 +535,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                           Center(
                               child: TextButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>LeaveRequest()));
+                                },
                                 child: Text(
                                   "Leave",
                                   style: TextStyle(
@@ -492,7 +549,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                     SizedBox(
-                      height: 10,
+                      height: 1.h,
                     ),
                     Container(
                       decoration: BoxDecoration(
@@ -528,7 +585,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                           Center(
                               child: TextButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>Complaint()));
+                                },
                                 child: Text(
                                   "Complaint",
                                   style: TextStyle(
@@ -540,7 +599,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                     SizedBox(
-                      height: 10,
+                      height: 1.h,
                     ),
                     Container(
                       decoration: BoxDecoration(
@@ -589,7 +648,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                     SizedBox(
-                      height: 10,
+                      height: 1.h,
                     ),
                     Container(
                       decoration: BoxDecoration(
@@ -625,8 +684,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                           Center(
                               child: TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
+                                onPressed: () async{
+                                  SharedPreferences sharedPreferences= await SharedPreferences.getInstance();
+                                  sharedPreferences.clear();
+                                  sharedPreferences.remove('email');
+                                  String? email = sharedPreferences.getString('email');
+                                  print(email);
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
                                 },
                                 child: Text(
                                   "Log Out",

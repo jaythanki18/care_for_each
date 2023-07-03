@@ -23,58 +23,53 @@ class _CategoryState extends State<Category> {
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       backgroundColor: Color.fromRGBO(2, 25, 71, 1),
-      title: FutureBuilder(
-        future: CategoryManageAPI().categoryManage(widget.c_emailid, catname, gst, "delete",catid),
-        builder: (context,snapshot){
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("Edit Category : ",style: TextStyle(color: Colors.white,decoration: TextDecoration.underline),),
-              SizedBox(height: 10,),
-              Container(
-                width: 64.10.w,
-                height: 5.33.h,
-                child: ElevatedButton(
-                    onPressed: () {
-                      // Navigator.push(context, MaterialPageRoute(builder: (context)=>));
-                    },
-                    child: Text(catname, style: TextStyle(color: Colors.teal,fontSize: 11.37.sp),),
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                        elevation: 0,
-                        backgroundColor: Colors.transparent,
-                        side: const BorderSide(
-                          width: 1.0,
-                          color: Colors.teal,
-                        )
+      title: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text("Edit Category : ",style: TextStyle(color: Colors.white,decoration: TextDecoration.underline),),
+          SizedBox(height: 10,),
+          Container(
+            width: 64.10.w,
+            height: 5.33.h,
+            child: ElevatedButton(
+                onPressed: () async {
+                  // Navigator.push(context, MaterialPageRoute(builder: (context)=>));
+                },
+                child: Text(catname, style: TextStyle(color: Colors.teal,fontSize: 11.37.sp),),
+                style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    elevation: 0,
+                    backgroundColor: Colors.transparent,
+                    side: const BorderSide(
+                      width: 1.0,
+                      color: Colors.teal,
                     )
-                ),
-              ),
-              SizedBox(height: 0.59.h,),
-              Container(
-                width: 64.10.w,
-                height: 5.33.h,
-                child: ElevatedButton(
-                    onPressed: () {
-                      // Navigator.push(context, MaterialPageRoute(builder: (context)=>));
-                    },
-                    child: Text(gst, style: TextStyle(color: Colors.teal,fontSize: 11.37.sp),),
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                        elevation: 0,
-                        backgroundColor: Colors.transparent,
-                        side: const BorderSide(
-                          width: 1.0,
-                          color: Colors.teal,
-                        )
+                )
+            ),
+          ),
+          SizedBox(height: 0.59.h,),
+          Container(
+            width: 64.10.w,
+            height: 5.33.h,
+            child: ElevatedButton(
+                onPressed: () {
+                  // Navigator.push(context, MaterialPageRoute(builder: (context)=>));
+                },
+                child: Text(gst, style: TextStyle(color: Colors.teal,fontSize: 11.37.sp),),
+                style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    elevation: 0,
+                    backgroundColor: Colors.transparent,
+                    side: const BorderSide(
+                      width: 1.0,
+                      color: Colors.teal,
                     )
-                ),
-              ),
-            ],
-          );
-        },
-
+                )
+            ),
+          ),
+        ],
       ),
+
       // content: Text("Would you like to continue learning how to use Flutter alerts?"),
       actions: [
         Row(
@@ -82,7 +77,8 @@ class _CategoryState extends State<Category> {
             Padding(
               padding: const EdgeInsets.only(left: 50,),
               child: ElevatedButton(
-                  onPressed: (){
+                  onPressed: () async{
+                    CategoryManageModel data = await CategoryManageAPI().categoryManage(widget.c_emailid, catname, gst, "delete", catid);
                        Navigator.push(context, MaterialPageRoute(builder: (context)=>Category(c_emailid: widget.c_emailid,)));
                   },
                   style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.teal)),
@@ -94,6 +90,7 @@ class _CategoryState extends State<Category> {
               padding: const EdgeInsets.only(right: 50),
               child: ElevatedButton(
                   onPressed: (){
+
                     Navigator.push(context, MaterialPageRoute(builder: (context)=>EditCategory(catid: catid,c_emailid: widget.c_emailid,)));
                   },
                   style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.teal)),
@@ -147,7 +144,7 @@ class _CategoryState extends State<Category> {
           IconButton(
               onPressed: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => CompanyProfile()));
+                    MaterialPageRoute(builder: (context) => CompanyProfile(c_emailid: widget.c_emailid,)));
               },
               icon: Icon(Icons.account_circle_sharp),
               color: Color.fromRGBO(9, 31, 87, 1)

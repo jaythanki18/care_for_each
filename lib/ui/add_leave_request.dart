@@ -1,9 +1,12 @@
+import 'package:care_for_each/API/EmployeeSide/employee_leave_add_API.dart';
+import 'package:care_for_each/Models/EmployeeSide/EmployeeLeaveAddModel.dart';
 import 'package:care_for_each/ui/leave_request.dart';
 import 'package:care_for_each/ui/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'cart.dart';
 import 'package:sizer/sizer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AddLeaveRequest extends StatefulWidget {
   const AddLeaveRequest({Key? key}) : super(key: key);
@@ -18,12 +21,27 @@ class _AddLeaveRequestState extends State<AddLeaveRequest> {
 
   TextEditingController startdate = TextEditingController();
   TextEditingController enddate = TextEditingController();
+  TextEditingController _reason = TextEditingController();
+  String reason="";
   @override
   void initState() {
     startdate.text = ""; //set the initial value of text field
     enddate.text="";
     super.initState();
+    getData();
   }
+
+  String? getEName;
+  String? getCName;
+  void getData() async{
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    setState(() {
+      getEName=sharedPreferences.getString("email")!;
+      getCName=sharedPreferences.getString('c_email');
+    });
+    debugPrint(getEName);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,7 +94,7 @@ class _AddLeaveRequestState extends State<AddLeaveRequest> {
             Container(
               margin: EdgeInsets.only(left: 33,right: 33),
               width: 83.07.w,
-              height: 18.36.h,
+              height: 30.36.h,
               decoration: BoxDecoration(
                   gradient: LinearGradient(colors: [
                     Color.fromRGBO(62, 86, 115, 0.2),
@@ -162,6 +180,19 @@ class _AddLeaveRequestState extends State<AddLeaveRequest> {
                         } else {}
                       },
                     ),
+                    TextFormField(
+                      controller: _reason,
+                      onChanged: (value){
+                        reason=value;
+                        setState(() {
+
+                        });
+                      },
+                      decoration: InputDecoration(
+                        labelText: 'Reason',
+                        labelStyle: TextStyle(color: Color.fromRGBO(12,25,71,1,))
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -170,13 +201,18 @@ class _AddLeaveRequestState extends State<AddLeaveRequest> {
               width: 77.94.w,
               height: 5.92.h,
               child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async{
+                    print(getEName);
+                    print(_reason.text);
+                    print(enddate.text.toString());
+                    print(startdate.text.toString());
+                    EmployeeLeaveAddModel data = await EmployeeLeaveAddAPI().leave(getEName, _reason.text, enddate.text.toString(), startdate.text.toString(), "1");
                     if(formKey.currentState!.validate()){
                       const snackBar = SnackBar(
                         content: Text('Submitting Form'),
                       );
                       ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                     // Navigator.push(context, MaterialPageRoute(builder: (context)=>LeaveRequest()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>LeaveRequest()));
                     }
                     else{
                       const snackBar = SnackBar(

@@ -4,8 +4,9 @@ import 'company_profile.dart';
 import 'package:sizer/sizer.dart';
 
 class StockReport extends StatefulWidget {
-  const StockReport({Key? key}) : super(key: key);
+  const StockReport({Key? key, required this.c_email}) : super(key: key);
 
+  final String c_email;
   @override
   State<StockReport> createState() => _StockReportState();
 }
@@ -56,7 +57,7 @@ class _StockReportState extends State<StockReport> {
           IconButton(
               onPressed: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => CompanyProfile()));
+                    MaterialPageRoute(builder: (context) => CompanyProfile(c_emailid: widget.c_email,)));
               },
               icon: Icon(Icons.account_circle_sharp),
               color: Color.fromRGBO(9, 31, 87, 1))

@@ -36,7 +36,7 @@ class _ComplaintState extends State<Complaint> {
           },
         ),
         title: Text(
-          "Compaint",
+          "Complaint",
           style: TextStyle(color: Color.fromRGBO(9, 31, 87, 1)),
         ),
         actions: [
@@ -50,7 +50,7 @@ class _ComplaintState extends State<Complaint> {
           IconButton(
               onPressed: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => CompanyProfile()));
+                    MaterialPageRoute(builder: (context) => CompanyProfile(c_emailid: widget.c_emailid,)));
               },
               icon: Icon(Icons.account_circle_sharp),
               color: Color.fromRGBO(9, 31, 87, 1))
@@ -75,7 +75,7 @@ class _ComplaintState extends State<Complaint> {
                               children: [
 
                                 Container(
-                                  margin: EdgeInsets.only(left: 39,right: 39),
+                                  margin: EdgeInsets.symmetric(horizontal: 10.w),
                                   decoration: BoxDecoration(
                                       border: Border(
                                         left: BorderSide(color: Colors.teal, width: 1.36.h,),
@@ -102,22 +102,22 @@ class _ComplaintState extends State<Complaint> {
                                         ),
 
                                           Padding(
-                                          padding: const EdgeInsets.all(8.0),
+                                          padding:  EdgeInsets.symmetric(horizontal: 2.06.w,vertical: 0.83.h),
                                           child: SizedBox(
-                                            width: 180,
+                                            width: 46.2.w,
                                             child: Column(
                                               mainAxisAlignment: MainAxisAlignment.center,
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
-                                                Text("Name : "+snapshot.data!.server![index].ename.toString(),style: TextStyle(color: Color.fromRGBO(12,25,71,1),fontWeight: FontWeight.bold,fontSize: 9.09.sp,overflow: TextOverflow.ellipsis),maxLines: 1,),
+                                                SizedBox(width: 43.6.w,child: Text("Name : "+snapshot.data!.server![index].ename.toString(),style: TextStyle(color: Color.fromRGBO(12,25,71,1),fontWeight: FontWeight.bold,fontSize: 9.09.sp,overflow: TextOverflow.ellipsis),maxLines: 1,)),
                                                 SizedBox(height: 1.36.h,),
-                                                Text("Designation : "+snapshot.data!.server![index].designation.toString(),style: TextStyle(color: Color.fromRGBO(12,25,71,1),fontWeight: FontWeight.bold,fontSize: 9.09.sp,overflow: TextOverflow.ellipsis),maxLines: 2,),
+                                                SizedBox(width: 43.6.w,child: Text("Designation : "+snapshot.data!.server![index].designation.toString(),style: TextStyle(color: Color.fromRGBO(12,25,71,1),fontWeight: FontWeight.bold,fontSize: 9.09.sp,overflow: TextOverflow.ellipsis),maxLines: 2,)),
                                                 SizedBox(height: 1.36.h,),
-                                                Text("Subject : "+snapshot.data!.server![index].subject.toString(),style: TextStyle(color: Color.fromRGBO(12,25,71,1),fontWeight: FontWeight.bold,fontSize: 9.09.sp,overflow: TextOverflow.ellipsis),maxLines: 1,),
+                                                SizedBox(width: 43.6.w,child: Text("Subject : "+snapshot.data!.server![index].subject.toString(),style: TextStyle(color: Color.fromRGBO(12,25,71,1),fontWeight: FontWeight.bold,fontSize: 9.09.sp,overflow: TextOverflow.ellipsis),maxLines: 1,)),
                                                 SizedBox(height: 1.36.h,),
-                                                Text("Description :  "+snapshot.data!.server![index].description.toString(),style: TextStyle(color: Color.fromRGBO(12,25,71,1),fontWeight: FontWeight.bold,fontSize: 9.09.sp,overflow: TextOverflow.ellipsis),maxLines: 3,),
+                                                SizedBox(width: 43.6.w,child: Text("Description :  "+snapshot.data!.server![index].description.toString(),style: TextStyle(color: Color.fromRGBO(12,25,71,1),fontWeight: FontWeight.bold,fontSize: 9.09.sp,overflow: TextOverflow.ellipsis),maxLines: 3,)),
                                                 SizedBox(height: 1.36.h,),
-                                                Text("Date : "+snapshot.data!.server![index].date.toString(),style: TextStyle(color: Color.fromRGBO(12,25,71,1),fontWeight: FontWeight.bold,fontSize: 9.09.sp,overflow: TextOverflow.ellipsis),maxLines: 2,)
+                                                SizedBox(width: 43.6.w,child: Text("Date : "+snapshot.data!.server![index].date.toString(),style: TextStyle(color: Color.fromRGBO(12,25,71,1),fontWeight: FontWeight.bold,fontSize: 9.09.sp,overflow: TextOverflow.ellipsis),maxLines: 2,))
                                               ],
                                             ),
                                           ),

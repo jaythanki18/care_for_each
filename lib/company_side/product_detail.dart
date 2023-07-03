@@ -1,12 +1,16 @@
 import 'dart:io';
 import 'package:care_for_each/API/product_value_edit_API.dart';
+import 'package:care_for_each/Models/ProductValueEditModel.dart';
 import 'package:care_for_each/company_side/products.dart';
 import 'package:care_for_each/widgets/round_button2.dart';
 import 'package:flutter/material.dart';
+import '../API/ProductPhotoEditAPI.dart';
 import '../API/SingleProductDisplayAPI.dart';
+import '../ui/add_visitor.dart';
 import '../widgets/round_button.dart';
 import 'company_profile.dart';
 import 'package:sizer/sizer.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ProductDetail extends StatefulWidget {
   final String pid;
@@ -14,15 +18,26 @@ class ProductDetail extends StatefulWidget {
   const ProductDetail({Key? key,required this.pid, required this.c_emailid}) : super(key: key);
 
 
-
   @override
   State<ProductDetail> createState() => _ProductDetailState();
 }
 
 class _ProductDetailState extends State<ProductDetail> {
+  var _image;
+  var imagePicker;
+  var type;
+  late String returnedVal;
+  TextEditingController _userimage=TextEditingController();
+
   String edit="";
-  showAlertEditDialog(BuildContext context,name,pid,fname) {
-    TextEditingController value=TextEditingController();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    imagePicker = new ImagePicker();
+  }
+ String showAlertEditDialog(BuildContext context,name,pid,fname,initval) {
+    TextEditingController value=TextEditingController(text: initval);
     late String val;
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
@@ -64,13 +79,6 @@ class _ProductDetailState extends State<ProductDetail> {
             ),
           Row(
                   children: [
-                    ElevatedButton(onPressed: (){
-                      print("pid : "+widget.pid);
-                      print("fname : "+fname);
-                      print("Controller value : "+value.text);
-                    },
-                        child: Text("OK")
-                    ),
                     Padding(
                       padding: const EdgeInsets.only(left: 50,),
                       child: ElevatedButton(
@@ -88,19 +96,17 @@ class _ProductDetailState extends State<ProductDetail> {
                         onTap: (){
                            //val=value.text;
                         },
-                        child: FutureBuilder(
-                          future: ProductValueEditAPI().productEditList(widget.pid,fname,edit),
-                             builder: (context,snapshot){
-                              return ElevatedButton(
-                                onPressed: (){
-                                  print(snapshot.data!.server![0].result.toString());
+                        child: ElevatedButton(
+                                onPressed: () async{
+                                  ProductValueEditModel data = await ProductValueEditAPI().productEditList(widget.pid,fname,value.text.toString());
+                                  print("productEditList(${widget.pid},${fname},${value.text.toString()})");
+                                  print(data!.server![0].result.toString());
                                   Navigator.push(context, MaterialPageRoute(builder: (context)=>ProductDetail(pid: widget.pid,c_emailid: widget.c_emailid,)));
                                 },
                                 style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.teal)),
-                                child: Text("Edit",style: TextStyle(color: Colors.white)));
-                            }
+                                child: Text("Edit",style: TextStyle(color: Colors.white))
+                        )
 
-                        ),
                       ),
                     ),
                   ],
@@ -121,14 +127,19 @@ class _ProductDetailState extends State<ProductDetail> {
         return alert;
       },
     );
+    return value.text;
+  }
+  editImage(userImage){
+
+    FutureBuilder(
+      future: ProductPhotoEditAPI().phot(widget.pid,userImage),
+      builder: (context,snapshot2){
+        return Text(snapshot2.data!.server![0].result.toString());
+      },
+
+    );
   }
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -157,7 +168,7 @@ class _ProductDetailState extends State<ProductDetail> {
           IconButton(
               onPressed: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => CompanyProfile()));
+                    MaterialPageRoute(builder: (context) => CompanyProfile(c_emailid: widget.c_emailid,)));
               },
               icon: Icon(Icons.account_circle_sharp),
               color: Color.fromRGBO(9, 31, 87, 1)
@@ -208,44 +219,64 @@ class _ProductDetailState extends State<ProductDetail> {
                                               padding: EdgeInsets.symmetric(horizontal: 3.33.w,vertical: 3.33.w),
                                               child: Row(
                                                 children: [
-                                                  Image.network(snapshot.data!.server![index].pphoto.toString(),height: 25.64.w,width: 25.64.w,errorBuilder: (context, error, stackTrace) => SizedBox(width: 25.64.w,height: 100,),),
+                                                  InkWell(onTap: (){
+                                                    GestureDetector(
+                                                      onTap: () async {
+                                                        TextFormField(controller: _userimage,);
+                                                        var source = type == ImageSourceType.camera
+                                                            ? ImageSource.camera
+                                                            : ImageSource.gallery;
+                                                        XFile image = await imagePicker.pickImage(
+                                                            source: source,
+                                                            imageQuality: 50,
+                                                            preferredCameraDevice: CameraDevice.front);
+                                                        setState(() {
+                                                          _image = File(image.path);
+                                                          var photo=File(image.path);
+                                                          _userimage=_image;
+                                                        });
+                                                        print(_userimage.text);
+                                                      },
+                                                    );
+                                                    editImage(_userimage.text.toString());
+                                                  },child: Image.network(snapshot.data!.server![index].pphoto.toString(),height: 25.64.w,width: 25.64.w,errorBuilder: (context, error, stackTrace) => SizedBox(width: 25.64.w,height: 100,child: Container(color: Colors.black54,),),)),
                                                   SizedBox(width: 3.33.w,),
                                                   Column(
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
                                                       InkWell(
                                                           onTap: (){
-                                                           showAlertEditDialog(context, "Name",pid,"pname");
+                                                           showAlertEditDialog(context, "Name",pid,"pname",snapshot.data!.server![index].pname.toString());
                                                           },
                                                           child: SizedBox(width: 150,child: Text('Name : '+snapshot.data!.server![index].pname.toString(),style: TextStyle(fontSize: 9.09.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1))
                                                       ),
                                                       InkWell(
                                                           onTap: (){
-                                                            showAlertEditDialog(context, "Code",pid,"pcode");
+                                                            showAlertEditDialog(context, "Code",pid,"pcode",snapshot.data!.server![index].pcode.toString());
                                                           },
                                                           child: SizedBox(width: 150,child: Text('Code : '+snapshot.data!.server![index].pcode.toString(),style: TextStyle(fontSize: 9.09.sp,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1))
                                                       ),
                                                       InkWell(
                                                         onTap: (){
-                                                          showAlertEditDialog(context, "Available stock",pid,"stock");
+                                                          showAlertEditDialog(context, "Available stock",pid,"stock",snapshot.data!.server![index].stock.toString());
                                                         },
                                                           child: SizedBox(width: 150,child: Text('Available Stock : '+snapshot.data!.server![index].stock.toString(),style: TextStyle(fontSize: 9.09.sp,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1))
                                                       ),
                                                       InkWell(
                                                           onTap: (){
-                                                            showAlertEditDialog(context, "Minimum stock",pid,"minimum_stock");
+                                                            showAlertEditDialog(context, "Minimum stock",pid,"minimum_stock",snapshot.data!.server![index].minimumStock.toString());
                                                           },
                                                           child: SizedBox(width: 150,child: Text('Minimum Stock : '+snapshot.data!.server![index].minimumStock.toString(),style: TextStyle(fontSize: 9.09.sp,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1))
                                                       ),
                                                       InkWell(
                                                         onTap: (){
-                                                          showAlertEditDialog(context, "Minimum Price",pid,"sprice");
+                                                          showAlertEditDialog(context, "Minimum Price",pid,"sprice",snapshot.data!.server![index].sprice.toString(),);
                                                         },
                                                           child: SizedBox(width: 150,child: Text('Minimum price : ₹'+snapshot.data!.server![index].sprice.toString(),style: TextStyle(fontSize: 9.09.sp,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1))
                                                       ),
                                                       InkWell(
                                                         onTap: (){
-                                                          showAlertEditDialog(context, "Price",pid,"price");
+                                                          showAlertEditDialog(context, "Price",pid,"price",snapshot.data!.server![index].price.toString());
                                                         },
                                                         child: Container(
                                                           height: 3.08.h,
@@ -266,7 +297,7 @@ class _ProductDetailState extends State<ProductDetail> {
                                         ),
                                         InkWell(
                                           onTap: (){
-                                            showAlertEditDialog(context, "Description",pid,"pdesc");
+                                            showAlertEditDialog(context, "Description",pid,"pdesc",snapshot.data!.server![index].pdesc.toString());
                                           },
                                           child: Column(
                                             crossAxisAlignment:CrossAxisAlignment.center,
@@ -313,42 +344,37 @@ showAlertDialog(BuildContext context,pid,fname,value,c_emailid) {
     title: Text("Are you sure want to DELETE ?",style: TextStyle(color: Colors.white),),
     // content: Text("Would you like to continue learning how to use Flutter alerts?"),
     actions: [
-      FutureBuilder(
-        future: ProductValueEditAPI().productEditList(pid, fname, value),
-        builder: (context,snapshot){
-          return Column(
+      Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 50,),
-                    child: ElevatedButton(
+              Padding(
+                padding:  EdgeInsets.symmetric(horizontal: 12.82.w),
+                child: Row(
+                  children: [
+                    ElevatedButton(
                         onPressed: (){
                           Navigator.pop(context);
                         },
                         style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.teal)),
                         child: Text("No",style: TextStyle(color: Colors.white))
                     ),
-                  ),
-                  SizedBox(width: 50,),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 50),
-                    child: ElevatedButton(
-                        onPressed: (){
-                          print(snapshot.data!.server![0].result.toString());
+                    SizedBox(width: 12.82.w,),
+                    ElevatedButton(
+                        onPressed: () async{
+                          ProductValueEditModel data =await ProductValueEditAPI().productEditList(pid, fname, value);
+                          print(data!.server![0].result.toString());
                           Navigator.push(context, MaterialPageRoute(builder: (context)=>Products(c_emailid: c_emailid,)));
                         },
                         style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.teal)),
                         child: Text("Yes",style: TextStyle(color: Colors.white))),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ],
-          );
-        },
+          )
 
-      ),
+
+
 
     ],
   );

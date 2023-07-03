@@ -1,9 +1,12 @@
+import 'package:care_for_each/Models/EmployeeSide/AddWishlistModel.dart';
 import 'package:care_for_each/ui/ginnie_box.dart';
 import 'package:care_for_each/ui/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../API/EmployeeSide/add_wishlist_API.dart';
 import 'cart.dart';
 import 'package:sizer/sizer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class NewGinnie extends StatefulWidget {
   const NewGinnie({Key? key}) : super(key: key);
@@ -18,14 +21,35 @@ class _NewGinnieState extends State<NewGinnie> {
 
   TextEditingController dateInput = TextEditingController();
   TextEditingController _name = TextEditingController();
+  TextEditingController _address = TextEditingController();
+  TextEditingController _company = TextEditingController();
   TextEditingController _email = TextEditingController();
   TextEditingController _contact = TextEditingController();
   TextEditingController _message = TextEditingController();
+
+  String name="";
+  String address="";
+  String company_name="";
+  String contact="";
+  String emailid="";
+  String desc="";
+  String date="";
 
   @override
   void initState() {
     dateInput.text = ""; //set the initial value of text field
     super.initState();
+    getData();
+  }
+
+  String? e_emailid;
+
+  void getData() async{
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    setState(() {
+      e_emailid=sharedPreferences.getString("email")!;
+    });
+    debugPrint(e_emailid);
   }
 
   @override
@@ -89,6 +113,11 @@ class _NewGinnieState extends State<NewGinnie> {
                         children: [
                           TextFormField(
                             controller: _name,
+                            onChanged: (value){
+                              setState(() {
+                                name=value;
+                              });
+                            },
                             keyboardType: TextInputType.name,
                             maxLines: null,
                             decoration: InputDecoration(
@@ -96,7 +125,7 @@ class _NewGinnieState extends State<NewGinnie> {
                                 labelStyle: TextStyle(
                                     color: Color.fromRGBO(12, 25, 71, 1))),
                             validator: (value){
-                              if(value!.isEmpty || !RegExp(r"^\s*([A-Za-z]{1,}([\.,] |[-']| ))+[A-Za-z]+\.?\s*$").hasMatch(value!)){
+                              if(value!.isEmpty ){
                                 return 'Enter correct name';
                               }
                               else{
@@ -105,6 +134,12 @@ class _NewGinnieState extends State<NewGinnie> {
                             },
                           ),
                           TextFormField(
+                            controller: _address,
+                            onChanged: (value){
+                              setState(() {
+                                address=value;
+                              });
+                            },
                             keyboardType: TextInputType.streetAddress,
                             validator: (value){
                               if(value!.isEmpty){
@@ -120,6 +155,12 @@ class _NewGinnieState extends State<NewGinnie> {
                                     color: Color.fromRGBO(12, 25, 71, 1))),
                           ),
                           TextFormField(
+                            controller: _company,
+                            onChanged: (value){
+                              setState(() {
+                                company_name=value;
+                              });
+                            },
                             keyboardType: TextInputType.text,
                             validator: (value){
                               if(value!.isEmpty){
@@ -136,6 +177,11 @@ class _NewGinnieState extends State<NewGinnie> {
                           ),
                           TextFormField(
                             controller: _contact,
+                            onChanged: (value){
+                              setState(() {
+                                contact=value;
+                              });
+                            },
                             keyboardType: TextInputType.phone,
                             validator: (value){
                               if(value!.isEmpty || !RegExp(r"^\+?[0-9]{10}$").hasMatch(value!)){
@@ -152,6 +198,11 @@ class _NewGinnieState extends State<NewGinnie> {
                           ),
                           TextFormField(
                             controller: _email,
+                            onChanged: (value){
+                              setState(() {
+                                emailid=value;
+                              });
+                            },
                             keyboardType: TextInputType.emailAddress,
                             validator: (value){
                               if(value!.isEmpty || !RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w]{2,4}').hasMatch(value!)){
@@ -168,6 +219,11 @@ class _NewGinnieState extends State<NewGinnie> {
                           ),
                           TextFormField(
                             controller: dateInput,
+                            onChanged: (value){
+                              setState(() {
+                                date=value;
+                              });
+                            },
                             validator: (value){
                               if(value!.isEmpty){
                                 return 'Enter correct date';
@@ -224,6 +280,11 @@ class _NewGinnieState extends State<NewGinnie> {
                               }
                             },
                             controller: _message,
+                            onChanged: (value){
+                              setState(() {
+                                desc=value;
+                              });
+                            },
                             keyboardType: TextInputType.multiline,
                             decoration: InputDecoration(
                                 labelText: "Description",
@@ -238,34 +299,49 @@ class _NewGinnieState extends State<NewGinnie> {
                 SizedBox(
                   height: 30.h,
                 ),
-                Container(
-                  child: Center(
-                    child: Container(
-                      width: 77.94.w,
-                      height: 6.51.h,
-                      child: ElevatedButton(
-                          onPressed: () {
-                            if(formKey.currentState!.validate()){
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => GinnieBox()));
-                            }
+                             Container(
+                              child: Center(
+                                child: Container(
+                                  width: 77.94.w,
+                                  height: 6.51.h,
+                                  child: ElevatedButton(
+                                      onPressed: () async{
+                                        debugPrint(e_emailid);
+                                        debugPrint(_name.text.toString());
+                                        debugPrint(_contact.text.toString());
+                                        debugPrint(_address.text.toString());
+                                        debugPrint( dateInput.text.toString());
+                                        debugPrint( _email.text.toString());
+                                        debugPrint(_company.text.toString());
+                                        debugPrint( _message.text.toString());
+                                        AddWishlistModel data= await AddWishlistAPI().wishlist(e_emailid, _name.text.toString(), _contact.text.toString(), _address.text.toString(), dateInput.text.toString(), _email.text.toString(), _company.text.toString(), _message.text.toString());
+                                        if(formKey.currentState!.validate()){
+                                          print(data.server![0].status.toString());
+                                          Navigator.push(context, MaterialPageRoute(builder: (context) => GinnieBox()));
+                                        }
 
-                          },
-                          child: Text(
-                            "Add Ginnie",
-                            style: TextStyle(
-                                color: Colors.teal, fontSize: 15.166.sp),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                              elevation: 0,
-                              backgroundColor: Colors.white,
-                              shadowColor: Colors.white,
-                              side: const BorderSide(
-                                width: 1.0,
-                                color: Colors.teal,
-                              ))),
-                    ),
-                  ),
-                ),
+                                      },
+                                      child: Text(
+                                        "Add Ginnie",
+                                        style: TextStyle(
+                                            color: Colors.teal, fontSize: 15.166.sp),
+                                      ),
+                                      style: ElevatedButton.styleFrom(
+                                          elevation: 0,
+                                          backgroundColor: Colors.white,
+                                          shadowColor: Colors.white,
+                                          side: const BorderSide(
+                                            width: 1.0,
+                                            color: Colors.teal,
+                                          ))),
+                                ),
+                              ),
+                             )
+
+
+
+
+
               ],
             ),
           ),

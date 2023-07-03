@@ -1,9 +1,13 @@
+import 'package:care_for_each/API/EmployeeSide/employee_complaint_insert_API.dart';
+import 'package:care_for_each/Models/EmployeeSide/EmployeeComplaintInsertModel.dart';
 import 'package:care_for_each/ui/dashboard.dart';
 import 'package:care_for_each/ui/profile.dart';
 import 'package:flutter/material.dart';
 
 import 'cart.dart';
 import 'package:sizer/sizer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 class NewComplaint extends StatefulWidget {
   const NewComplaint({Key? key}) : super(key: key);
 
@@ -14,6 +18,25 @@ class NewComplaint extends StatefulWidget {
 class _NewComplaintState extends State<NewComplaint> {
   final formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  TextEditingController _subject= TextEditingController();
+  TextEditingController _description= TextEditingController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getData();
+  }
+  String? getEName;
+  String? getCName;
+  void getData() async{
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    setState(() {
+      getEName=sharedPreferences.getString("email")!;
+      getCName=sharedPreferences.getString('c_email');
+    });
+    debugPrint(getEName);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,6 +97,7 @@ class _NewComplaintState extends State<NewComplaint> {
                     height: 5.92.h,
                     width: 77.94.w,
                     child: TextFormField(
+                      controller: _subject,
                       keyboardType: TextInputType.text,
                       validator: (value){
                         if(value!.isEmpty){
@@ -98,6 +122,7 @@ class _NewComplaintState extends State<NewComplaint> {
                     height: 5.92.h,
                     width: 77.94.w,
                     child: TextFormField(
+                      controller: _description,
                       keyboardType: TextInputType.text,
                       validator: (value){
                         if(value!.isEmpty){
@@ -113,7 +138,7 @@ class _NewComplaintState extends State<NewComplaint> {
                             BorderSide(color: Color.fromRGBO(12, 25, 71, 1)),
                             borderRadius: BorderRadius.circular(10.0),
                           ),
-                          labelText: "Write a subject",
+                          labelText: "Write a description",
                           labelStyle: TextStyle(color: Color.fromRGBO(12, 25, 71, 1))),
                     ),
                   ),
@@ -124,9 +149,13 @@ class _NewComplaintState extends State<NewComplaint> {
               height: 5.92.h,
               width: 77.94.w,
               child: ElevatedButton(
-                  onPressed: () {
-                    if(formKey.currentState!.validate()){
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>Dashboard()));
+                  onPressed: () async{
+                    print(getEName);
+                    print(_subject.text.toString());
+                    print(_description.text.toString());
+                    EmployeeComplaintInsert data = await EmployeeComplaintInsertAPI().complaint(getEName, _subject.text.toString(), _description.text.toString());
+                    if(formKey.currentState!.validate() && data.server![0].result.toString() == "success"){
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>Dashboard(e_emailid: getEName!,)));
                     }
 
                   },

@@ -1,8 +1,17 @@
+import 'dart:convert';
+
+import 'package:care_for_each/API/EmployeeSide/employee_login_API.dart';
+import 'package:care_for_each/Models/EmployeeSide/EmployeeLoginModel.dart';
+import 'package:care_for_each/User.dart';
 import 'package:care_for_each/company_side/company_login.dart';
+import 'package:care_for_each/company_side/new_sub_category.dart';
+import 'package:care_for_each/ui/auth/forget_password.dart';
 import 'package:flutter/material.dart';
 import '../../widgets/round_button.dart';
 import '../dashboard.dart';
 import 'package:sizer/sizer.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -14,13 +23,43 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final formKey=GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey=GlobalKey<ScaffoldState>();
+  TextEditingController email=TextEditingController();
+  TextEditingController pword=TextEditingController();
+  bool obsecure=true;
+
+
+  String emailid="";
+  String password="";
+
+  @override
+    void initState() {
+      // TODO: implement initState
+      super.initState();
+
+    }
+
+    void storeData()async{
+      SharedPreferences sharedPreferences= await SharedPreferences.getInstance();
+        sharedPreferences.setString('email', email.text);
+    }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    email.dispose();
+    pword.dispose();
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
+        backgroundColor: Colors.white,
         body: Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: EdgeInsets.symmetric(horizontal: 2.h),
           child: SingleChildScrollView(
             child: Form(
               key: formKey,
@@ -53,9 +92,15 @@ class _LoginScreenState extends State<LoginScreen> {
                   // width: 77.94.w,
                   // height: 5.92.h,
                   child: TextFormField(
+                    controller: email,
+                    onChanged: (value){
+                      setState(() {
+                        emailid=value;
+                      });
+                    },
                     keyboardType: TextInputType.emailAddress,
                     validator: (value){
-                      if(value!.isEmpty || !RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w]{2,4}').hasMatch(value!)){
+                      if(value!.isEmpty){
                         return 'Enter correct email';
                       }
                       else{
@@ -86,19 +131,19 @@ class _LoginScreenState extends State<LoginScreen> {
                   // width: 77.94.w,
                   // height: 5.92.h,
                   child: TextFormField(
-                    obscureText: true,
+                    controller: pword,
+                    onChanged: (value){
+                      setState(() {
+                        password=value;
+                      });
+                    },
+                    obscureText: obsecure,
                     keyboardType: TextInputType.text,
                     validator: (PassCurrentValue){
-                      RegExp regex=RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
+
                       var passNonNullValue=PassCurrentValue??"";
                       if(passNonNullValue.isEmpty){
                         return ("Password is required");
-                      }
-                      else if(passNonNullValue.length<6){
-                        return ("Password Must be more than 5 characters");
-                      }
-                      else if(!regex.hasMatch(passNonNullValue)){
-                        return ("Password should contain upper,lower,digit and Special character ");
                       }
                       return null;
                     },
@@ -108,7 +153,14 @@ class _LoginScreenState extends State<LoginScreen> {
                         borderSide: BorderSide.none,
                       ),
                       labelText: "Password",
-                      suffixIcon: Icon(Icons.visibility_off),
+                      suffixIcon: IconButton(onPressed: () {
+                        setState(() {
+                          Icon(Icons.visibility);
+                          obsecure == true ? obsecure=false : obsecure=true;
+                        });
+                      },
+                        icon: Icon(Icons.visibility_off),
+                      ),
                       labelStyle: TextStyle(
                           color: Color.fromRGBO(62, 86, 115, 1),
                           fontSize: 11.37.sp,
@@ -123,48 +175,63 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(
                   height: 2.37.h,
                 ),
-                RoundButton(
-                  title: "Log In",
-                  onTap: () {
-                    if(formKey.currentState!.validate()){
-                      // const snackBar = SnackBar(
-                      //   content: Text('Submitting Form'),
-                      // );
-                      // ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>Dashboard()));
-                    }
+                  SizedBox(
+                    height: 25.83.h,
+                    child: Column(
+                      children: [
 
-                  },
-                ),
-                Container(
-                    alignment: Alignment.centerRight,
-                    child: TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          "Forgot password?",
-                          style: TextStyle(color: Colors.grey[400],fontSize: 11.37.sp),
-                        ))),
-                Container(
-                  width: 77.94.w,
-                  height: 5.92.h,
-                  child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>CompanyLogin()));
+                      RoundButton(
+                      title: "Log In",
+                      onTap: () async{
+                       // Navigator.push(context, MaterialPageRoute(builder: (context)=>Dashboard(e_emailid: email.text.toString(),)));
+                        EmployeeLoginModel data =await  EmployeeLoginAPI().login(email.text, pword.text);
+                        if(formKey.currentState!.validate() && data.server?[0].success.toString() == email.text){
+                          storeData();
+                          var snackBar = SnackBar(
+                            content: Text("Login successfully!"),
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>Dashboard(e_emailid: email.text.toString(),)));
+
+                        }
+
                       },
-                      child: Text(
-                        "Company Log In",
-                        style: TextStyle(color: Colors.teal),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                          elevation: 0,
-                          backgroundColor: Colors.white,
-                          side: const BorderSide(
-                            width: 1.0,
-                            color: Colors.teal,
-                          )
-                      )
+                    ),
+                        Container(
+                            alignment: Alignment.centerRight,
+                            child: TextButton(
+                                onPressed: () {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>ChangePassword(op: pword.text.toString(),)));
+                                },
+                                child: Text(
+                                  "Forgot password?",
+                                  style: TextStyle(color: Colors.grey[400],fontSize: 11.37.sp),
+                                ))),
+                        Container(
+                          width: 77.94.w,
+                          height: 5.92.h,
+                          child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=>CompanyLogin()));
+                              },
+                              child: Text(
+                                "Company Log In",
+                                style: TextStyle(color: Colors.teal),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                  elevation: 0,
+                                  backgroundColor: Colors.white,
+                                  side: const BorderSide(
+                                    width: 1.0,
+                                    color: Colors.teal,
+                                  )
+                              )
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
+
             ],
         ),
       ),

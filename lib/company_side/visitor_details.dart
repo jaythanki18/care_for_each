@@ -41,7 +41,7 @@ class _CompanyVisitorDetailState extends State<CompanyVisitorDetail> {
           IconButton(
               onPressed: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => CompanyProfile()));
+                    MaterialPageRoute(builder: (context) => CompanyProfile(c_emailid: widget.c_emailid,)));
               },
               icon: Icon(Icons.account_circle_sharp),
               color: Color.fromRGBO(9, 31, 87, 1)
@@ -61,7 +61,7 @@ class _CompanyVisitorDetailState extends State<CompanyVisitorDetail> {
           ),
           SizedBox(height: 2.48.h,),
           Card(
-            margin: EdgeInsets.only(left: 40,right: 40),
+            margin: EdgeInsets.symmetric(horizontal: 10.25.w),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
             child: Container(
              // height: 34.36.h,
@@ -82,13 +82,13 @@ class _CompanyVisitorDetailState extends State<CompanyVisitorDetail> {
                     Center(child: Container(child: Image.network(widget.photo,errorBuilder: (context, error, stackTrace) => SizedBox(width: 25.64.w,height: 100,)),height: 95,width: 80,)),
                     SizedBox(height: 11.37.sp,),
                     //Image.asset("calender.png",width: 0.01*w),
-                    Text('Person Name : '+widget.visitorname,style: TextStyle(fontSize: 10.61.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1),
-                    Text('Company Address : '+widget.address,style: TextStyle(fontSize: 10.61.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1,),
-                    Text('Email : '+widget.email,style: TextStyle(fontSize: 10.61.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1),
-                    Text('Contact No : '+widget.contact,style: TextStyle(fontSize: 10.61.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1),
-                    Text('Date : '+widget.date,style: TextStyle(fontSize: 10.61.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1),
-                    Text('Time : '+widget.time,style: TextStyle(fontSize: 10.61.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 2),
-                    Text('Discussion : '+widget.discussion,style: TextStyle(fontSize: 10.61.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 2),
+                    SizedBox(width: 75.w,child: Text('Person Name : '+widget.visitorname,style: TextStyle(fontSize: 10.61.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1)),
+                    SizedBox(width: 75.w,child: Text('Company Address : '+widget.address,style: TextStyle(fontSize: 10.61.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1,)),
+                    SizedBox(width: 75.w,child: Text('Email : '+widget.email,style: TextStyle(fontSize: 10.61.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1)),
+                    SizedBox(width: 75.w,child: Text('Contact No : '+widget.contact,style: TextStyle(fontSize: 10.61.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1)),
+                    SizedBox(width: 75.w,child: Text('Date : '+widget.date,style: TextStyle(fontSize: 10.61.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1)),
+                    SizedBox(width: 75.w,child: Text('Time : '+widget.time,style: TextStyle(fontSize: 10.61.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 2)),
+                    SizedBox(width: 75.w,child: Text('Discussion : '+widget.discussion,style: TextStyle(fontSize: 10.61.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 2)),
                     //Text('Expected Date :${message}'),
                   ],
                 ),

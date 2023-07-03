@@ -5,14 +5,17 @@ import 'company_profile.dart';
 import 'package:sizer/sizer.dart';
 
 class GinnieBoxDetail extends StatefulWidget {
-  const GinnieBoxDetail({Key? key, required this.wcid}) : super(key: key);
+  const GinnieBoxDetail({Key? key, required this.wcid, required this.c_emailid}) : super(key: key);
 
+  final String c_emailid;
   final String wcid;
+
   @override
   State<GinnieBoxDetail> createState() => _GinnieBoxDetailState();
 }
 
 class _GinnieBoxDetailState extends State<GinnieBoxDetail> {
+  int len =0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,7 +43,7 @@ class _GinnieBoxDetailState extends State<GinnieBoxDetail> {
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => CompanyProfile()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => CompanyProfile(c_emailid: widget.c_emailid,)));
               },
               icon: Icon(Icons.account_circle_sharp),
               color: Color.fromRGBO(9, 31, 87, 1)
@@ -77,7 +80,7 @@ class _GinnieBoxDetailState extends State<GinnieBoxDetail> {
                                     elevation: 4,
                                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                                     child: Container(
-                                      height: 45.26.h,
+                                     // height: 40.26.h,
                                       width: 83.07.w,
                                       decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(2.36.h),
@@ -94,13 +97,13 @@ class _GinnieBoxDetailState extends State<GinnieBoxDetail> {
                                             Center(child: Container(child: Image.asset("assets/img_4.png",width: 23.83.w,height: 14.45.h,))),
                                             SizedBox(height: 1.77.h,),
                                             //Image.asset("calender.png",width: 0.01*w),
-                                            Text('Name : '+snapshot.data!.server![index].cname.toString(),style: TextStyle(fontSize: 12.13.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1),
-                                            Text('Company Address : '+snapshot.data!.server![index].ccname.toString(),style: TextStyle(fontSize: 12.13.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1,),
-                                            Text('Date : '+snapshot.data!.server![index].cdate.toString(),style: TextStyle(fontSize: 12.13.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1),
-                                            Text('Email : '+snapshot.data!.server![index].cemid.toString(),style: TextStyle(fontSize: 12.13.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1),
-                                            Text('Contact No : '+snapshot.data!.server![index].cmobileno.toString(),style: TextStyle(fontSize: 12.13.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1),
-                                            Text('Expected Date : '+snapshot.data!.server![index].cdate.toString(),style: TextStyle(fontSize: 12.13.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 2),
-                                            Text('Grand Total : ₹ '+snapshot.data!.server![index].gt.toString(),style: TextStyle(fontSize: 12.13.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 2),
+                                            SizedBox(width: 70.w,child: Text('Name : '+snapshot.data!.server![index].cname.toString(),style: TextStyle(fontSize: 12.13.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1)),
+                                            SizedBox(width: 70.w,child: Text('Company Address : '+snapshot.data!.server![index].ccname.toString(),style: TextStyle(fontSize: 12.13.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1,)),
+                                            SizedBox(width: 70.w,child: Text('Date : '+snapshot.data!.server![index].cdate.toString(),style: TextStyle(fontSize: 12.13.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1)),
+                                            SizedBox(width: 70.w,child: Text('Email : '+snapshot.data!.server![index].cemid.toString(),style: TextStyle(fontSize: 12.13.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1)),
+                                            SizedBox(width: 70.w,child: Text('Contact No : '+snapshot.data!.server![index].cmobileno.toString(),style: TextStyle(fontSize: 12.13.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1)),
+                                            SizedBox(width: 70.w,child: Text('Expected Date : '+snapshot.data!.server![index].cdate.toString(),style: TextStyle(fontSize: 12.13.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 2)),
+                                            SizedBox(width: 70.w,child: Text('Grand Total : ₹ '+snapshot.data!.server![index].gt.toString(),style: TextStyle(fontSize: 12.13.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 2)),
                                             //Text('Expected Date :${message}'),
                                           ],
                                         ),
@@ -118,7 +121,7 @@ class _GinnieBoxDetailState extends State<GinnieBoxDetail> {
                                     shadowColor: Colors.grey,
                                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2.36.h)),
                                     child: Container(
-                                      height: 23.22.h,
+                                    //  height: 23.22.h,
                                       width: 79.74.w,
                                       decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(2.36.h),
@@ -135,9 +138,9 @@ class _GinnieBoxDetailState extends State<GinnieBoxDetail> {
                                           children: [
                                             Center(child: Container(child: Image.network(snapshot.data!.server![index].ephoto.toString(),width: 20.51.w,height: 11.25.h,errorBuilder: (context, error, stackTrace) => SizedBox(width: 20.51.w,height: 11.25.h,)))),
                                             //Image.asset("calender.png",width: 0.01*w),
-                                            Text(snapshot.data!.server![index].ename.toString(),style: TextStyle(fontSize: 10.61.sp,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1),
-                                            Text(snapshot.data!.server![index].edesc.toString(),style: TextStyle(fontSize: 10.61.sp,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1,),
-                                            Text(snapshot.data!.server![index].eemailid.toString(),style: TextStyle(fontSize: 10.61.sp,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1),
+                                            SizedBox(width: 70.w,child: Text(snapshot.data!.server![index].ename.toString(),style: TextStyle(fontSize: 10.61.sp,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1)),
+                                            SizedBox(width: 70.w,child: Text(snapshot.data!.server![index].edesc.toString(),style: TextStyle(fontSize: 10.61.sp,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1,)),
+                                            SizedBox(width: 70.w,child: Text(snapshot.data!.server![index].eemailid.toString(),style: TextStyle(fontSize: 10.61.sp,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1)),
                                           ],
                                         ),
                                       ),
@@ -154,12 +157,13 @@ class _GinnieBoxDetailState extends State<GinnieBoxDetail> {
                                 //
                                 //     }
                                 // ),
+
                                 Center(
                                   child: Card(
                                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                                     child: Container(
-                                      height: 300,
-                                      width: 300,
+                                      height: 31.30.h,
+                                      width: 77.w,
                                       decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(20),
                                           gradient: LinearGradient(colors: [
@@ -169,11 +173,12 @@ class _GinnieBoxDetailState extends State<GinnieBoxDetail> {
                                       ),
                                       child: Padding(
                                         padding:  EdgeInsets.symmetric(horizontal: 2.05.w,vertical: 1.89.h),
-                                        child: ListView.builder(
-                                          itemCount:snapshot.data!.server1!.length,
-                                          itemBuilder: (BuildContext context, int index2) {
-                                            return Container(
-                                              child: Column(
+                                        child: Container(
+                                          child: ListView.builder(
+                                            itemCount:snapshot.data!.server1!.length,
+                                            itemBuilder: (BuildContext context, int index2) {
+                                              len = snapshot.data!.server1!.length;
+                                              return Column(
                                                 children: [
                                                   Row(
                                                     children: [
@@ -182,21 +187,21 @@ class _GinnieBoxDetailState extends State<GinnieBoxDetail> {
                                                       Column(
                                                         crossAxisAlignment: CrossAxisAlignment.start,
                                                         children: [
-                                                          Text('Name : '+snapshot.data!.server1![index2].pname.toString(),style: TextStyle(fontSize: 9.09.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1),
-                                                          Text('Code : '+snapshot.data!.server1![index2].pcode.toString(),style: TextStyle(fontSize: 9.09.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1),
-                                                          Text('Quantity : '+snapshot.data!.server1![index2].qty.toString(),style: TextStyle(fontSize: 9.09.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1),
-                                                          Text('price : ₹ '+snapshot.data!.server1![index2].sprice.toString(),style: TextStyle(fontSize: 9.09.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1),
+                                                          SizedBox(width: 40.w,child: Text('Name : '+snapshot.data!.server1![index2].pname.toString(),style: TextStyle(fontSize: 9.09.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1)),
+                                                          SizedBox(width: 40.w,child: Text('Code : '+snapshot.data!.server1![index2].pcode.toString(),style: TextStyle(fontSize: 9.09.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1)),
+                                                          SizedBox(width: 40.w,child: Text('Quantity : '+snapshot.data!.server1![index2].qty.toString(),style: TextStyle(fontSize: 9.09.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1)),
+                                                          SizedBox(width: 40.w,child: Text('price : ₹ '+snapshot.data!.server1![index2].sprice.toString(),style: TextStyle(fontSize: 9.09.sp,fontWeight:FontWeight.bold,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1)),
                                                         ],
                                                       ),
                                                     ],
                                                   ),
                                                   SizedBox(height: 1.77.h,),
-                                                  Text('Detail : '+snapshot.data!.server1![index2].pdesc.toString(),style: TextStyle(fontSize: 9.09.sp,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 3),
+                                                  SizedBox(width: 40.w,child: Text('Detail : '+snapshot.data!.server1![index2].pdesc.toString(),style: TextStyle(fontSize: 9.09.sp,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 3)),
                                                   Divider(color: Colors.black,),
                                                 ],
-                                              ),
-                                            );
-                                          },
+                                              );
+                                            },
+                                          ),
                                         ),
                                       ),
                                     ),

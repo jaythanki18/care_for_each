@@ -3,14 +3,37 @@ import 'package:care_for_each/ui/view_product.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-class SalesDetail extends StatefulWidget {
-  const SalesDetail({Key? key}) : super(key: key);
+import '../API/EmployeeSide/sales_history_API.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../API/EmployeeSide/sales_history_detailAPI.dart';
+import '../API/EmployeeSide/sales_history_product_API.dart';
+
+class SalesDetail extends StatefulWidget {
+  const SalesDetail({Key? key, required this.oid}) : super(key: key);
+
+  final String oid;
   @override
   State<SalesDetail> createState() => _SalesDetailState();
 }
 
 class _SalesDetailState extends State<SalesDetail> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getData();
+  }
+  String? getEName;
+  String? getCName;
+  void getData() async{
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    setState(() {
+      getEName=sharedPreferences.getString("email")!;
+      getCName=sharedPreferences.getString('c_email');
+    });
+
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,525 +75,244 @@ class _SalesDetailState extends State<SalesDetail> {
         backgroundColor: Colors.white,
         shadowColor: Colors.transparent,
       ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(colors: [
-                    Color.fromRGBO(62, 86, 115, 0.2),
-                    Color.fromRGBO(184, 184, 184, 0.1)
-                  ]),
-                  borderRadius: BorderRadius.circular(20),
-                  color: Colors.blue,
-                ),
-                width: 83.07.w,
-                height: 42.29.h,
-                child: Column(
-                  children: [
-                    Padding(
-                      padding:  EdgeInsets.symmetric(horizontal: 2.5.w),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Image.asset("assets/product_photo.png",height:19.78.h,width: 37.43.w,),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 18.0),
-                            child: Container(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "Customer Name : ABCDEFG",
-                                    style: TextStyle(
-                                        color: Color.fromRGBO(12, 25, 71, 1), fontSize: 6.82.sp),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  SizedBox(
-                                    height: 1.30.h,
-                                  ),
-                                  Text(
-                                    "Company Name : XYZXYZ",
-                                    style: TextStyle(
-                                        color: Color.fromRGBO(12, 25, 71, 1), fontSize: 6.82.sp),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  SizedBox(
-                                    height: 1.30.h,
-                                  ),
-                                  Text("Mail Address : abc@gmail.com",style: TextStyle(
-                                      color: Color.fromRGBO(12, 25, 71, 1),fontSize: 6.82.sp),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  SizedBox(
-                                    height: 1.30.h,
-                                  ),
-                                  Text("Contact No : +91 90909 09090",style: TextStyle(
-                                      color: Color.fromRGBO(12, 25, 71, 1),fontSize: 6.82.sp),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,),
-                                  SizedBox(
-                                    height: 1.30.h,
-                                  ),
-                                  Text("Payment Type  : Cash",style: TextStyle(
-                                      color: Color.fromRGBO(12, 25, 71, 1),fontSize: 6.82.sp),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,),
-                                  SizedBox(
-                                    height: 1.30.h,
-                                  ),
-                                  Text("Paid Amount : 00",style: TextStyle(
-                                      color: Color.fromRGBO(12, 25, 71, 1),fontSize: 6.82.sp),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,),
-                                  SizedBox(
-                                    height: 1.30.h,
-                                  ),
-                                  Text("Total Payment : ₹ 999",style: TextStyle(
-                                      color: Color.fromRGBO(12, 25, 71, 1),fontSize: 6.82.sp),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,),
-                                ],
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding:  EdgeInsets.symmetric(horizontal: 4.61.w),
-                      child: Column(
-                        //crossAxisAlignment: CrossAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text("Customer Detail : ",style: TextStyle(decoration: TextDecoration.underline,color: Color.fromRGBO(12, 25, 71, 1),fontSize: 11.37.sp),),
-                          SizedBox(height: 1.h,),
-                          Text("      Date : 01-03-2023", style: TextStyle(
-                              color: Color.fromRGBO(12, 25, 71, 1),
-                              fontSize: 9.09.sp),
-                          ),
-                          Text("      Time : 06:00 PM", style: TextStyle(
-                              color: Color.fromRGBO(12, 25, 71, 1),
-                              fontSize: 9.09.sp),
-                          ),
-                          Text("      Payment Method : Cash On Delivery", style: TextStyle(
-                              color: Color.fromRGBO(12, 25, 71, 1),
-                              fontSize: 9.09.sp),
-                          ),
-                          Text("      Paid Amount : 00", style: TextStyle(
-                              color: Color.fromRGBO(12, 25, 71, 1),
-                              fontSize: 9.09.sp),
-                          ),
-                          Text("      Pending Amount : Rs. 1180", style: TextStyle(
-                              color: Color.fromRGBO(12, 25, 71, 1),
-                              fontSize: 9.09.sp),
-                          ),
-                          SizedBox(height: 1.h,),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                width: 33.33.w,
-                                height: 4.26.h,
-                                child: ElevatedButton(
-                                    onPressed: () {
+      body: Center(
 
-                                    },
-                                    child: Text(
-                                      "Pay",
-                                      style: TextStyle(fontSize: 10.61.sp,
-                                          color: Colors.teal, ),
-                                    ),
-                                    style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.white,
-                                        shadowColor: Colors.white,
-                                        side: const BorderSide(
-                                          width: 1.0,
-                                          color: Colors.teal,
-                                        ))),
-                              ),
-                              Container(
-                                width: 33.33.w,
-                                height: 4.26.h,
-                                child: ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>ViewProduct()));
-                                    },
-                                    child: Text(
-                                      "View Product",
-                                      style: TextStyle(fontSize: 10.61.sp,
-                                          color: Colors.teal, ),
-                                    ),
-                                    style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.white,
-                                        shadowColor: Colors.white,
-                                        side: const BorderSide(
-                                          width: 1.0,
-                                          color: Colors.teal,
-                                        ))),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              SizedBox(height: 1.h,),
-              Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(colors: [
-                    Color.fromRGBO(62, 86, 115, 0.2),
-                    Color.fromRGBO(184, 184, 184, 0.1)
-                  ]),
-                  borderRadius: BorderRadius.circular(20),
-                  color: Colors.blue,
-                ),
-                width: 83.07.w,
-                height: 42.29.h,
-                child: InkWell(
-                  onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>SalesDetail()));
-                  },
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding:  EdgeInsets.symmetric(horizontal: 2.5.w),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Image.asset("assets/product_photo.png",height:19.78.h,width: 37.43.w,),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 18.0),
-                              child: Container(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
+        child: Column(
+          children: [
+            Expanded(
+              child: FutureBuilder(
+                  future: SalesHistoryDetailAPI().sales(widget.oid),
+                  builder: (BuildContext context, snapshot){
+                    if(snapshot.connectionState==ConnectionState.waiting){
+                      return Center(child: CircularProgressIndicator(),);
+                    }
+                    else if(snapshot.hasData){
+                      return Expanded(
+                          child: ListView.builder(
+                              itemCount: snapshot.data!.server!.length,
+                              itemBuilder: (context,index){
+                                return  Column(
                                   children: [
-                                    Text(
-                                      "Customer Name : ABCDEFG",
-                                      style: TextStyle(
-                                          color: Color.fromRGBO(12, 25, 71, 1), fontSize: 6.82.sp),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    SizedBox(
-                                      height: 1.30.h,
-                                    ),
-                                    Text(
-                                      "Company Name : XYZXYZ",
-                                      style: TextStyle(
-                                          color: Color.fromRGBO(12, 25, 71, 1), fontSize: 6.82.sp),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    SizedBox(
-                                      height: 1.30.h,
-                                    ),
-                                    Text("Mail Address : abc@gmail.com",style: TextStyle(
-                                        color: Color.fromRGBO(12, 25, 71, 1),fontSize: 6.82.sp),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    SizedBox(
-                                      height: 1.30.h,
-                                    ),
-                                    Text("Contact No : +91 90909 09090",style: TextStyle(
-                                        color: Color.fromRGBO(12, 25, 71, 1),fontSize: 6.82.sp),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,),
-                                    SizedBox(
-                                      height: 1.30.h,
-                                    ),
-                                    Text("Payment Type  : Cash",style: TextStyle(
-                                        color: Color.fromRGBO(12, 25, 71, 1),fontSize: 6.82.sp),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,),
-                                    SizedBox(
-                                      height: 1.30.h,
-                                    ),
-                                    Text("Paid Amount : 00",style: TextStyle(
-                                        color: Color.fromRGBO(12, 25, 71, 1),fontSize: 6.82.sp),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,),
-                                    SizedBox(
-                                      height: 1.30.h,
-                                    ),
-                                    Text("Total Payment : ₹ 999",style: TextStyle(
-                                        color: Color.fromRGBO(12, 25, 71, 1),fontSize: 6.82.sp),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,),
-                                  ],
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding:  EdgeInsets.symmetric(horizontal: 4.61.w),
-                        child: Column(
-                          //crossAxisAlignment: CrossAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text("Customer Detail : ",style: TextStyle(decoration: TextDecoration.underline,color: Color.fromRGBO(12, 25, 71, 1),fontSize: 11.37.sp),),
-                            SizedBox(height: 1.h,),
-                            Text("      Date : 01-03-2023", style: TextStyle(
-                                color: Color.fromRGBO(12, 25, 71, 1),
-                                fontSize: 9.09.sp),
-                            ),
-                            Text("      Time : 06:00 PM", style: TextStyle(
-                                color: Color.fromRGBO(12, 25, 71, 1),
-                                fontSize: 9.09.sp),
-                            ),
-                            Text("      Payment Method : Cash On Delivery", style: TextStyle(
-                                color: Color.fromRGBO(12, 25, 71, 1),
-                                fontSize: 9.09.sp),
-                            ),
-                            Text("      Paid Amount : 00", style: TextStyle(
-                                color: Color.fromRGBO(12, 25, 71, 1),
-                                fontSize: 9.09.sp),
-                            ),
-                            Text("      Pending Amount : Rs. 1180", style: TextStyle(
-                                color: Color.fromRGBO(12, 25, 71, 1),
-                                fontSize: 9.09.sp),
-                            ),
-                            SizedBox(height: 1.h,),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Container(
-                                  width: 33.33.w,
-                                  height: 4.26.h,
-                                  child: ElevatedButton(
-                                      onPressed: () {
+                                    SizedBox(height: 1.h,),
+                                    Center(
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          gradient: LinearGradient(colors: [
+                                            Color.fromRGBO(62, 86, 115, 0.2),
+                                            Color.fromRGBO(184, 184, 184, 0.1)
+                                          ]),
+                                          borderRadius: BorderRadius.circular(2.h),
+                                          color: Colors.blue,
+                                        ),
+                                        width: 83.07.w,
+                                        height: 42.29.h,
+                                        child: Column(
+                                          children: [
+                                            Row(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                FutureBuilder(
+                                                    future: SalesHistoryProductDetailAPI().customer(widget.oid),
+                                                    builder: (BuildContext context, snapshot2){
+                                                      if(snapshot2.connectionState==ConnectionState.waiting){
+                                                        return Center(child: CircularProgressIndicator(),);
+                                                      }
+                                                      else if(snapshot2.hasData){
+                                                        return  Padding(
+                                                          padding:  EdgeInsets.symmetric(horizontal: 2.25.w,vertical: 1.h),
+                                                          child: Image.network(snapshot2.data!.server![index].pphoto.toString(),height:17.78.h,width: 35.43.w,errorBuilder: (context, error, stackTrace) => SizedBox(width: 35.43.w,height: 17.78.h,)),
+                                                        );
+                                                      }
+                                                      else{
+                                                        return Text("No data");
+                                                      }
+                                                    }
+                                                ),
 
-                                      },
-                                      child: Text(
-                                        "Proceed",
-                                        style: TextStyle(fontSize: 10.61.sp,
-                                          color: Colors.teal, ),
-                                      ),
-                                      style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.white,
-                                          shadowColor: Colors.white,
-                                          side: const BorderSide(
-                                            width: 1.0,
-                                            color: Colors.teal,
-                                          ))),
-                                ),
-                                Container(
-                                  width: 33.33.w,
-                                  height: 4.26.h,
-                                  child: ElevatedButton(
-                                      onPressed: () {
-                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>ViewProduct()));
-                                      },
-                                      child: Text(
-                                        "View Product",
-                                        style: TextStyle(fontSize: 10.61.sp,
-                                          color: Colors.teal, ),
-                                      ),
-                                      style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.white,
-                                          shadowColor: Colors.white,
-                                          side: const BorderSide(
-                                            width: 1.0,
-                                            color: Colors.teal,
-                                          ))),
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(height: 1.h,),
-              Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(colors: [
-                    Color.fromRGBO(62, 86, 115, 0.2),
-                    Color.fromRGBO(184, 184, 184, 0.1)
-                  ]),
-                  borderRadius: BorderRadius.circular(20),
-                  color: Colors.blue,
-                ),
-                width: 83.07.w,
-                height: 42.29.h,
-                child: InkWell(
-                  onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>SalesDetail()));
-                  },
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding:  EdgeInsets.symmetric(horizontal: 2.5.w),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Image.asset("assets/product_photo.png",height:19.78.h,width: 37.43.w,),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 18.0),
-                              child: Container(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "Customer Name : ABCDEFG",
-                                      style: TextStyle(
-                                          color: Color.fromRGBO(12, 25, 71, 1), fontSize: 6.82.sp),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    SizedBox(
-                                      height: 1.30.h,
-                                    ),
-                                    Text(
-                                      "Company Name : XYZXYZ",
-                                      style: TextStyle(
-                                          color: Color.fromRGBO(12, 25, 71, 1), fontSize: 6.82.sp),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    SizedBox(
-                                      height: 1.30.h,
-                                    ),
-                                    Text("Mail Address : abc@gmail.com",style: TextStyle(
-                                        color: Color.fromRGBO(12, 25, 71, 1),fontSize: 6.82.sp),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    SizedBox(
-                                      height: 1.30.h,
-                                    ),
-                                    Text("Contact No : +91 90909 09090",style: TextStyle(
-                                        color: Color.fromRGBO(12, 25, 71, 1),fontSize: 6.82.sp),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,),
-                                    SizedBox(
-                                      height: 1.30.h,
-                                    ),
-                                    Text("Payment Type  : Cash",style: TextStyle(
-                                        color: Color.fromRGBO(12, 25, 71, 1),fontSize: 6.82.sp),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,),
-                                    SizedBox(
-                                      height: 1.30.h,
-                                    ),
-                                    Text("Paid Amount : 00",style: TextStyle(
-                                        color: Color.fromRGBO(12, 25, 71, 1),fontSize: 6.82.sp),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,),
-                                    SizedBox(
-                                      height: 1.30.h,
-                                    ),
-                                    Text("Total Payment : ₹ 999",style: TextStyle(
-                                        color: Color.fromRGBO(12, 25, 71, 1),fontSize: 6.82.sp),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,),
-                                  ],
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding:  EdgeInsets.symmetric(horizontal: 4.61.w),
-                        child: Column(
-                          //crossAxisAlignment: CrossAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text("Customer Detail : ",style: TextStyle(decoration: TextDecoration.underline,color: Color.fromRGBO(12, 25, 71, 1),fontSize: 11.37.sp),),
-                            SizedBox(height: 1.h,),
-                            Text("      Date : 01-03-2023", style: TextStyle(
-                                color: Color.fromRGBO(12, 25, 71, 1),
-                                fontSize: 9.09.sp),
-                            ),
-                            Text("      Time : 06:00 PM", style: TextStyle(
-                                color: Color.fromRGBO(12, 25, 71, 1),
-                                fontSize: 9.09.sp),
-                            ),
-                            Text("      Payment Method : Cash On Delivery", style: TextStyle(
-                                color: Color.fromRGBO(12, 25, 71, 1),
-                                fontSize: 9.09.sp),
-                            ),
-                            Text("      Paid Amount : 00", style: TextStyle(
-                                color: Color.fromRGBO(12, 25, 71, 1),
-                                fontSize: 9.09.sp),
-                            ),
-                            Text("      Pending Amount : Rs. 1180", style: TextStyle(
-                                color: Color.fromRGBO(12, 25, 71, 1),
-                                fontSize: 9.09.sp),
-                            ),
-                            SizedBox(height: 1.h,),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Container(
-                                  width: 33.33.w,
-                                  height: 4.26.h,
-                                  child: ElevatedButton(
-                                      onPressed: () {
+                                                Padding(
+                                                  padding: const EdgeInsets.only(left: 4.0),
+                                                  child: Container(
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      children: [
+                                                        SizedBox(
+                                                          width:35.64.w,
+                                                          child: Text(
+                                                            "Customer Name : ${snapshot.data!.server![index].customername.toString()}",
+                                                            style: TextStyle(
+                                                                color: Color.fromRGBO(12, 25, 71, 1), fontSize: 6.82.sp),
+                                                            maxLines: 1,
+                                                            overflow: TextOverflow.ellipsis,
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 1.30.h,
+                                                        ),
+                                                        SizedBox(
+                                                          width: 35.64.w,
+                                                          child: Text(
+                                                            "Company Name : ${snapshot.data!.server![index].customercompanyname.toString()}",
+                                                            style: TextStyle(
+                                                                color: Color.fromRGBO(12, 25, 71, 1), fontSize: 6.82.sp),
+                                                            maxLines: 1,
+                                                            overflow: TextOverflow.ellipsis,
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 1.30.h,
+                                                        ),
+                                                        SizedBox(
+                                                          width: 35.64.w,
+                                                          child: Text("Mail Address : ${snapshot.data!.server![index].customeremailid.toString()}",style: TextStyle(
+                                                              color: Color.fromRGBO(12, 25, 71, 1),fontSize: 6.82.sp),
+                                                            maxLines: 2,
+                                                            overflow: TextOverflow.ellipsis,
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 1.30.h,
+                                                        ),
+                                                        SizedBox(
+                                                          width: 35.64.w,
+                                                          child: Text("Contact No : +91${snapshot.data!.server![index].customercontactno.toString()}",style: TextStyle(
+                                                              color: Color.fromRGBO(12, 25, 71, 1),fontSize: 6.82.sp),
+                                                            maxLines: 1,
+                                                            overflow: TextOverflow.ellipsis,),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 1.30.h,
+                                                        ),
+                                                        SizedBox(
+                                                          width: 35.64.w,
+                                                          child: Text("Payment Type  : ${snapshot.data!.server![index].paymentmode.toString()}",style: TextStyle(
+                                                              color: Color.fromRGBO(12, 25, 71, 1),fontSize: 6.82.sp),
+                                                            maxLines: 1,
+                                                            overflow: TextOverflow.ellipsis,),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 1.30.h,
+                                                        ),
+                                                        SizedBox(
+                                                          width: 35.64.w,
+                                                          child: Text("Paid Amount : ${snapshot.data!.server![index].paidamount.toString()}",style: TextStyle(
+                                                              color: Color.fromRGBO(12, 25, 71, 1),fontSize: 6.82.sp),
+                                                            maxLines: 1,
+                                                            overflow: TextOverflow.ellipsis,),
+                                                        ),
+                                                        SizedBox(
+                                                          height: 1.30.h,
+                                                        ),
+                                                        SizedBox(
+                                                          width: 35.64.w,
+                                                          child: Text("Total Payment : ₹ ${snapshot.data!.server![index].grandtotal.toString()}",style: TextStyle(
+                                                              color: Color.fromRGBO(12, 25, 71, 1),fontSize: 6.82.sp),
+                                                            maxLines: 1,
+                                                            overflow: TextOverflow.ellipsis,),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                            Padding(
+                                              padding:  EdgeInsets.symmetric(horizontal: 4.61.w),
+                                              child: Column(
+                                                //crossAxisAlignment: CrossAxisAlignment.start,
+                                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                children: [
+                                                  Text("Customer Detail : ",style: TextStyle(decoration: TextDecoration.underline,color: Color.fromRGBO(12, 25, 71, 1),fontSize: 11.37.sp),),
+                                                  SizedBox(height: 1.h,),
+                                                  Text("      Date : ${snapshot.data!.server![index].date.toString()}", style: TextStyle(
+                                                      color: Color.fromRGBO(12, 25, 71, 1),
+                                                      fontSize: 9.09.sp),
+                                                  ),
+                                                  // Text("      Time : ${snapshot.data!.server1[index].}", style: TextStyle(
+                                                  //     color: Color.fromRGBO(12, 25, 71, 1),
+                                                  //     fontSize: 9.09.sp),
+                                                  // ),
+                                                  Text("      Payment Method : ${snapshot.data!.server![index].paymentmode.toString()}", style: TextStyle(
+                                                      color: Color.fromRGBO(12, 25, 71, 1),
+                                                      fontSize: 9.09.sp),
+                                                  ),
+                                                  Text("      Paid Amount : ${snapshot.data!.server![index].paidamount.toString()}", style: TextStyle(
+                                                      color: Color.fromRGBO(12, 25, 71, 1),
+                                                      fontSize: 9.09.sp),
+                                                  ),
+                                                  Text("      Pending Amount : Rs. ${snapshot.data!.server![index].pendingamount.toString()}", style: TextStyle(
+                                                      color: Color.fromRGBO(12, 25, 71, 1),
+                                                      fontSize: 9.09.sp),
+                                                  ),
+                                                  SizedBox(height: 2.h,),
+                                                  Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    children: [
+                                                      Container(
+                                                        width: 33.33.w,
+                                                        height: 4.26.h,
+                                                        child: ElevatedButton(
+                                                            onPressed: () {
 
-                                      },
-                                      child: Text(
-                                        "Proceed",
-                                        style: TextStyle(fontSize: 10.61.sp,
-                                          color: Colors.teal, ),
+                                                            },
+                                                            child: Text(
+                                                              "Pay",
+                                                              style: TextStyle(fontSize: 10.61.sp,
+                                                                color: Colors.teal, ),
+                                                            ),
+                                                            style: ElevatedButton.styleFrom(
+                                                                backgroundColor: Colors.white,
+                                                                shadowColor: Colors.white,
+                                                                side: const BorderSide(
+                                                                  width: 1.0,
+                                                                  color: Colors.teal,
+                                                                ))),
+                                                      ),
+                                                      Container(
+                                                        width: 33.33.w,
+                                                        height: 4.26.h,
+                                                        child: ElevatedButton(
+                                                            onPressed: () {
+                                                              Navigator.push(context, MaterialPageRoute(builder: (context)=>ViewProduct(oid: widget.oid,)));
+                                                            },
+                                                            child: Text(
+                                                              "View Product",
+                                                              style: TextStyle(fontSize: 10.61.sp,
+                                                                color: Colors.teal, ),
+                                                            ),
+                                                            style: ElevatedButton.styleFrom(
+                                                                backgroundColor: Colors.white,
+                                                                shadowColor: Colors.white,
+                                                                side: const BorderSide(
+                                                                  width: 1.0,
+                                                                  color: Colors.teal,
+                                                                ))),
+                                                      ),
+                                                    ],
+                                                  )
+                                                ],
+                                              ),
+                                            )
+                                          ],
+                                        ),
                                       ),
-                                      style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.white,
-                                          shadowColor: Colors.white,
-                                          side: const BorderSide(
-                                            width: 1.0,
-                                            color: Colors.teal,
-                                          ))),
-                                ),
-                                Container(
-                                  width: 33.33.w,
-                                  height: 4.26.h,
-                                  child: ElevatedButton(
-                                      onPressed: () {
-                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>ViewProduct()));
-                                      },
-                                      child: Text(
-                                        "View Product",
-                                        style: TextStyle(fontSize: 10.61.sp,
-                                          color: Colors.teal, ),
-                                      ),
-                                      style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.white,
-                                          shadowColor: Colors.white,
-                                          side: const BorderSide(
-                                            width: 1.0,
-                                            color: Colors.teal,
-                                          ))),
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                ),
+                                    ),
+                                  ],
+                                );
+                              })
+                      );
+                    }
+                    else{
+                      return Text("No data");
+                    }
+                  }
               ),
-            ],
-          ),
+            ),
+
+
+
+          ],
         ),
       ),
     );

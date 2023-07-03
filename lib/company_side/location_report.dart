@@ -4,8 +4,9 @@ import 'company_profile.dart';
 import 'package:sizer/sizer.dart';
 
 class LocationReport extends StatefulWidget {
-  const LocationReport({Key? key}) : super(key: key);
+  const LocationReport({Key? key, required this.c_email}) : super(key: key);
 
+  final String c_email;
   @override
   State<LocationReport> createState() => _LocationReportState();
 }
@@ -56,7 +57,7 @@ class _LocationReportState extends State<LocationReport> {
           IconButton(
               onPressed: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => CompanyProfile()));
+                    MaterialPageRoute(builder: (context) => CompanyProfile(c_emailid: widget.c_email,)));
               },
               icon: Icon(Icons.account_circle_sharp),
               color: Color.fromRGBO(9, 31, 87, 1))

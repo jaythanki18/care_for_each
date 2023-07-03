@@ -3,8 +3,9 @@ import 'package:intl/intl.dart';
 import 'company_profile.dart';
 import 'package:sizer/sizer.dart';
 class PendingCollectionReport extends StatefulWidget {
-  const PendingCollectionReport({Key? key}) : super(key: key);
+  const PendingCollectionReport({Key? key, required this.c_email}) : super(key: key);
 
+  final String c_email;
   @override
   State<PendingCollectionReport> createState() => _PendingCollectionReportState();
 }
@@ -55,7 +56,7 @@ class _PendingCollectionReportState extends State<PendingCollectionReport> {
           IconButton(
               onPressed: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => CompanyProfile()));
+                    MaterialPageRoute(builder: (context) => CompanyProfile(c_emailid: widget.c_email,)));
               },
               icon: Icon(Icons.account_circle_sharp),
               color: Color.fromRGBO(9, 31, 87, 1))

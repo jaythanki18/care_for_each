@@ -76,7 +76,7 @@ class _CompanyDashboardState extends State<CompanyDashboard> {
           IconButton(
               onPressed: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => CompanyProfile()));
+                    MaterialPageRoute(builder: (context) => CompanyProfile(c_emailid: widget.c_email,)));
               },
               icon: Icon(Icons.account_circle_sharp),
               color: Color.fromRGBO(9, 31, 87, 1)
@@ -597,7 +597,7 @@ class _CompanyDashboardState extends State<CompanyDashboard> {
                     Center(
                       child: TextButton(
                         onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>Report()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>Report(c_email: widget.c_email,)));
                         },
                         child: Padding(
                           padding:  EdgeInsets.symmetric(horizontal: 2.56.w),

@@ -48,7 +48,7 @@ class _NewCategoryState extends State<NewCategory> {
           IconButton(
               onPressed: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => CompanyProfile()));
+                    MaterialPageRoute(builder: (context) => CompanyProfile(c_emailid: widget.c_emailid,)));
               },
               icon: Icon(Icons.account_circle_sharp),
               color: Color.fromRGBO(9, 31, 87, 1)
@@ -91,7 +91,7 @@ class _NewCategoryState extends State<NewCategory> {
                                 color: Color.fromRGBO(12, 25, 71, 1))),
                       ),
                     ),
-                    SizedBox(height: 1.36.h,),
+                    SizedBox(height: 2.36.h,),
                     SizedBox(
                       height: 5.92.h,
                       child: TextFormField(
@@ -117,6 +117,7 @@ class _NewCategoryState extends State<NewCategory> {
                     ),
                   ],
                 ),
+                SizedBox(height: 2.36.h,),
                 RoundButton(
                   title: "Save",
                   onTap: () {
@@ -137,12 +138,10 @@ class _NewCategoryState extends State<NewCategory> {
                           return Text("No data");
                         }
                       },
-
                     );
                     if(formKey.currentState!.validate()){
                       Navigator.push(context, MaterialPageRoute(builder: (context)=>Category(c_emailid: widget.c_emailid,)));
                     }
-
                   },
                 ),
               ],

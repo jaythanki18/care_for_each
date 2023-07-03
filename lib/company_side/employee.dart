@@ -5,6 +5,7 @@ import 'package:care_for_each/company_side/new_employee.dart';
 import 'package:care_for_each/ui/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Employee extends StatelessWidget {
   const Employee({Key? key, required this.c_emailid}) : super(key: key);
@@ -92,8 +93,8 @@ class Employee extends StatelessWidget {
                                     )));
                                 },
                                 child: Container(
-                                  height: 23.5.h,
-                                  width: 79.74.w,
+                                //  height: 23.5.h,
+                                  width: 80.w,
                                   child: Card(
                                     //color: Colors.blue,
                                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -121,9 +122,9 @@ class Employee extends StatelessWidget {
                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
                                                   //Text('Company Name : ',style: TextStyle(fontSize: 8.34.sp,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 1,),
-                                                  SizedBox(width: 150,child: Text('Person Name : '+snapshot.data!.server![index].ename.toString(),style: TextStyle(fontWeight:FontWeight.bold,fontSize:  8.34.sp,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 2)),
-                                                  SizedBox(width: 150,child: Text('Designation: '+snapshot.data!.server![index].designation.toString(),style: TextStyle(fontWeight:FontWeight.bold,fontSize:  8.34.sp,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 2)),
-                                                  SizedBox(width: 150,child: Text('Email Id : '+snapshot.data!.server![index].emailid.toString(),style: TextStyle(fontWeight:FontWeight.bold,fontSize:  8.34.sp,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 2)),
+                                                  SizedBox(width: 39.w,child: Text('Person Name : '+snapshot.data!.server![index].ename.toString(),style: TextStyle(fontWeight:FontWeight.bold,fontSize:  8.34.sp,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 2)),
+                                                  SizedBox(width: 39.w,child: Text('Designation: '+snapshot.data!.server![index].designation.toString(),style: TextStyle(fontWeight:FontWeight.bold,fontSize:  8.34.sp,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 2)),
+                                                  SizedBox(width: 39.w,child: Text('Email Id : '+snapshot.data!.server![index].emailid.toString(),style: TextStyle(fontWeight:FontWeight.bold,fontSize:  8.34.sp,color: Color.fromRGBO(12,25,71,1)),overflow: TextOverflow.ellipsis,maxLines: 2)),
                                                   //Text('Expected Date :${message}'),
                                                 ],
                                               ),
@@ -139,7 +140,15 @@ class Employee extends StatelessWidget {
                                                     width: 28.71.w,
                                                     height: 4.14.h,
                                                     child: ElevatedButton(
-                                                        onPressed: () {
+                                                        onPressed: () async{
+                                                          String phoneNumber = '+91${snapshot.data!.server![index].mobilenum.toString()}';
+                                                          String url = 'tel:$phoneNumber';
+
+                                                          if (await canLaunchUrl(Uri.parse(url))) {
+                                                          await launchUrl(Uri.parse(url));
+                                                          } else {
+                                                          throw 'Could not launch $url';
+                                                          }
                                                           //Navigator.push(context, MaterialPageRoute(builder: (context)=>GinnieBox(name: _name.text, email: _email.text, phone: _contact.text, date: dateInput.text, message: _message.text)));
                                                         },
                                                         child: Row(
@@ -191,7 +200,8 @@ class Employee extends StatelessWidget {
                                                 ),
                                               ),
                                             ],
-                                          )
+                                          ),
+                                          SizedBox(height: 1.h,),
                                         ],
                                       ),
                                     ),

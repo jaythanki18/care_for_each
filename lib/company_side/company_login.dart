@@ -1,14 +1,16 @@
 import 'dart:convert';
 import 'package:care_for_each/API/CompanyLoginAPI.dart';
+import 'package:care_for_each/Models/CompanyLoginModel.dart';
 import 'package:care_for_each/company_side/company_dashboard.dart';
-import 'package:care_for_each/company_side/company_profile.dart';
 import 'package:flutter/material.dart';
 import '../../widgets/round_button.dart';
 import 'package:sizer/sizer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
-
+class Email{
+  static TextEditingController emailController = TextEditingController();
+}
 class CompanyLogin extends StatefulWidget {
   const CompanyLogin({Key? key}) : super(key: key);
 
@@ -19,7 +21,7 @@ class CompanyLogin extends StatefulWidget {
 class _CompanyLoginState extends State<CompanyLogin> {
   final formKey=GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey=GlobalKey<ScaffoldState>();
-
+  bool obsecure=true;
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -33,67 +35,16 @@ class _CompanyLoginState extends State<CompanyLogin> {
     super.initState();
   }
 
-  //  signIn(String email,String password) async{
-  //   Map server={
-  //     'emailid':email,
-  //     'pword':password
-  //   };
-  //   var jsonData=null;
-  //   SharedPreferences sharedPreferences=await SharedPreferences.getInstance();
-  //   var response=await http.post(Uri.parse("http://www.careforeach.com/new/company/company_api_jay/webservices/company_profile.php"),body: jsonEncode(
-  //       {
-  //         'emailid':email,
-  //         'pword':password
-  //       }));
-  //   if(response.statusCode==200){
-  //     jsonData=jsonDecode(response.body);
-  //     print(jsonData);
-  //     setState(() {
-  //      // _isLoading=false;
-  //      // sharedPreferences.setString("token", jsonData['token']);
-  //       Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>CompanyDashboard()), (route) => false);
-  //     });
-  //   }
-  //   else{
-  //     print(response.body);
-  //   }
-  // }
-  // class LoginApi{
-  // LoginApi();
-  // Future<LoginModel> loginList(phone) async{
-  // var url = LURL + "/api/user/login";
-  // http.Response response = await http.post(Uri.parse(url),
-  // headers: {"content-type": "application/json"},
-  // body: jsonEncode({
-  // "mobile": phone
-  //
-  // }));
-  // var data = jsonDecode(response.body);
-  // print("SignIn" + response.body);
-  // return LoginModel.fromJson(data);
-  // }
-  // }
-  // Future<void> _login() async {
-  //   final url = 'http://www.careforeach.com/new/company/company_api_jay/webservices/company_login.php';
-  //   //final url='http://www.careforeach.com/new/company/company_api_jay/webservices/company_profile.php';
-  //   final data = {
-  //     'emailid': emailController.text,
-  //     'pword': passwordController.text,
-  //   };
-  //
-  //   final response = await http.post(Uri.parse(url), body: data);
-  //   final responseData = jsonDecode(response.body);
-  //
-  //   // Handle the response as per your requirements
-  //   if(response.statusCode==200){
-  //     print(responseData);
-  //   }
-  //
-  // }
+  void storeData()async{
+    SharedPreferences sharedPreferences= await SharedPreferences.getInstance();
+    sharedPreferences.setString('c_email', emailController.text);
+  }
+
   @override
   Widget build(BuildContext context) {
 
     return Scaffold(
+      backgroundColor: Colors.white,
         body: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 20),
@@ -176,10 +127,9 @@ class _CompanyLoginState extends State<CompanyLogin> {
                         });
                       },
                       controller: passwordController,
-                      obscureText: true,
+                      obscureText: obsecure,
                       keyboardType: TextInputType.text,
                       validator: (PassCurrentValue){
-                    //    RegExp regex=RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
                         var passNonNullValue=PassCurrentValue??"";
                         if(passNonNullValue.isEmpty){
                           return ("Password is required");
@@ -187,9 +137,6 @@ class _CompanyLoginState extends State<CompanyLogin> {
                         else if(passNonNullValue.length<6){
                           return ("Password Must be more than 5 characters");
                         }
-                        // else if(!regex.hasMatch(passNonNullValue)){
-                        //   return ("Password should contain upper,lower,digit and Special character ");
-                        // }
                         return null;
                       },
                       decoration: InputDecoration(
@@ -198,7 +145,15 @@ class _CompanyLoginState extends State<CompanyLogin> {
                           borderSide: BorderSide.none,
                         ),
                         labelText: "Password",
-                        suffixIcon: Icon(Icons.visibility_off),
+                        suffixIcon: IconButton(onPressed: () {
+                          setState(() {
+                            Icon(Icons.visibility);
+                            obsecure == true ? obsecure=false : obsecure=true;
+                          });
+                        },
+                          icon: Icon(Icons.visibility_off),
+                        ),
+
                         labelStyle: TextStyle(
                             color: Color.fromRGBO(62, 86, 115, 1),
                             fontSize: 11.37.sp,
@@ -217,70 +172,27 @@ class _CompanyLoginState extends State<CompanyLogin> {
                     height: 25.83.h,
                     child:  Column(
                       children: [
-                        FutureBuilder(
-                            future: CompanyLoginAPI().login(emailController.text,passwordController.text),
-                            builder: (BuildContext context, snapshot){
-                              if(snapshot.connectionState==ConnectionState.waiting){
-                                return  RoundButton(
-                                  title: "Log In", onTap: () {  },
-
-                                  // onTap: () async{
-                                  //   // final SharedPreferences sharedPreferences=await SharedPreferences.getInstance();
-                                  //   // sharedPreferences.setString('c_email', emailController.text);
-                                  //   email=emailController.text;
-                                  //   print(""+snapshot.data!.server![index].success.toString());
-                                  //   // var snackBar = SnackBar(
-                                  //   //   content: Text("success : "+snapshot.data!.server![index].success.toString()),
-                                  //   // );
-                                  //   // ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                                  //   if(formKey.currentState!.validate() && snapshot.data!.server![index].success.toString()==emailController.text.toString()){
-                                  //     Navigator.push(context, MaterialPageRoute(builder: (context)=>CompanyDashboard(c_email: emailController.text,)));
-                                  //     print(emailController.text);
-                                  //   }
-                                  //   else if(snapshot.data!.server![index].success.toString()!=emailController.text.toString()){
-                                  //     var snackBar = SnackBar(
-                                  //       content: Text("success : "+snapshot.data!.server![index].success.toString()),
-                                  //     );
-                                  //     ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                                  //   }
-                                  // },
-                                );
-                              }
-                              else if(snapshot.hasData){
-                                return Expanded(
-                                    child: ListView.builder(
-                                        itemCount: snapshot.data!.server!.length,
-                                        itemBuilder: (context,index){
-                                          return  RoundButton(
-                                            title: "Log In",
-                                            onTap: () async{
-                                              // final SharedPreferences sharedPreferences=await SharedPreferences.getInstance();
-                                              // sharedPreferences.setString('c_email', emailController.text);
-                                              email=emailController.text;
-                                              print("success"+snapshot.data!.server![index].success.toString());
-                                              // var snackBar = SnackBar(
-                                              //   content: Text("success : "+snapshot.data!.server![index].success.toString()),
-                                              // );
-                                              // ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                                              if(formKey.currentState!.validate() && snapshot.data!.server![index].success.toString()==emailController.text.toString()){
-                                                Navigator.push(context, MaterialPageRoute(builder: (context)=>CompanyDashboard(c_email: emailController.text,)));
-                                                print(emailController.text);
-                                              }
-                                              else if(snapshot.data!.server![index].success.toString()!=emailController.text.toString()){
-                                                var snackBar = SnackBar(
-                                                  content: Text(snapshot.data!.server![index].success.toString()),
-                                                );
-                                                ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                                              }
-                                            },
-                                          );
-                                        })
-                                );
-                              }
-                              else{
-                                return Text("No data");
-                              }
+                        RoundButton(
+                          title: "Log In",
+                          onTap: () async{
+                          //  Navigator.push(context, MaterialPageRoute(builder: (context)=>CompanyDashboard(c_email: emailController.text,)));
+                            CompanyLoginModel data=await CompanyLoginAPI().login(emailController.text, passwordController.text);
+                            if(formKey.currentState!.validate() && data.server?[0].success.toString() == emailController.text){
+                              var snackBar = SnackBar(
+                                content: Text("Login successfully!"),
+                              );
+                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                              storeData();
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=>CompanyDashboard(c_email: emailController.text,)));
+                              debugPrint(emailController.text);
                             }
+                            else if(data.server?[0].success.toString() != emailController.text){
+                              var snackBar = SnackBar(
+                                content: Text(data!.server![0].success.toString()),
+                              );
+                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                            }
+                          },
                         ),
                         Container(
                             alignment: Alignment.centerRight,

@@ -45,7 +45,7 @@ class _LeaveDetail1State extends State<LeaveDetail1> {
           IconButton(
               onPressed: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => CompanyProfile()));
+                    MaterialPageRoute(builder: (context) => CompanyProfile(c_emailid: widget.c_emailid,)));
               },
               icon: Icon(Icons.account_circle_sharp),
               color: Color.fromRGBO(9, 31, 87, 1)
@@ -153,7 +153,7 @@ class _LeaveDetail1State extends State<LeaveDetail1> {
                                       children: [
                                         Padding(
                                           padding:  EdgeInsets.symmetric(horizontal: 3.58.w,vertical: 3.58.h),
-                                          child: Image.network(snapshot.data!.server![index].photo.toString(),height: 67,width: 60,errorBuilder: (context, error, stackTrace) => SizedBox(width: 60,height: 67,))
+                                          child: Image.network(snapshot.data!.server![index].photo.toString(),height: 7.h,width: 15.4.w,errorBuilder: (context, error, stackTrace) => Container(color: Colors.black54,child: SizedBox(height: 7.h,width: 15.4.w)))
                                         ),
                                         SizedBox(width: 13,),
                                         SizedBox(

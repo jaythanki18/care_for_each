@@ -1,8 +1,13 @@
+import 'package:care_for_each/API/EmployeeSide/employee_login_logout_API.dart';
+import 'package:care_for_each/Models/EmployeeSide/EmployeeLoginLogoutModel.dart';
 import 'package:care_for_each/ui/cart.dart';
 import 'package:care_for_each/ui/profile.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:sizer/sizer.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AttendanceScreen extends StatefulWidget {
   const AttendanceScreen({Key? key}) : super(key: key);
@@ -12,8 +17,90 @@ class AttendanceScreen extends StatefulWidget {
 }
 
 class _AttendanceScreenState extends State<AttendanceScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getData();
+  }
+
+  String? getName;
+  String? getCName;
+  void getData() async{
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    setState(() {
+      getName=sharedPreferences.getString("email")!;
+      getCName=sharedPreferences.getString("c_email")!;
+    });
+
+  }
+
   final formKey=GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey=GlobalKey<ScaffoldState>();
+  String locationMessage="Location of the User";
+  String location = 'NULL, press button';
+   Position? currentposition;
+  String? currentAddress;
+  late String lat;
+  late String long;
+
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      await Geolocator.openLocationSettings();
+      Fluttertoast.showToast(msg: 'Please keep your location on!');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        Fluttertoast.showToast(msg: 'Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      Fluttertoast.showToast(msg: 'permission is denied forever');
+    }
+    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    try{
+      List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
+      Placemark place= placemarks[0];
+      setState(() {
+        currentposition = position;
+        currentAddress = "${place.street} ,${place.locality}, ${place.postalCode}, ${place.country}";
+      });
+    }
+    catch(e){
+      print(e); 
+    }
+    return await Geolocator.getCurrentPosition();
+  }
+
+  Future<Position> _getCurrentLocation() async{
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if(!serviceEnabled){
+      return Future.error('Location service are disabled.');
+    }
+
+    LocationPermission permission = await Geolocator.checkPermission();
+    if(permission == LocationPermission.denied){
+      permission = await Geolocator.requestPermission();
+      if(permission == LocationPermission.denied){
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if(permission == LocationPermission.deniedForever){
+      return Future.error('Location permission are permanently denied, we cannot request more');
+    }
+    return await Geolocator.getCurrentPosition();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,6 +148,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
         backgroundColor: Colors.white,
         shadowColor: Colors.transparent,
       ),
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Form(
           key: formKey,
@@ -89,61 +177,127 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                 ),
               ),
               SizedBox(height: 3.67.h,),
-              Container(
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 20,left: 20),
-                  child: TextFormField(
-                    onTap: (){
-                      InputDecoration(
-                        fillColor: Color.fromRGBO(211, 224, 255, 1),
-                        filled: true,
-                          labelStyle: TextStyle(color: Color.fromRGBO(0, 52, 185, 1),fontWeight: FontWeight.bold,)
-                      );
-                    },
-                    validator: (value){
-                      if(value!.isEmpty){
-                        return 'Please enter address';
-                      }
-                    },
-                    decoration: InputDecoration(
-                      labelText: 'Address',
-                      labelStyle: TextStyle(color: Color.fromRGBO(12, 25, 71, 1),fontWeight: FontWeight.bold,),
-                      border: UnderlineInputBorder(),
-                    ),
-                  ),
-                ),
+              // Container(
+              //   child: Padding(
+              //     padding: const EdgeInsets.only(right: 20,left: 20),
+              //     child: TextFormField(
+              //       onTap: (){
+              //         InputDecoration(
+              //           fillColor: Color.fromRGBO(211, 224, 255, 1),
+              //           filled: true,
+              //             labelStyle: TextStyle(color: Color.fromRGBO(0, 52, 185, 1),fontWeight: FontWeight.bold,)
+              //         );
+              //       },
+              //       validator: (value){
+              //         if(value!.isEmpty){
+              //           return 'Please enter address';
+              //         }
+              //       },
+              //       decoration: InputDecoration(
+              //         labelText: 'Address',
+              //         labelStyle: TextStyle(color: Color.fromRGBO(12, 25, 71, 1),fontWeight: FontWeight.bold,),
+              //         border: UnderlineInputBorder(),
+              //       ),
+              //     ),
+              //   ),
+              // ),
+
+              // Container(
+              //   child: Padding(
+              //     padding: const EdgeInsets.only(right: 20,left: 20),
+              //     child: TextFormField(
+              //       validator: (value){
+              //         if(value!.isEmpty){
+              //           return 'Please enter Date';
+              //         }
+              //       },
+              //       decoration: InputDecoration(
+              //         labelText: 'Date',
+              //         labelStyle: TextStyle(color: Color.fromRGBO(12, 25, 71, 1),fontWeight: FontWeight.bold,backgroundColor:  Color.fromARGB(9, 31, 87, 1)),
+              //         border: UnderlineInputBorder(),
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              // Container(
+              //   child: Padding(
+              //     padding: const EdgeInsets.only(right: 20,left: 20),
+              //     child: TextFormField(
+              //       validator: (value){
+              //         if(value!.isEmpty){
+              //           return 'Please enter Time';
+              //         }
+              //       },
+              //       decoration: InputDecoration(
+              //         labelText: 'Time',
+              //         labelStyle: TextStyle(color: Color.fromRGBO(12, 25, 71, 1),fontWeight: FontWeight.bold,backgroundColor:  Color.fromARGB(9, 31, 87, 1)),
+              //         border: UnderlineInputBorder(),
+              //       ),
+              //     ),
+              //   ),
+              // ),
+             // Text(locationMessage,style: TextStyle(color: Color.fromRGBO(12, 25, 71, 1)),),
+
+            currentposition!=null ? Center(child: Text('Latitude : '+currentposition!.latitude.toString(),style: TextStyle(color: Color.fromRGBO(12, 25, 71, 1)))) :
+            Padding(
+              padding:  EdgeInsets.
+                symmetric(horizontal: 10.w),
+              child: Center(child: Text('Click on Get Cureent location button to get your location',style: TextStyle(color: Color.fromRGBO(12, 25, 71, 1)),),),
+            ),
+            currentposition!=null ? Center(child: Text('Longitude : '+currentposition!.longitude.toString(),style: TextStyle(color: Color.fromRGBO(12, 25, 71, 1)),)) : Container(),
+            currentAddress!=null ? Center(child: Text('Address : '+currentAddress.toString(),style: TextStyle(color: Color.fromRGBO(12, 25, 71, 1)))) : Container(),
+              SizedBox(height: 3.5.h,),
+              ElevatedButton(onPressed: (){
+
+               // _determinePosition();
+                _determinePosition().then((value){
+                  lat = '${value.latitude}';
+                  long = '${value.longitude}';
+                  print(lat);
+                  print(long);
+                  setState(() {
+                    locationMessage = 'Latitude : ${lat} , Longitude : ${long}';
+                  });
+                });
+
+
+              },
+                  child: Text("Get current location",style: TextStyle(color: Color.fromRGBO(59, 150, 138, 1)),),
+                  style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  shadowColor: Colors.white,
+                  side: const BorderSide(
+                    width: 1.0,
+                    color: Colors.teal,
+                  ))
               ),
+              SizedBox(height: 3.5.h,),
               Container(
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 20,left: 20),
-                  child: TextFormField(
-                    validator: (value){
-                      if(value!.isEmpty){
-                        return 'Please enter Date';
-                      }
-                    },
-                    decoration: InputDecoration(
-                      labelText: 'Date',
-                      labelStyle: TextStyle(color: Color.fromRGBO(12, 25, 71, 1),fontWeight: FontWeight.bold,backgroundColor:  Color.fromARGB(9, 31, 87, 1)),
-                      border: UnderlineInputBorder(),
-                    ),
-                  ),
-                ),
-              ),
-              Container(
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 20,left: 20),
-                  child: TextFormField(
-                    validator: (value){
-                      if(value!.isEmpty){
-                        return 'Please enter Time';
-                      }
-                    },
-                    decoration: InputDecoration(
-                      labelText: 'Time',
-                      labelStyle: TextStyle(color: Color.fromRGBO(12, 25, 71, 1),fontWeight: FontWeight.bold,backgroundColor:  Color.fromARGB(9, 31, 87, 1)),
-                      border: UnderlineInputBorder(),
-                    ),
+                child: Center(
+                  child: Container(
+                    width: 74.10.w,
+                    height: 6.51.h,
+                    child: ElevatedButton(
+                        onPressed: () async{
+                          print(getName);
+                          print(currentposition!.latitude.toString());
+                          print(currentposition!.longitude.toString());
+                          EmployeeLoginLogoutModel data = await EmployeeLoginLogutAPI().login(getName, currentposition!.latitude.toString(), currentposition!.longitude.toString(), currentAddress.toString(), "login");
+                          if(data.server![0].result.toString() == 'true'){
+                           Fluttertoast.showToast(msg: 'Log in successfully');
+                          }
+                        },
+                        child: Text(
+                          "Log In",
+                          style: TextStyle(color: Color.fromRGBO(59, 150, 138, 1),fontSize: 18.95),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            shadowColor: Colors.white,
+                            side: const BorderSide(
+                              width: 1.0,
+                              color: Colors.teal,
+                            ))),
                   ),
                 ),
               ),
@@ -270,46 +424,52 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
 
     );
   }
-}
+  showAlertDialog(BuildContext context) {
 
-showAlertDialog(BuildContext context) {
-
-  // set up the AlertDialog
-  AlertDialog alert = AlertDialog(
-    backgroundColor: Color.fromRGBO(2, 25, 71, 1),
-    title: Text("Are you sure want to LOGOUT ?",style: TextStyle(color: Colors.white),),
-    // content: Text("Would you like to continue learning how to use Flutter alerts?"),
-    actions: [
-      Row(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 50,),
-            child: ElevatedButton(
-                onPressed: (){
-                  Navigator.pop(context);
-                },
-              style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.teal)),
-                child: Text("No",style: TextStyle(color: Colors.white,fontSize: 10.61.sp))
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      backgroundColor: Color.fromRGBO(2, 25, 71, 1),
+      title: Text("Are you sure want to LOGOUT ?",style: TextStyle(color: Colors.white),),
+      // content: Text("Would you like to continue learning how to use Flutter alerts?"),
+      actions: [
+        Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 50,),
+              child: ElevatedButton(
+                  onPressed: (){
+                    Navigator.pop(context);
+                  },
+                  style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.teal)),
+                  child: Text("No",style: TextStyle(color: Colors.white,fontSize: 10.61.sp))
+              ),
             ),
-          ),
-          SizedBox(width: 12.82.w,),
-          Padding(
-            padding: const EdgeInsets.only(right: 50),
-            child: ElevatedButton(
-              onPressed: (){},
-                style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.teal)),
-                child: Text("Yes",style: TextStyle(color: Colors.white,fontSize: 10.61.sp))),
-          ),
-        ],
-      ),
-    ],
-  );
+            SizedBox(width: 12.82.w,),
+            Padding(
+              padding: const EdgeInsets.only(right: 50),
+              child: ElevatedButton(
+                  onPressed: () async{
+                    EmployeeLoginLogoutModel data = await EmployeeLoginLogutAPI().login(getName, currentposition!.latitude.toString(), currentposition!.longitude.toString(), currentAddress.toString(), "logout");
+                    if(data.server![0].result.toString() == 'true'){
+                      Fluttertoast.showToast(msg: 'Logout  successfully');
+                      Navigator.pop(context);
+                    }
+                  },
+                  style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.teal)),
+                  child: Text("Yes",style: TextStyle(color: Colors.white,fontSize: 10.61.sp))),
+            ),
+          ],
+        ),
+      ],
+    );
 
-  // show the dialog
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
-  );
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
 }
+

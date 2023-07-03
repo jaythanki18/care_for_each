@@ -1,17 +1,21 @@
+import 'package:care_for_each/Models/CompanyProfileEditModel.dart';
+import 'package:care_for_each/company_side/company_profile.dart';
 import 'package:flutter/material.dart';
-
+import 'package:sizer/sizer.dart';
 import '../API/CompanyProfileAPI.dart';
 import '../API/company_profile_edit_API.dart';
 import '../Models/CompanyProfileModel.dart';
 
 class ProfileDetail extends StatefulWidget {
-  const ProfileDetail({Key? key}) : super(key: key);
+  const ProfileDetail({Key? key, required this.c_emailid}) : super(key: key);
 
+  final String c_emailid;
   @override
   State<ProfileDetail> createState() => _ProfileDetailState();
 }
 
 class _ProfileDetailState extends State<ProfileDetail> {
+  String edit="";
 
   @override
   Widget build(BuildContext context) {
@@ -55,20 +59,20 @@ class _ProfileDetailState extends State<ProfileDetail> {
         child: Column(
           children: [
             FutureBuilder<CompanyProfileModel>(
-              future: CompanyProfileApi().profileList("info@webearl.com"),
+              future: CompanyProfileApi().profileList(widget.c_emailid),
               builder: (BuildContext context, snapshot){
-               TextEditingController cname=TextEditingController(text: snapshot.data!.server![0].cname.toString());
-               TextEditingController personname=TextEditingController(text: snapshot.data!.server![0].personname.toString());
-               TextEditingController address=TextEditingController(text: snapshot.data!.server![0].address.toString());
-               TextEditingController designation=TextEditingController(text: snapshot.data!.server![0].designation.toString());
 
                 if(snapshot.connectionState==ConnectionState.waiting){
                   return Center(child: CircularProgressIndicator());
                 }
                 else if (snapshot.hasData){
+                  TextEditingController cname=TextEditingController(text: snapshot.data!.server![0].cname.toString());
+                  TextEditingController personname=TextEditingController(text: snapshot.data!.server![0].personname.toString());
+                  TextEditingController address=TextEditingController(text: snapshot.data!.server![0].address.toString());
+                  TextEditingController designation=TextEditingController(text: snapshot.data!.server![0].designation.toString());
                   return Center(
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 63.0),
+                      padding:  EdgeInsets.symmetric(horizontal: 16.15.w),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
@@ -78,7 +82,7 @@ class _ProfileDetailState extends State<ProfileDetail> {
                             children: [
                               Center(
                                   child: Container(
-                                       height: 200,width: 200,
+                                       height: 21.h,width: 51.3.w,
                                       child: CircleAvatar(
                                         child:  Image.network(
                                           snapshot.data!.server![0].cPhoto.toString(),
@@ -90,13 +94,13 @@ class _ProfileDetailState extends State<ProfileDetail> {
                                 // ),
                               ),
                               SizedBox(
-                                height: 10,
+                                height: 1.h,
                               ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   SizedBox(
-                                    width:150,
+                                    width:38.46.w,
                                     child: TextFormField(
                                      controller: cname,
                                     //  initialValue: snapshot.data!.server![0].cname.toString(),
@@ -107,7 +111,10 @@ class _ProfileDetailState extends State<ProfileDetail> {
                                     ),
                                   ),
                                   IconButton(onPressed: (){
-                                    editProfile("info@webearl.com", "cname", cname.text);
+                                    print(widget.c_emailid);
+                                    print(cname.text);
+                                    showAlertEditDialog(context, "Company name", widget.c_emailid, "cname", cname.text);
+                                   // editProfile(widget.c_emailid, "cname", cname.text);
                                   }, icon: Icon(Icons.edit))
                                 ],
                               ),
@@ -115,7 +122,7 @@ class _ProfileDetailState extends State<ProfileDetail> {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   SizedBox(
-                                    width: 150,
+                                    width: 38.46.w,
                                     child: TextFormField(
                                       controller: personname,
                                       //  initialValue: snapshot.data!.server![0].cname.toString(),
@@ -126,7 +133,8 @@ class _ProfileDetailState extends State<ProfileDetail> {
                                     ),
                                   ),
                                   IconButton(onPressed: (){
-                                    editProfile("info@webearl.com", "personname", personname.text);
+                                    showAlertEditDialog(context, "Personn name", widget.c_emailid, "personname", personname.text);
+                                   // editProfile(widget.c_emailid, "personname", personname.text);
                                   }, icon: Icon(Icons.edit))
                                 ],
                               ),
@@ -134,7 +142,7 @@ class _ProfileDetailState extends State<ProfileDetail> {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   SizedBox(
-                                    width: 150,
+                                    width: 38.46.w,
                                     child: TextFormField(
                                       controller: designation,
                                       //  initialValue: snapshot.data!.server![0].cname.toString(),
@@ -145,7 +153,8 @@ class _ProfileDetailState extends State<ProfileDetail> {
                                     ),
                                   ),
                                   IconButton(onPressed: (){
-                                    editProfile("info@webearl.com", "designation", designation.text);
+                                    showAlertEditDialog(context, "Designation", widget.c_emailid, "designation", designation.text);
+                                  //  editProfile(widget.c_emailid, "designation", designation.text);
                                   }, icon: Icon(Icons.edit))
                                 ],
                               ),
@@ -153,7 +162,8 @@ class _ProfileDetailState extends State<ProfileDetail> {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   SizedBox(
-                                    width: 150,
+                                    width: 38.46.w,
+                                    //height: 20.h,
                                     child: TextFormField(
                                       controller: address,
                                       //  initialValue: snapshot.data!.server![0].cname.toString(),
@@ -164,30 +174,15 @@ class _ProfileDetailState extends State<ProfileDetail> {
                                     ),
                                   ),
                                   IconButton(onPressed: (){
-                                    editProfile("info@webearl.com", "address", address.text);
+                                    showAlertEditDialog(context, "Address", widget.c_emailid, "address", address.text);
+                                  //  editProfile(widget.c_emailid, "address", address.text);
                                   }, icon: Icon(Icons.edit))
                                 ],
                               ),
 
                             ],
                           ),
-                          Container(
-                            height: 40,
-                            width: 100,
-                            child: ElevatedButton(
-                              style: ButtonStyle(
-                                backgroundColor: MaterialStatePropertyAll(Colors.teal)
-                              ),
-                                onPressed: ()
-                                {
-                                  print("Company name : "+cname.text);
-                                  print("Person name : "+personname.text);
-                                  print("Designation name : "+designation.text);
-                                  print("Address : "+address.text);
-                                  
-                                }, child: Text("Edit")
-                            ),
-                          )
+
                         ],
                       ),
                     ),
@@ -205,6 +200,99 @@ class _ProfileDetailState extends State<ProfileDetail> {
       ),
     );
   }
+
+  String showAlertEditDialog(BuildContext context,name,c_email,fname,initval) {
+    TextEditingController value=TextEditingController(text: initval);
+    late String val;
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      backgroundColor: Color.fromRGBO(2, 25, 71, 1),
+      title: Text(name,style: TextStyle(color: Colors.white),),
+      // content: Text("Would you like to continue learning how to use Flutter alerts?"),
+      actions: [
+        Column(
+          children: [
+            SizedBox(
+              height: 5.92.h,
+              child: TextFormField(
+                onChanged: (val){
+                  edit=val;
+                  setState(() {
+
+                  });
+                },
+                controller: value,
+                style: TextStyle(color: Colors.white),
+                validator: (value){
+                  if(value!.isEmpty ){
+                    return 'Enter correct name';
+                  }
+                  else{
+                    return null;
+                  }
+                },
+                keyboardType: TextInputType.name,
+                decoration: InputDecoration(
+                    focusColor: Colors.white,
+                    enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(width: 0,color: Colors.white)
+                    ),
+                    labelText: "Edit ",
+                    labelStyle: TextStyle(
+                        color: Colors.white)),
+              ),
+            ),
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 50,),
+                  child: ElevatedButton(
+                      onPressed: (){
+                        Navigator.pop(context);
+                      },
+                      style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.teal)),
+                      child: Text("No",style: TextStyle(color: Colors.white))
+                  ),
+                ),
+                SizedBox(width: 50,),
+                Padding(
+                  padding: const EdgeInsets.only(right: 50),
+                  child: InkWell(
+                      onTap: (){
+                        //val=value.text;
+                      },
+                      child: ElevatedButton(
+                          onPressed: () async{
+                            CompanyProfileEditModel data = await CompanyProfileEditApi().profileEdit(widget.c_emailid, fname, value.text);
+                            Text(data.server![0].result.toString());
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfileDetail(c_emailid: widget.c_emailid,)));
+                          },
+                          style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.teal)),
+                          child: Text("Edit",style: TextStyle(color: Colors.white))
+                      )
+
+                  ),
+                ),
+              ],
+            )
+
+
+
+          ],
+        ),
+
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+    return value.text;
+  }
 }
 
 editProfile(c_emailid,fname,value){
@@ -214,6 +302,9 @@ editProfile(c_emailid,fname,value){
   FutureBuilder(
     future: CompanyProfileEditApi().profileEdit(c_emailid, fname, value),
     builder: (context,snapshot){
+      if (snapshot.data == null) {
+        return Text("No data");
+      }
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -224,3 +315,4 @@ editProfile(c_emailid,fname,value){
 
   );
 }
+

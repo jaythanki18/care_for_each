@@ -20,7 +20,7 @@ class SubCategoryManageAPI {
           'c_emailid': c_email,
           'subcatname':subcatname,
           'type':type,
-          'cat_id':catid,
+          'catid':catid,
           'subcat_id':subcat_id
         }
     );

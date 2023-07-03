@@ -9,13 +9,15 @@ import 'package:care_for_each/company_side/sales_report.dart';
 import 'package:care_for_each/company_side/stock_report.dart';
 import 'package:care_for_each/company_side/visitor_report.dart';
 import 'package:flutter/material.dart';
-
+import '../ui/cart.dart';
 import 'attendance_report.dart';
 import 'company_profile.dart';
+import 'package:sizer/sizer.dart';
 
 class Report extends StatelessWidget {
-  const Report({Key? key}) : super(key: key);
+  const Report({Key? key, required this.c_email}) : super(key: key);
 
+  final String c_email;
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -45,17 +47,17 @@ class Report extends StatelessWidget {
           style: TextStyle(color: Color.fromRGBO(9, 31, 87, 1)),
         ),
         actions: [
-          IconButton(
-            onPressed: () {
-               //Navigator.push(context, MaterialPageRoute(builder: (context) => CartScreen()));
-            },
-            icon: Icon(Icons.shopping_cart),
-            color: Color.fromRGBO(9, 31, 87, 1),
-          ),
+          // IconButton(
+          //   onPressed: () {
+          //      Navigator.push(context, MaterialPageRoute(builder: (context) => CartScreen()));
+          //   },
+          //   icon: Icon(Icons.shopping_cart),
+          //   color: Color.fromRGBO(9, 31, 87, 1),
+          // ),
           IconButton(
               onPressed: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => CompanyProfile()));
+                    MaterialPageRoute(builder: (context) => CompanyProfile(c_emailid: c_email,)));
               },
               icon: Icon(Icons.account_circle_sharp),
               color: Color.fromRGBO(9, 31, 87, 1))
@@ -68,7 +70,7 @@ class Report extends StatelessWidget {
           child: Column(
             children: [
               SizedBox(
-                height: 5,
+                height: 0.5.h,
               ),
               Container(
                 decoration: BoxDecoration(
@@ -85,8 +87,8 @@ class Report extends StatelessWidget {
                     end: Alignment.bottomRight,
                   ),
                 ),
-                height: 0.09 * (height),
-                width: 0.9 * (width),
+                height: 10.h,
+                width: 90.w,
                 child: Row(
                   children: [
                     Padding(
@@ -99,7 +101,7 @@ class Report extends StatelessWidget {
                     Center(
                       child: TextButton(
                         onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>AttendanceReport()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>AttendanceReport(c_email: c_email,)));
                         },
                         child: Text("Attendance",
                           style: TextStyle(color: Color.fromRGBO(9, 31, 87, 1),
@@ -111,7 +113,7 @@ class Report extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: 5,
+                height: 0.5.h,
               ),
               Container(
                 decoration: BoxDecoration(
@@ -126,7 +128,7 @@ class Report extends StatelessWidget {
                     end: Alignment.bottomRight,
                   ),
                 ),
-                height: 0.09 * (height),
+                height: 10.h,
                 width: 0.9 * (width),
                 child: Row(
                   children: [
@@ -140,7 +142,7 @@ class Report extends StatelessWidget {
                     Center(
                         child: TextButton(
                           onPressed: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>VisitorReport()));
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>VisitorReport(c_email: c_email,)));
                           },
                           child: Text(
                             "Visitor",
@@ -153,7 +155,7 @@ class Report extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: 5,
+                height: 0.5.h,
               ),
               Container(
                 decoration: BoxDecoration(
@@ -168,8 +170,8 @@ class Report extends StatelessWidget {
                     end: Alignment.bottomRight,
                   ),
                 ),
-                height: 0.09 * (height),
-                width: 0.9 * (width),
+                height: 10.h,
+                width: 90.w,
                 child: Row(
                   children: [
                     Padding(
@@ -182,7 +184,7 @@ class Report extends StatelessWidget {
                     Center(
                       child: TextButton(
                         onPressed: (){
-                             Navigator.push(context, MaterialPageRoute(builder: (context)=>CollectionReport()));
+                             Navigator.push(context, MaterialPageRoute(builder: (context)=>CollectionReport(c_email: c_email,)));
                         },
                         child: Text("Collection",
                           style: TextStyle(
@@ -195,7 +197,7 @@ class Report extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: 5,
+                height: 0.5.h,
               ),
               Container(
                 decoration: BoxDecoration(
@@ -210,8 +212,8 @@ class Report extends StatelessWidget {
                     end: Alignment.bottomRight,
                   ),
                 ),
-                height: 0.09 * (height),
-                width: 0.9 * (width),
+                height: 10.h,
+                width: 90.w,
                 child: Row(
                   children: [
                     Padding(
@@ -224,7 +226,7 @@ class Report extends StatelessWidget {
                     Center(
                         child: TextButton(
                           onPressed: (){
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=>StockReport()));
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=>StockReport(c_email: c_email,)));
                           },
                           child: Text(
                             "Stock",
@@ -237,7 +239,7 @@ class Report extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: 5,
+                height: 0.5.h,
               ),
               Container(
                 decoration: BoxDecoration(
@@ -252,8 +254,8 @@ class Report extends StatelessWidget {
                     end: Alignment.bottomRight,
                   ),
                 ),
-                height: 0.09 * (height),
-                width: 0.9 * (width),
+                height: 10.h,
+                width: 90.w,
                 child: Row(
                   children: [
                     Padding(
@@ -266,7 +268,7 @@ class Report extends StatelessWidget {
                     Center(
                         child: TextButton(
                           onPressed: (){
-                             Navigator.push(context, MaterialPageRoute(builder: (context)=>ComplaintReport()));
+                             Navigator.push(context, MaterialPageRoute(builder: (context)=>ComplaintReport(c_email: c_email,)));
                           },
                           child: Text(
                             "Complaint",
@@ -280,7 +282,7 @@ class Report extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: 5,
+                height: 0.5.h,
               ),
               Container(
                 decoration: BoxDecoration(
@@ -295,8 +297,8 @@ class Report extends StatelessWidget {
                     end: Alignment.bottomRight,
                   ),
                 ),
-                height: 0.09 * (height),
-                width: 0.9 * (width),
+                height: 10.h,
+                width: 90.w,
                 child: Row(
                   children: [
                     Padding(
@@ -309,7 +311,7 @@ class Report extends StatelessWidget {
                     Center(
                         child: TextButton(
                           onPressed: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (contexxt)=>SalesReport()));
+                            Navigator.push(context, MaterialPageRoute(builder: (contexxt)=>SalesReport(c_email: c_email,)));
                           },
                           child: Text(
                             "Sales",
@@ -322,7 +324,7 @@ class Report extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: 5,
+                height: 0.5.h,
               ),
               Container(
                 decoration: BoxDecoration(
@@ -337,8 +339,8 @@ class Report extends StatelessWidget {
                     end: Alignment.bottomRight,
                   ),
                 ),
-                height: 0.09 * (height),
-                width: 0.9 * (width),
+                height: 10.h,
+                width: 90.w,
                 child: Row(
                   children: [
                     Padding(
@@ -351,7 +353,7 @@ class Report extends StatelessWidget {
                     Center(
                         child: TextButton(
                           onPressed: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>CustomerReport()));
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>CustomerReport(c_email: c_email,)));
                           },
                           child: Text(
                             "Customer",
@@ -364,7 +366,7 @@ class Report extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: 5,
+                height: 0.5.h,
               ),
               Container(
                 decoration: BoxDecoration(
@@ -379,8 +381,8 @@ class Report extends StatelessWidget {
                     end: Alignment.bottomRight,
                   ),
                 ),
-                height: 0.09 * (height),
-                width: 0.9 * (width),
+                height: 10.h,
+                width: 90.w,
                 child: Row(
                   children: [
                     Padding(
@@ -393,7 +395,7 @@ class Report extends StatelessWidget {
                     Center(
                         child: TextButton(
                           onPressed: (){
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=>GinnieBoxReport()));
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=>GinnieBoxReport(c_email: c_email,)));
                           },
                           child: Text(
                             "Ginnie Box",
@@ -406,7 +408,7 @@ class Report extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: 5,
+                height: 0.5.h,
               ),
               Container(
                 decoration: BoxDecoration(
@@ -421,8 +423,8 @@ class Report extends StatelessWidget {
                     end: Alignment.bottomRight,
                   ),
                 ),
-                height: 0.09 * (height),
-                width: 0.9 * (width),
+                height: 10.h,
+                width: 90.w,
                 child: Row(
                   children: [
                     Padding(
@@ -435,7 +437,7 @@ class Report extends StatelessWidget {
                     Center(
                         child: TextButton(
                           onPressed: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>PendingCollectionReport()));
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>PendingCollectionReport(c_email: c_email,)));
                           },
                           child: Text(
                             "Pending Collection",
@@ -448,7 +450,7 @@ class Report extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: 5,
+                height: 0.5.h,
               ),
               Container(
                 decoration: BoxDecoration(
@@ -463,8 +465,8 @@ class Report extends StatelessWidget {
                     end: Alignment.bottomRight,
                   ),
                 ),
-                height: 0.09 * (height),
-                width: 0.9 * (width),
+                height: 10.h,
+                width: 90.w,
                 child: Row(
                   children: [
                     Padding(
@@ -477,7 +479,7 @@ class Report extends StatelessWidget {
                     Center(
                         child: TextButton(
                           onPressed: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>LocationReport()));
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>LocationReport(c_email: c_email,)));
                           },
                           child: Text(
                             "Location",
@@ -491,7 +493,7 @@ class Report extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: 5,
+                height: 0.5.h,
               ),
               Container(
                 decoration: BoxDecoration(
@@ -506,8 +508,8 @@ class Report extends StatelessWidget {
                     end: Alignment.bottomRight,
                   ),
                 ),
-                height: 0.09 * (height),
-                width: 0.9 * (width),
+                height: 10.h,
+                width: 90.w,
                 child: Row(
                   children: [
                     Padding(
@@ -520,7 +522,7 @@ class Report extends StatelessWidget {
                     Center(
                         child: TextButton(
                           onPressed: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>LeaveReport()));
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=>LeaveReport(c_email: c_email,)));
                           },
                           child: Text(
                             "Leave",

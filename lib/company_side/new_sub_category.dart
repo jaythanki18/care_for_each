@@ -1,10 +1,22 @@
+import 'package:care_for_each/Models/CategoryDisplayModel.dart';
+import 'package:care_for_each/Models/SubCategoryManageModel.dart';
+import 'package:care_for_each/company_side/sub_category.dart';
 import 'package:flutter/material.dart';
 
+import '../API/CategoryDisplayAPI.dart';
 import '../API/SubCategoryManageAPI.dart';
 import '../widgets/round_button.dart';
 import '../widgets/round_button2.dart';
+import 'category.dart';
 import 'company_profile.dart';
 import 'package:sizer/sizer.dart';
+
+class User {
+  const User(this.id,this.name);
+
+  final String name;
+  final int id;
+}
 
 class NewSubCategory extends StatefulWidget {
   const NewSubCategory({Key? key, required this.c_emailid}) : super(key: key);
@@ -12,14 +24,62 @@ class NewSubCategory extends StatefulWidget {
   final String c_emailid;
   @override
   State<NewSubCategory> createState() => _NewSubCategoryState();
+
 }
 
 class _NewSubCategoryState extends State<NewSubCategory> {
   final formKey = GlobalKey<FormState>();
   TextEditingController subcatname=TextEditingController();
-  final items=['Select Category','Mobile Application','Digital Marketing','Web Application','Graphics Designing ','Customized Software','Man Power','Hello 2'];
-  String? selectedItem='Select Category';
-  late final int catid;
+
+  // final items=['Select Category','Mobile Application','Digital Marketing','Web Application','Graphics Designing ','Customized Software','Man Power','Hello 2'];
+  // String? selectedItem='Select Category';
+  // late final int catid;
+  String subcat_name="";
+
+  late User selectedUser;
+  List<User> users = <User>[const User(000,'Select Category'),const User(112,'Mobile Application'), const User(113,'Digital Marketing'), const User(135,'Web Application'),const User(136,'Graphics Designing'),const User(137,'Customized Software'),const User(138,'Man Power'),const User(139,'Hello 2')];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    selectedUser=users[0];
+    callDisplayAPI();
+  }
+
+  var displayInitial;
+  String catid="";
+  var id;
+  // var categoryName;
+  void getId(categoryName)async{
+    CategoryDisplayModel data= await CategoryDisplayAPI().categoryList(widget.c_emailid);
+    for(var i = 0 ; i<data.server!.length;i++){
+      if(categoryName == data.server?[i].catname){
+        id= data.server?[i].catid.toString();
+        catid=id.toString();
+
+        print(catid);
+
+      }
+    }
+  }
+
+
+  List<String>? CategoryList;
+ void callDisplayAPI() async{
+    CategoryDisplayModel data= await CategoryDisplayAPI().categoryList(widget.c_emailid);
+   setState(() {
+     CategoryList = data.server?.map((e) => e.catname.toString()).toList() ;
+    displayInitial=data.server![0].catname.toString();
+   });
+  }
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is removed from the
+    // widget tree.
+    subcatname.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +109,7 @@ class _NewSubCategoryState extends State<NewSubCategory> {
           IconButton(
               onPressed: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => CompanyProfile()));
+                    MaterialPageRoute(builder: (context) => CompanyProfile(c_emailid: widget.c_emailid,)));
               },
               icon: Icon(Icons.account_circle_sharp),
               color: Color.fromRGBO(9, 31, 87, 1)
@@ -69,38 +129,83 @@ class _NewSubCategoryState extends State<NewSubCategory> {
                 children: [
                   RoundButton2(title: 'New Sub Category Add', onTap: (){}),
                   SizedBox(height: 6.39.h,),
-                  Container(
-                    height: 5.92.h,
-                    width: 85.12.w,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(1.36.h),
-                      border: Border.all(
-                          color: Colors.teal,width: 2),
+                  // Container(
+                  //   height: 5.92.h,
+                  //   width: 85.12.w,
+                  //   decoration: BoxDecoration(
+                  //     borderRadius: BorderRadius.circular(1.36.h),
+                  //     border: Border.all(
+                  //         color: Colors.teal,width: 2),
+                  //   ),
+                  //   child: GestureDetector(
+                  //     onTap: (){
+                  //
+                  //     },
+                  //     child: DropdownButtonFormField<String>(
+                  //       value: selectedItem,
+                  //       items: items.map((item) => DropdownMenuItem(
+                  //         value: item,
+                  //         child: Text(item,style: TextStyle(color: Colors.black,fontSize: 14),),
+                  //       )
+                  //       ).toList(),
+                  //       onChanged: (item)=>setState((){
+                  //         selectedItem=item;
+                  //         if(selectedItem=="Mobile Application"){ catid=112;}
+                  //         if(selectedItem=="Digital Marketing"){ catid=113;}
+                  //         if(selectedItem=="customized Software"){ catid=137;}
+                  //         if(selectedItem=="man power"){ catid=138;}
+                  //         if(selectedItem=="Web Application"){ catid=135;}
+                  //         if(selectedItem=="Graphics Designing"){ catid=136;}
+                  //         print(selectedItem);
+                  //         print(catid);
+                  //       }),
+                  //         onTap: (){
+                  //
+                  //         },
+                  //     ),
+                  //   ),
+                  // ),
+                  DropdownButtonFormField<String>(
+                    decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.teal,width: 2)
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.teal,width: 2)
+                      ),
                     ),
-                    child: DropdownButtonFormField<String>(
-                      value: selectedItem,
-                      items: items.map((item) => DropdownMenuItem(
-                        value: item,
-                        child: Text(item,style: TextStyle(color: Colors.black,fontSize: 14),),
-                      )
-                      ).toList(),
-                      onChanged: (item)=>setState(()=>selectedItem=item),
-                        onTap: (){
-                          if(selectedItem=="Mobile Application"){ catid=112;}
-                          else if(selectedItem=="Digital Marketing"){ catid=113;}
-                          else if(selectedItem=="customized Software"){ catid=137;}
-                          else if(selectedItem=="man power"){ catid=138;}
-                          else if(selectedItem=="Web Application"){ catid=135;}
-                          else if(selectedItem=="Graphics Designing"){ catid=136;}
-                          print(selectedItem);
-                          print(catid);
-                        },
-                    ),
+                    value: displayInitial,
+                    onChanged: (newValue) {
+                      setState(() {
+                        displayInitial = newValue!;
+
+                        print(displayInitial);
+                        getId(displayInitial);
+                      });
+                    },
+                    items: CategoryList?.map((String user) {
+                      return new DropdownMenuItem<String>(
+                        value: user,
+                        child: new Text(
+                          user,
+                          style: new TextStyle(color: Colors.black),
+                        ),
+                      );
+                    }).toList(),
                   ),
+                //  new Text("selected user name is ${selectedUser.name} : and Id is : ${selectedUser.id}"),
+
                   SizedBox(height: 1.36.h,),
                   SizedBox(
                     height: 5.920.h,
                     child: TextFormField(
+                      controller: subcatname,
+                      onChanged: (value){
+                        subcat_name=value;
+                        setState(() {
+
+                        });
+                      },
                       validator: (value){
                         if(value!.isEmpty){
                           return 'Please enter sub category name';
@@ -123,29 +228,14 @@ class _NewSubCategoryState extends State<NewSubCategory> {
               ),
               RoundButton(
                 title: "Save",
-                onTap: () {
-                  FutureBuilder(
-                      future: SubCategoryManageAPI().subcategoryManage(widget.c_emailid,subcatname.text,"insert",catid,""),
-                      builder: (BuildContext context, snapshot) {
-                        if(snapshot.connectionState==ConnectionState.waiting){
-                          return Center(child: CircularProgressIndicator());
-                        }
-                        else if(snapshot.hasData){
-                          return Column(
-                            children: [
-                              Text(snapshot.data!.server![0].result.toString())
-                            ],
-                          );
-                        }
-                        else{
-                          return Text("No data");
-                        }
-                      }
-                  );
+                onTap: () async{
+                  SubCategoryManageModel data = await SubCategoryManageAPI().subcategoryManage(widget.c_emailid, subcatname.text.toString(), "insert", catid, "");
+                  print("subcategoryManage(${widget.c_emailid.toString()},${subcatname.text},insert,${catid},)");
+                  debugPrint(data.server![0].result.toString());
                   if(formKey.currentState!.validate()){
-
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>SubCategory(c_emailid: widget.c_emailid,)));
                   }
-                  //Navigator.push(context, MaterialPageRoute(builder: (context)=>Category()));
+
                 },
               ),
             ],

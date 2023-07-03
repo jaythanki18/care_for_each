@@ -25,7 +25,7 @@ class CompanyLoginAPI {
         }
     );
     Map<String,dynamic> data = jsonDecode(response.body);
-    print("Profile edit" + response.body);
+    print("Login : " + response.body);
 
     return CompanyLoginModel.fromJson(data);
   }

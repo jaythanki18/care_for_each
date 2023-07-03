@@ -14,7 +14,8 @@ import 'cart.dart';
 import 'ginnie_box.dart';
 
 class Dashboard extends StatefulWidget {
-  const Dashboard({Key? key}) : super(key: key);
+  const Dashboard({Key? key, required this.e_emailid}) : super(key: key);
+  final String e_emailid;
 
   @override
   State<Dashboard> createState() => _DashboardState();
@@ -138,7 +139,9 @@ class _DashboardState extends State<Dashboard> {
                     ),
                     Center(
                       child: TextButton(
-                        onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>ProductScreen()));},
+                        onPressed: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>ProductScreen(e_emailid: widget.e_emailid,)));
+                          },
                         child: Text("Products",
                           style: TextStyle(color: Color.fromRGBO(9, 31, 87, 1),
                               fontWeight: FontWeight.bold),
@@ -290,7 +293,9 @@ class _DashboardState extends State<Dashboard> {
                     ),
                     Center(
                       child: TextButton(
-                        onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>GinnieBox()));},
+                        onPressed: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>GinnieBox()));
+                          },
                         child: Text("Ginnie Box",
                           style: TextStyle(color: Color.fromRGBO(9, 31, 87, 1),
                               fontWeight: FontWeight.bold),

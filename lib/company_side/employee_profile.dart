@@ -1,9 +1,11 @@
 import 'package:care_for_each/API/EmployeeEditConfirmAPI.dart';
 import 'package:care_for_each/API/employee_data_API.dart';
 import 'package:care_for_each/Models/EmployeeDataModel.dart';
+import 'package:care_for_each/Models/EmployeeDeleteModel.dart';
 import 'package:care_for_each/company_side/employee.dart';
 import 'package:flutter/material.dart';
 import '../API/employee_delete_API.dart';
+import '../Models/EmployeeEditConfirmModel.dart';
 import '../widgets/round_button.dart';
 import 'package:sizer/sizer.dart';
 
@@ -17,8 +19,9 @@ class EmployeeProfile extends StatefulWidget {
 }
 
 class _EmployeeProfileState extends State<EmployeeProfile> {
-  showAlertEditDialog(BuildContext context,name,fname) {
-    TextEditingController value=TextEditingController();
+  String edit="";
+  String showAlertEditDialog(BuildContext context,name,c_email,fname,initval) {
+    TextEditingController value=TextEditingController(text: initval);
     late String val;
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
@@ -31,6 +34,12 @@ class _EmployeeProfileState extends State<EmployeeProfile> {
             SizedBox(
               height: 5.92.h,
               child: TextFormField(
+                onChanged: (val){
+                  edit=val;
+                  setState(() {
+
+                  });
+                },
                 controller: value,
                 style: TextStyle(color: Colors.white),
                 validator: (value){
@@ -41,7 +50,7 @@ class _EmployeeProfileState extends State<EmployeeProfile> {
                     return null;
                   }
                 },
-                keyboardType: TextInputType.text,
+                keyboardType: TextInputType.name,
                 decoration: InputDecoration(
                     focusColor: Colors.white,
                     enabledBorder: OutlineInputBorder(
@@ -53,38 +62,36 @@ class _EmployeeProfileState extends State<EmployeeProfile> {
               ),
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                ElevatedButton(onPressed: (){
-                  print("fname : "+fname);
-                  print("Controller value : "+value.text);
-
-                },
-                    child: Text("OK")
+                Padding(
+                  padding: const EdgeInsets.only(left: 50,),
+                  child: ElevatedButton(
+                      onPressed: (){
+                        Navigator.pop(context);
+                      },
+                      style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.teal)),
+                      child: Text("No",style: TextStyle(color: Colors.white))
+                  ),
                 ),
-                ElevatedButton(
-                    onPressed: (){
-                      Navigator.pop(context);
-                    },
-                    style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.teal)),
-                    child: Text("No",style: TextStyle(color: Colors.white))
-                ),
-               // SizedBox(width: 50,),
-                InkWell(
-                  onTap: (){
-                    val=value.text;
-                  },
-                  child: FutureBuilder(
-                      future: EmployeeEditConfirmAPI().employee("info@webearl.com", fname, value.text, ""),
-                      builder: (context,snapshot){
-                        return ElevatedButton(
-                            onPressed: (){
-                              print(snapshot.data!.server![0].result.toString());
-                             // Navigator.push(context, MaterialPageRoute(builder: (context)=>ProductDetail(pid: widget.pid)));
-                            },
-                            style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.teal)),
-                            child: Text("Edit",style: TextStyle(color: Colors.white)));
-                      }
+                SizedBox(width: 50,),
+                Padding(
+                  padding: const EdgeInsets.only(right: 50),
+                  child: InkWell(
+                      onTap: (){
+                        //val=value.text;
+                      },
+                      child: ElevatedButton(
+                          onPressed: () async{
+                            debugPrint(value.text);
+                            debugPrint(widget.emailid);
+                            EmployeeEditConfirmModel data = await EmployeeEditConfirmAPI().employee(widget.c_emailid, fname, value.text, widget.emailid);
+                         //   Text(data.server![0].result.toString());
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>EmployeeProfile(c_emailid: widget.c_emailid,photo: widget.photo,address: widget.address,edu: widget.edu,mobilenum: widget.mobilenum,dob: widget.dob,joiningdate: widget.joiningdate,designation: widget.designation,emailid: widget.emailid,ename: widget.ename,key: widget.key,)));
+                          //  Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfileDetail(c_emailid: widget.c_emailid,)));
+                          },
+                          style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.teal)),
+                          child: Text("Edit",style: TextStyle(color: Colors.white))
+                      )
 
                   ),
                 ),
@@ -106,6 +113,7 @@ class _EmployeeProfileState extends State<EmployeeProfile> {
         return alert;
       },
     );
+    return value.text;
   }
 
   @override
@@ -150,7 +158,7 @@ class _EmployeeProfileState extends State<EmployeeProfile> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             FutureBuilder(
-            future: EmployeeDataAPI().employeeList("info@webearl.com"),
+            future: EmployeeDataAPI().employeeList(widget.c_emailid),
                 builder: (BuildContext context, snapshot) {
               TextEditingController ename=TextEditingController(text: widget.ename);
               TextEditingController emailid=TextEditingController(text: widget.emailid);
@@ -168,7 +176,7 @@ class _EmployeeProfileState extends State<EmployeeProfile> {
                     return Column(
                       children: [
                         Card(
-                          margin: EdgeInsets.only(left: 40,right: 40),
+                          margin: EdgeInsets.symmetric(horizontal: 10.25.w),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                           child: Container(
                           //  height: 47.51.h,
@@ -181,7 +189,7 @@ class _EmployeeProfileState extends State<EmployeeProfile> {
                                 ])
                             ),
                             child: Padding(
-                              padding: const EdgeInsets.only(left: 40,right: 40,bottom: 17,top: 16),
+                              padding:  EdgeInsets.symmetric(horizontal: 10.25,vertical: 1.77.h),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -192,7 +200,7 @@ class _EmployeeProfileState extends State<EmployeeProfile> {
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                      SizedBox(
-                                       width:150,
+                                       width:38.46.w,
                                        child: TextFormField(
                                          controller:ename,
                                          decoration: InputDecoration(
@@ -202,7 +210,8 @@ class _EmployeeProfileState extends State<EmployeeProfile> {
                                        ),
                                      ),
                                       IconButton(onPressed: (){
-                                        editEmployeeProfile(widget.c_emailid, "ename", ename.text);
+                                        showAlertEditDialog(context, "Name", widget.c_emailid, "ename", ename.text);
+                                       // editEmployeeProfile(widget.c_emailid, "ename", ename.text);
                                       },icon: Icon(Icons.edit,color: Colors.teal,))
                                     ],
                                   ),
@@ -210,7 +219,7 @@ class _EmployeeProfileState extends State<EmployeeProfile> {
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       SizedBox(
-                                        width:150,
+                                        width:38.46.w,
                                         child: TextFormField(
                                           controller:emailid,
                                           decoration: InputDecoration(
@@ -220,6 +229,7 @@ class _EmployeeProfileState extends State<EmployeeProfile> {
                                         ),
                                       ),
                                       IconButton(onPressed: (){
+                                        showAlertEditDialog(context, "Email", widget.c_emailid, "emailid", emailid.text);
                                        // editEmployeeProfile("info@webearl.com", "emailid", emailid.text);
                                       },icon: Icon(Icons.edit,color: Colors.teal,))
                                     ],
@@ -230,7 +240,7 @@ class _EmployeeProfileState extends State<EmployeeProfile> {
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       SizedBox(
-                                        width:150,
+                                        width:38.46.w,
                                         child: TextFormField(
                                           controller:designation,
                                           decoration: InputDecoration(
@@ -240,7 +250,8 @@ class _EmployeeProfileState extends State<EmployeeProfile> {
                                         ),
                                       ),
                                       IconButton(onPressed: (){
-                                        editEmployeeProfile(widget.c_emailid, "designation", designation.text);
+                                        showAlertEditDialog(context, "Designation", widget.c_emailid, "designation", designation.text);
+                                       // editEmployeeProfile(widget.c_emailid, "designation", designation.text);
                                       },icon: Icon(Icons.edit,color: Colors.teal,))
                                     ],
                                   ),
@@ -248,7 +259,7 @@ class _EmployeeProfileState extends State<EmployeeProfile> {
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       SizedBox(
-                                        width:150,
+                                        width:38.46.w,
                                         child: TextFormField(
                                           controller:dob,
                                           decoration: InputDecoration(
@@ -258,7 +269,8 @@ class _EmployeeProfileState extends State<EmployeeProfile> {
                                         ),
                                       ),
                                       IconButton(onPressed: (){
-                                        editEmployeeProfile(widget.c_emailid, "dob", dob.text);
+                                        showAlertEditDialog(context, "DOB", widget.c_emailid, "dob", dob.text);
+                                      //  editEmployeeProfile(widget.c_emailid, "dob", dob.text);
                                       },icon: Icon(Icons.edit,color: Colors.teal,))
                                     ],
                                   ),
@@ -266,7 +278,7 @@ class _EmployeeProfileState extends State<EmployeeProfile> {
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       SizedBox(
-                                        width:150,
+                                        width:38.46.w,
                                         child: TextFormField(
                                           controller:joiningdate,
                                           decoration: InputDecoration(
@@ -284,7 +296,7 @@ class _EmployeeProfileState extends State<EmployeeProfile> {
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       SizedBox(
-                                        width:150,
+                                        width:38.46.w,
                                         child: TextFormField(
                                           controller:mobilenum,
                                           decoration: InputDecoration(
@@ -294,7 +306,8 @@ class _EmployeeProfileState extends State<EmployeeProfile> {
                                         ),
                                       ),
                                       IconButton(onPressed: (){
-                                        editEmployeeProfile(widget.c_emailid, "mobilenum", mobilenum.text);
+                                        showAlertEditDialog(context, "Mobile no.", widget.c_emailid, "mobilenum", mobilenum.text);
+                                       // editEmployeeProfile(widget.c_emailid, "mobilenum", mobilenum.text);
                                       },icon: Icon(Icons.edit,color: Colors.teal,))
                                     ],
                                   ),
@@ -302,7 +315,7 @@ class _EmployeeProfileState extends State<EmployeeProfile> {
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       SizedBox(
-                                        width:150,
+                                        width:38.46.w,
                                         child: TextFormField(
                                           controller:address,
                                           decoration: InputDecoration(
@@ -312,7 +325,8 @@ class _EmployeeProfileState extends State<EmployeeProfile> {
                                         ),
                                       ),
                                       IconButton(onPressed: (){
-                                        editEmployeeProfile(widget.c_emailid, "address", address.text);
+                                        showAlertEditDialog(context, "Address", widget.c_emailid, "address", address.text);
+                                    //    editEmployeeProfile(widget.c_emailid, "address", address.text);
                                       },icon: Icon(Icons.edit,color: Colors.teal,))
                                     ],
                                   ),
@@ -320,7 +334,7 @@ class _EmployeeProfileState extends State<EmployeeProfile> {
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       SizedBox(
-                                        width:150,
+                                        width:38.46.w,
                                         child: TextFormField(
                                           controller:edu,
                                           decoration: InputDecoration(
@@ -330,7 +344,8 @@ class _EmployeeProfileState extends State<EmployeeProfile> {
                                         ),
                                       ),
                                       IconButton(onPressed: (){
-                                        editEmployeeProfile(widget.c_emailid, "edu", edu.text);
+                                        showAlertEditDialog(context, "Education", widget.c_emailid, "edu", edu.text);
+                                      //  editEmployeeProfile(widget.c_emailid, "edu", edu.text);
                                       },icon: Icon(Icons.edit,color: Colors.teal,))
                                     ],
                                   ),
@@ -356,7 +371,7 @@ class _EmployeeProfileState extends State<EmployeeProfile> {
                 children: [
                   RoundButton(
                     title: "Delete Employee",
-                    onTap: () {
+                    onTap: () async{
                       showAlertDialog(context,widget.c_emailid,widget.emailid);
                     },
                   ),
@@ -368,85 +383,71 @@ class _EmployeeProfileState extends State<EmployeeProfile> {
       ),
     );
   }
-}
 
-showAlertDialog(BuildContext context,emailid,e_emailid) {
+  showAlertDialog(BuildContext context,emailid,e_emailid) {
 
-  // set up the AlertDialog
-  AlertDialog alert = AlertDialog(
-    backgroundColor: Color.fromRGBO(2, 25, 71, 1),
-    title: Text("Are you sure want to DELETE ?",style: TextStyle(color: Colors.white),),
-    // content: Text("Would you like to continue learning how to use Flutter alerts?"),
-    actions: [
-      Row(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 50,),
-            child: ElevatedButton(
-                onPressed: (){
-                  Navigator.pop(context);
-                },
-                style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.teal)),
-                child: Text("No",style: TextStyle(color: Colors.white))
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      backgroundColor: Color.fromRGBO(2, 25, 71, 1),
+      title: Text("Are you sure want to DELETE ?",style: TextStyle(color: Colors.white),),
+      // content: Text("Would you like to continue learning how to use Flutter alerts?"),
+      actions: [
+        Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 50,),
+              child: ElevatedButton(
+                  onPressed: (){
+                    Navigator.pop(context);
+                  },
+                  style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.teal)),
+                  child: Text("No",style: TextStyle(color: Colors.white))
+              ),
             ),
-          ),
-          SizedBox(width: 7.69.w,),
-          Padding(
-            padding: const EdgeInsets.only(right: 50),
-            child: ElevatedButton(
-                onPressed: (){
-                  FutureBuilder(
-                    future: EmployeeDeleteAPI().employee("info@webearl.com",e_emailid),
-                    builder: (BuildContext context, snapshot) {
-                      if(snapshot.connectionState==ConnectionState.waiting){
-                        return Text("Loading");
-                      }
-                      else if(snapshot.hasData){
-                        return Column(
-                          children: [
-                            Text(snapshot.data!.server![0].result.toString())
-                          ],
-                        );
-                      }
-                      else{
-                        return Text("No data");
-                      }
-                    },
+            SizedBox(width: 7.69.w,),
+            Padding(
+              padding: const EdgeInsets.only(right: 50),
+              child: ElevatedButton(
+                  onPressed: () async{
+                    EmployeeDeleteModel data= await EmployeeDeleteAPI().employee(widget.c_emailid, e_emailid);
+                    debugPrint(data.server![0].result.toString());
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>EmployeeProfile(c_emailid: widget.c_emailid,photo: widget.photo,address: widget.address,edu: widget.edu,mobilenum: widget.mobilenum,dob: widget.dob,joiningdate: widget.joiningdate,designation: widget.designation,emailid: widget.emailid,ename: widget.ename,key: widget.key,)));
+                  },
+                  style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.teal)),
+                  child: Text("Yes",style: TextStyle(color: Colors.white))),
+            ),
+          ],
+        ),
+      ],
+    );
 
-                  );
-                //  Navigator.push(context, MaterialPageRoute(builder: (context)=>Employee(c_emailid:c_emailid ,)));
-                },
-                style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.teal)),
-                child: Text("Yes",style: TextStyle(color: Colors.white))),
-          ),
-        ],
-      ),
-    ],
-  );
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
 
-  // show the dialog
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
-  );
+  editEmployeeProfile(c_emailid,fname,value){
+    print("c_emailid : "+c_emailid);
+    print("fname : "+fname);
+    print("value : "+value);
+    FutureBuilder(
+      future: EmployeeEditConfirmAPI().employee(c_emailid, fname, value, ""),
+      builder: (context,snapshot){
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+
+          ],
+        );
+      },
+
+    );
+  }
+
+
 }
 
-editEmployeeProfile(c_emailid,fname,value){
-  print("c_emailid : "+c_emailid);
-  print("fname : "+fname);
-  print("value : "+value);
-  FutureBuilder(
-    future: EmployeeEditConfirmAPI().employee(c_emailid, fname, value, ""),
-    builder: (context,snapshot){
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-
-        ],
-      );
-    },
-
-  );
-}

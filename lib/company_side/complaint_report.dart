@@ -4,8 +4,9 @@ import 'company_profile.dart';
 import 'package:sizer/sizer.dart';
 
 class ComplaintReport extends StatefulWidget {
-  const ComplaintReport({Key? key}) : super(key: key);
+  const ComplaintReport({Key? key, required this.c_email}) : super(key: key);
 
+  final String c_email;
   @override
   State<ComplaintReport> createState() => _ComplaintReportState();
 }
@@ -56,7 +57,7 @@ class _ComplaintReportState extends State<ComplaintReport> {
           IconButton(
               onPressed: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => CompanyProfile()));
+                    MaterialPageRoute(builder: (context) => CompanyProfile(c_emailid: widget.c_email,)));
               },
               icon: Icon(Icons.account_circle_sharp),
               color: Color.fromRGBO(9, 31, 87, 1))

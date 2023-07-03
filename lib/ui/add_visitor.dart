@@ -1,3 +1,5 @@
+import 'package:care_for_each/API/EmployeeSide/visitor_add_API.dart';
+import 'package:care_for_each/Models/EmployeeSide/VisitorAddModel.dart';
 import 'package:care_for_each/ui/profile.dart';
 import 'package:care_for_each/ui/visitor.dart';
 import 'package:care_for_each/ui/visitor_details.dart';
@@ -6,6 +8,7 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'cart.dart';
 import 'package:sizer/sizer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AddVisitor extends StatefulWidget {
   const AddVisitor({Key? key}) : super(key: key);
@@ -21,6 +24,14 @@ class AddVisitor extends StatefulWidget {
 }
 
 class _AddVisitorState extends State<AddVisitor> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+  }
+
+
   ImagePicker picker = ImagePicker();
   XFile? image;
 
@@ -82,6 +93,7 @@ class ImageFromGalleryEx extends StatefulWidget {
 }
 
 class ImageFromGalleryExState extends State<ImageFromGalleryEx> {
+
   final formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -92,6 +104,13 @@ class ImageFromGalleryExState extends State<ImageFromGalleryEx> {
   TextEditingController _address=TextEditingController();
   TextEditingController _discussion=TextEditingController();
   TextEditingController _userimage=TextEditingController();
+  String name="";
+  String company="";
+  String contact="";
+  String email="";
+  String address="";
+  String discussion="";
+ // String photo="";
   var _image;
   var imagePicker;
   var type;
@@ -102,6 +121,18 @@ class ImageFromGalleryExState extends State<ImageFromGalleryEx> {
   void initState() {
     super.initState();
     imagePicker = new ImagePicker();
+    getData();
+  }
+
+  String? getEName;
+  String? getCName;
+  void getData() async{
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    setState(() {
+      getEName=sharedPreferences.getString("email")!;
+      getCName=sharedPreferences.getString('c_email');
+    });
+
   }
 
   @override
@@ -184,9 +215,15 @@ class ImageFromGalleryExState extends State<ImageFromGalleryEx> {
                           ),
                           TextFormField(
                             controller: _name,
+                            onChanged: (value){
+                              name=value;
+                              setState(() {
+
+                              });
+                            },
                             keyboardType: TextInputType.name,
                             validator: (value){
-                              if(value!.isEmpty || !RegExp(r"^\s*([A-Za-z]{1,}([\.,] |[-']| ))+[A-Za-z]+\.?\s*$").hasMatch(value!)){
+                              if(value!.isEmpty){
                                 return 'Enter correct name';
                               }
                               else{
@@ -201,6 +238,12 @@ class ImageFromGalleryExState extends State<ImageFromGalleryEx> {
                           SizedBox(height: 1.77.h,),
                           TextFormField(
                             controller: _visitors_company,
+                            onChanged: (value){
+                              company=value;
+                              setState(() {
+
+                              });
+                            },
                             keyboardType: TextInputType.text,
                             validator: (value){
                               if(value!.isEmpty){
@@ -218,6 +261,12 @@ class ImageFromGalleryExState extends State<ImageFromGalleryEx> {
                           SizedBox(height: 1.77.h,),
                           TextFormField(
                             controller: _contact,
+                            onChanged: (value){
+                              contact=value;
+                              setState(() {
+
+                              });
+                            },
                             keyboardType: TextInputType.phone,
                             validator: (value){
                               if(value!.isEmpty || !RegExp(r"^\+?[0-9]{10}$").hasMatch(value!)){
@@ -235,6 +284,12 @@ class ImageFromGalleryExState extends State<ImageFromGalleryEx> {
                           SizedBox(height: 1.77.h,),
                           TextFormField(
                             controller: _email,
+                            onChanged: (value){
+                              email=value;
+                              setState(() {
+
+                              });
+                            },
                             keyboardType: TextInputType.emailAddress,
                             validator: (value){
                               if(value!.isEmpty || !RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w]{2,4}').hasMatch(value!)){
@@ -252,6 +307,12 @@ class ImageFromGalleryExState extends State<ImageFromGalleryEx> {
                           SizedBox(height: 1.77.h,),
                           TextFormField(
                             controller: _address,
+                            onChanged: (value){
+                              address=value;
+                              setState(() {
+
+                              });
+                            },
                             keyboardType: TextInputType.streetAddress,
                             validator: (value){
                               if(value!.isEmpty){
@@ -269,6 +330,12 @@ class ImageFromGalleryExState extends State<ImageFromGalleryEx> {
                           SizedBox(height: 1.77.h,),
                           TextFormField(
                             controller: _discussion,
+                            onChanged: (value){
+                              discussion=value;
+                              setState(() {
+
+                              });
+                            },
                             validator: (value){
                               if(value!.isEmpty){
                                 return 'Enter correct date';
@@ -296,8 +363,19 @@ class ImageFromGalleryExState extends State<ImageFromGalleryEx> {
                     width: 77.9.w,
                     height: 6.51.h,
                     child: ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
+                          print(_image.toString());
+                          debugPrint(getEName);
+                          debugPrint(_name.text);
+                          debugPrint(_visitors_company.text);
+                          debugPrint(_address.text);
+                          debugPrint(_discussion.text);
+                          debugPrint(_contact.text);
+                          debugPrint(_email.text);
+                         // debugPrint(getEName);
+                          VisitorAddModel data= await VisitorAddAPI().visitor(getEName, _name.text, _visitors_company.text, " ", _address.text, _discussion.text, _contact.text, _email.text, _image.toString());
                           if(formKey.currentState!.validate()){
+                            print(data.server![0].result.toString());
                             Navigator.push(context, MaterialPageRoute(builder: (context)=>Visitor()));
                           }
                            // Navigator.push(context, MaterialPageRoute(builder: (context)=>Visitor(name: _name.text, company: _visitors_company.text, phone: _contact.text, email: _email.text, address: _address.text, discussion: _discussion.text)));
